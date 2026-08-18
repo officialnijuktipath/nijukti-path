@@ -95,13 +95,26 @@ function hasLabel(e,label){return getLabels(e).some(x=>x.toLowerCase()===label.t
 function applyLink(e){
 let html=(e.content&&e.content.$t)||'';
 let box=document.createElement('div'); box.innerHTML=html;
-let links=[...box.querySelectorAll('a[href]')];
-let found=links.find(a=>{
+let links=[...box.querySelectorAll('a[href]')].filter(a=>{
   let h=(a.href||'');
-  let t=(a.textContent||'');
-  return !/officialnijuktipath\.blogspot\.com/i.test(h) &&
-         /apply|application|online form|registration|register|official website|official link/i.test(t+' '+h);
+  return h && !/officialnijuktipath\.blogspot\.com/i.test(h);
 });
+let labels=getLabels(e);
+let target=/answer\s*key|admit\s*card|results/i.test(labels.join(' '));
+let found;
+if(target){
+  found=links.find(a=>{
+    let h=(a.href||'');
+    let t=(a.textContent||'');
+    return /download|official|answer|key|admit|card|result|scert|sams|ossc|website|link/i.test(t+' '+h);
+  }) || links[0];
+}else{
+  found=links.find(a=>{
+    let h=(a.href||'');
+    let t=(a.textContent||'');
+    return /apply|application|online form|registration|register|official website|official link/i.test(t+' '+h);
+  });
+}
 return found ? found.href : '';
 }
 let POSTS=[];
