@@ -81,7 +81,7 @@ main{padding:38px 0 60px}.section-head{display:flex;justify-content:space-betwee
 <footer class="footer">NIJUKTI PATH — Sarkari Naukri, Sarkari Bharosa<br><br>© 2026 NIJUKTI PATH. All Rights Reserved.</footer>
 
 <script>
-const FEED='https://nijuktipath.blogspot.com/feeds/posts/default';
+const FEED='https://officialnijuktipath.blogspot.com/feeds/posts/default';
 
 function esc(s){
 return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
@@ -99,7 +99,7 @@ let links=[...box.querySelectorAll('a[href]')];
 let found=links.find(a=>{
   let h=(a.href||'');
   let t=(a.textContent||'');
-  return !/nijuktipath\.blogspot\.com/i.test(h) &&
+  return !/officialnijuktipath\.blogspot\.com/i.test(h) &&
          /apply|application|online form|registration|register|official website|official link/i.test(t+' '+h);
 });
 return found ? found.href : '';
@@ -109,7 +109,7 @@ function postId(e){return e.id.$t}
 function localPostUrlFromLink(href){
   try{
     let u=new URL(href,location.origin);
-    if(!/nijuktipath\.blogspot\.com/i.test(u.hostname)) return '';
+    if(!/officialnijuktipath\.blogspot\.com/i.test(u.hostname)) return '';
     let found=POSTS.find(e=>(e.link||[]).some(l=>l.rel==='alternate' && l.href===href));
     return found ? '/?post='+encodeURIComponent(postId(found)) : '';
   }catch(err){return '';}
@@ -133,7 +133,7 @@ return `<article class="card">
 <div class="org"><i class="fa-solid fa-landmark"></i> NIJUKTI PATH</div>
 <p class="desc">${esc(desc)}</p>
 <a class="btn" href="${getUrl(e)}">SEE MORE <i class="fa-solid fa-arrow-right"></i></a>
-${a?`<a class="btn apply" href="${esc(a)}" target="_blank" rel="noopener">${labels.some(x=>/answer\s*key|admit\s*card/i.test(x))?'DOWNLOAD NOW':'APPLY NOW'} <i class="fa-solid ${labels.some(x=>/answer\s*key|admit\s*card/i.test(x))?'fa-download':'fa-up-right-from-square'}"></i></a>`:''}
+${a?`<a class="btn apply" href="${esc(a)}" target="_blank" rel="noopener">${labels.some(x=>/answer\s*key|admit\s*card/i.test(x))?'DOWNLOAD NOW':labels.some(x=>/results/i.test(x))?'CHECK NOW':'APPLY NOW'} <i class="fa-solid ${labels.some(x=>/answer\s*key|admit\s*card/i.test(x))?'fa-download':labels.some(x=>/results/i.test(x))?'fa-check-circle':'fa-up-right-from-square'}"></i></a>`:''}
 </article>`;
 }
 function listPage(entries,label,query){
@@ -153,7 +153,7 @@ let a=applyLink(e);
 let bodyBox=document.createElement('div');
 bodyBox.innerHTML=body;
 [...bodyBox.querySelectorAll('a[href]')].forEach(link=>{
-  if(/nijuktipath\.blogspot\.com/i.test(link.href)){
+  if(/officialnijuktipath\.blogspot\.com/i.test(link.href)){
     let local=localPostUrlFromLink(link.href);
     if(local){
       link.href=local;
@@ -172,7 +172,7 @@ document.getElementById('app').innerHTML=`
 <article class="single">
 <h1>${esc(e.title.$t)}</h1>
 <div class="meta"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</div>
-${a?`<div class="apply-box"><strong>${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'Download / Official Link':'Application / Official Link'}</strong><br><br><a class="apply-now" href="${esc(a)}" target="_blank" rel="noopener">${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'DOWNLOAD NOW':'APPLY NOW'} &nbsp; <i class="fa-solid ${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'fa-download':'fa-arrow-up-right-from-square'}"></i></a></div>`:''}
+${a?`<div class="apply-box"><strong>${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'Download / Official Link':getLabels(e).some(x=>/results/i.test(x))?'Result / Official Link':'Application / Official Link'}</strong><br><br><a class="apply-now" href="${esc(a)}" target="_blank" rel="noopener">${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'DOWNLOAD NOW':getLabels(e).some(x=>/results/i.test(x))?'CHECK NOW':'APPLY NOW'} &nbsp; <i class="fa-solid ${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'fa-download':getLabels(e).some(x=>/results/i.test(x))?'fa-check-circle':'fa-arrow-up-right-from-square'}"></i></a></div>`:''}
 <div class="body">${body}</div>
 </article>`;
 }
