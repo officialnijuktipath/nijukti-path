@@ -81,7 +81,7 @@ main{padding:38px 0 60px}.section-head{display:flex;justify-content:space-betwee
 <footer class="footer">NIJUKTI PATH — Sarkari Naukri, Sarkari Bharosa<br><br>© 2026 NIJUKTI PATH. All Rights Reserved.</footer>
 
 <script>
-const FEED='https://nijuktipath.blogspot.com/feeds/posts/default?alt=json&max-results=50';
+const FEED='https://nijuktipath.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50';
 
 function esc(s){
 return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
@@ -181,10 +181,8 @@ ev.preventDefault();
 let q=document.getElementById('searchInput').value.trim();
 if(q) location.href='/?q='+encodeURIComponent(q);
 }
-fetch(FEED)
-.then(r=>r.json())
-.then(data=>{
-let entries=data.feed.entry||[];
+function handleFeed(data){
+let entries=(data && data.feed && data.feed.entry)||[];
 POSTS=entries;
 let p=new URLSearchParams(location.search);
 let pid=p.get('post'), label=p.get('label'), q=p.get('q');
@@ -201,8 +199,12 @@ document.getElementById('app').innerHTML=`
 <div class="grid">${entries.slice(4,12).map(card).join('')}</div>
 `;
 }
-})
-.catch(()=>document.getElementById('app').innerHTML='<div class="empty">Unable to load posts. Please refresh.</div>');
+}
+window.handleFeed=handleFeed;
+let feedScript=document.createElement('script');
+feedScript.src=FEED+'&callback=handleFeed';
+feedScript.onerror=()=>document.getElementById('app').innerHTML='<div class="empty">Unable to load posts. Please refresh.</div>';
+document.head.appendChild(feedScript);
 </script>
 </body>
 </html>
