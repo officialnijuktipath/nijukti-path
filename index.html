@@ -2,203 +2,184 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>NIJUKTI PATH — Sarkari Naukri, Sarkari Bharosa</title>
-<meta name="description" content="NIJUKTI PATH - Latest Government Jobs, Odisha Jobs, Answer Keys, Admit Cards, Results and Education Updates.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIJUKTI PATH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061329;--navy2:#0b2145;--gold:#f59e0b;--green:#22c55e;--blue:#2563eb;--bg:#f4f7fb;--text:#0f172a;--muted:#64748b}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f4f7fb;color:#1e293b;line-height:1.5}
 a{text-decoration:none;color:inherit}
-.container{max-width:1320px;margin:auto;padding:0 20px}
-.hero{background:radial-gradient(circle at 10% 15%,#123665 0,#081b38 42%,#041126 100%);color:white;padding-bottom:42px}
-.header{display:flex;align-items:center;gap:22px;padding:18px 0;border-bottom:1px solid #ffffff12}
-.logo{display:flex;align-items:center;gap:10px;min-width:max-content}
-.logo-badge{width:48px;height:48px;border:2px solid var(--gold);border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:20px;background:#07152d}
-.logo-badge span{color:var(--gold)}
-.logo h1{font-size:21px;font-weight:900;line-height:1}
-.logo h1 span{color:var(--gold)}
-.logo p{font-size:8px;color:#9fb0c8;font-weight:800;letter-spacing:1px;margin-top:4px}
-.search{position:relative;flex:1;max-width:520px;margin:auto}
-.search input{width:100%;border:1px solid #ffffff1f;background:#ffffff0d;color:white;border-radius:30px;padding:12px 18px 12px 42px;outline:none;font:inherit;font-size:13px}
-.search i{position:absolute;left:16px;top:13px;color:#9fb0c8}
-.social{display:flex;gap:8px}
-.social a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#ffffff0c;color:#d7dfeb}
-.nav{display:flex;gap:7px;overflow:auto;white-space:nowrap;padding-top:14px}
-.nav a{font-size:12px;font-weight:800;color:#cbd5e1;padding:9px 14px;border-radius:8px}
-.nav a.active{border:1px solid var(--gold);color:#fff2b2}
-.hero-copy{text-align:center;max-width:850px;margin:38px auto 28px}
-.hero-copy h2{font-size:37px;line-height:1.25;font-weight:900}
-.hero-copy .gold{color:var(--gold)} .hero-copy .green{color:var(--green)}
-.hero-copy p{color:#9fb0c8;font-size:14px;margin-top:9px}
-.line{width:48px;height:3px;background:var(--gold);margin:17px auto;border-radius:4px}
-.quick{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-.q{background:#0d2448b8;border:1px solid #ffffff14;border-radius:15px;padding:13px;display:flex;align-items:center;gap:10px}
-.q:hover{transform:translateY(-2px)}
-.q .icon{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;flex:none}
-.q strong{display:block;font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.q span{font-size:11px;color:#91a4bd}
-.jobs{background:#f4f7fb;padding:38px 0 55px}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.section-title{font-size:22px;font-weight:900;display:flex;gap:10px;align-items:center}
-.section-title:before{content:'';width:4px;height:22px;background:var(--gold);border-radius:5px}
-.view{background:#0f172a;color:white;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:800}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.card{background:white;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 5px 20px #0f172a08;transition:.2s}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #0f172a12}
-.cardtop{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}
-.badge{font-size:10px;font-weight:900;text-transform:uppercase;padding:5px 9px;border-radius:6px}
-.red{background:#fee2e2;color:#dc2626}.green{background:#dcfce7;color:#16a34a}.purple{background:#f3e8ff;color:#9333ea}.orange{background:#ffedd5;color:#ea580c}.blue{background:#dbeafe;color:#2563eb}
-.date{font-size:11px;color:#64748b;font-weight:700}
-.cardmid{display:flex;gap:12px}
-.card h3{font-size:16px;line-height:1.4;font-weight:900;flex:1}
-.iconcircle{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;flex:none}
-.org{font-size:11px;color:#64748b;font-weight:700;margin:10px 0}
-.desc{font-size:12px;color:#475569;line-height:1.6;margin-bottom:15px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;font-size:10px;font-weight:900;text-transform:uppercase}
-.apply{background:#16a34a;color:white;box-shadow:0 4px 12px #16a34a25}
-.more{background:#dbeafe;color:#2563eb}
-.apply:hover,.more:hover{opacity:.88}
-.extra{background:white;border:1px solid #e2e8f0;border-radius:22px;padding:25px;margin-top:38px}
-.extra h2{font-size:22px;font-weight:900;display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.extra h2:before{content:'';width:4px;height:23px;background:var(--gold);border-radius:5px}
-.popular{display:grid;gap:0;border:1px solid #e2e8f0;border-radius:15px;overflow:hidden}
-.popular a{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #e2e8f0;font-size:13px;font-weight:800}
-.popular a:last-child{border-bottom:0}
-.catgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.cat{border:1px solid #e2e8f0;border-radius:15px;padding:16px;display:flex;align-items:center;gap:14px}
-.cat .ci{width:48px;height:48px;border-radius:13px;background:#eff6ff;color:#2563eb;display:grid;place-items:center;font-size:19px}
-.cat strong{display:block;font-size:13px}.cat span{font-size:11px;color:#64748b}
-footer{background:#061329;color:#94a3b8;text-align:center;padding:28px 0;font-size:11px;margin-top:0}
-footer strong{color:white}
-.loading{text-align:center;padding:30px;color:#64748b}
-@media(max-width:800px){.header{flex-wrap:wrap}.search{order:3;flex-basis:100%;max-width:none}.social{margin-left:auto}.quick{grid-template-columns:repeat(5,minmax(130px,1fr));overflow:auto}.hero-copy h2{font-size:27px}.grid{grid-template-columns:1fr}.catgrid{grid-template-columns:1fr}.container{padding:0 14px}}
+.np-top{background:radial-gradient(circle at 10% 20%,#0d234a 0%,#061329 90%);color:#fff;padding-bottom:38px}
+.wrap{max-width:1320px;margin:auto;padding:0 20px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-b{border:2px solid #eab308;border-radius:10px;padding:6px 11px;font-weight:900;font-size:20px;background:#0f172a}
+.logo-b span{color:#eab308}
+.logo h1{font-size:21px;font-weight:900}.logo h1 span{color:#f59e0b}.logo p{font-size:9px;color:#94a3b8;font-weight:700;letter-spacing:1px}
+.search{position:relative;flex:1;max-width:520px}.search input{width:100%;padding:11px 18px 11px 40px;border-radius:30px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;outline:0}.search i{position:absolute;left:15px;top:12px;color:#94a3b8}
+.nav{display:flex;gap:7px;overflow-x:auto;white-space:nowrap;padding:14px 0 2px}.nav::-webkit-scrollbar{display:none}.nav a{padding:8px 13px;border-radius:8px;color:#cbd5e1;font-size:12px;font-weight:800}.nav a:hover,.nav a.active{border:1px solid #eab308;color:#fef08a}
+.hero{text-align:center;padding:42px 0 28px}.hero h2{font-size:36px;line-height:1.25;font-weight:900}.yellow{color:#f59e0b;background:transparent!important}.green{color:#22c55e;background:transparent!important}.hero p{color:#94a3b8;font-size:14px;margin-top:10px}.line{width:50px;height:3px;background:#f59e0b;margin:16px auto;border-radius:5px}
+.quick{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.q{padding:15px;border-radius:15px;background:rgba(15,28,54,.75);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;gap:10px}.qi{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center}.jobs{background:#f59e0b22;color:#f59e0b}.odisha{background:#22c55e22;color:#22c55e}.answer{background:#ef444422;color:#ef4444}.admit{background:#a855f722;color:#c084fc}.result{background:transparent!important;color:#fb923c}.q strong{font-size:11px;display:block}.q span{font-size:11px;color:#94a3b8}
+main{padding:38px 0 60px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.title{font-size:21px;font-weight:900;display:flex;align-items:center;gap:9px}.title:before{content:'';width:4px;height:21px;background:#f59e0b;border-radius:5px}.view{background:#0f172a;color:#fff;padding:8px 14px;border-radius:8px;font-size:11px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:17px;padding:20px;box-shadow:0 4px 18px #00000008;transition:.2s}.card:hover{transform:translateY(-3px);box-shadow:0 10px 25px #0f172a12}.top{display:flex;justify-content:space-between;gap:8px;margin-bottom:12px}.badge{font-size:10px;font-weight:800;padding:5px 9px;border-radius:6px;text-transform:uppercase;background:#dbeafe;color:#2563eb}.date{font-size:11px;color:#64748b}.mid{display:flex;gap:10px;align-items:flex-start}.mid h3{font-size:16px;line-height:1.4;font-weight:900;flex:1}.icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:#2563eb;flex-shrink:0}.org{font-size:11px;color:#64748b;margin:10px 0;font-weight:700}.desc{font-size:12px;color:#475569;margin-bottom:16px}.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:7px;background:#dbeafe;color:#2563eb;font-size:10px;font-weight:900}.apply{margin-left:7px;background:#dcfce7;color:#16a34a}
+.single{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:25px;box-shadow:0 4px 18px #00000008}.single h1{font-size:27px;line-height:1.3;font-weight:900;color:#0f172a}.meta{font-size:11px;color:#64748b;margin:10px 0 20px}.body{font-size:14px;line-height:1.85;color:#334155}.body img{max-width:100%;height:auto;border-radius:10px}.body a{color:#2563eb;text-decoration:underline}.apply-box{margin:25px 0;padding:18px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:14px}.apply-now{display:inline-flex;background:#16a34a;color:#fff;padding:12px 20px;border-radius:9px;font-weight:900;font-size:13px;text-decoration:none}.back{display:inline-flex;margin-bottom:16px;padding:8px 13px;border-radius:8px;background:#e2e8f0;font-size:11px;font-weight:800}
+.empty{text-align:center;padding:35px;color:#64748b;background:#fff;border-radius:16px}.footer{background:#061329;color:#94a3b8;text-align:center;padding:25px;font-size:11px}
+@media(max-width:768px){.header{flex-wrap:wrap}.search{order:3;max-width:none;flex-basis:100%}.quick{grid-template-columns:repeat(3,1fr);gap:8px}.q{padding:10px}.q strong{font-size:9px}.q span{font-size:9px}.hero h2{font-size:27px}.grid{grid-template-columns:1fr}.single h1{font-size:22px}}
+@media(max-width:480px){.quick{grid-template-columns:repeat(2,1fr)}.wrap{padding:0 14px}}
 </style>
 </head>
 <body>
-<section class="hero">
-<div class="container">
+
+<div class="np-top">
+<div class="wrap">
 <header class="header">
 <a class="logo" href="/">
-<div class="logo-badge">N<span>P</span></div>
+<div class="logo-b">N<span>P</span></div>
 <div><h1>NIJUKTI <span>PATH</span></h1><p>SARKARI NAUKRI, SARKARI BHAROSA</p></div>
 </a>
-<form class="search" action="https://nijuktipath.blogspot.com/search" method="get">
-<i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Search for jobs, admit card, results..." autocomplete="off">
+<form class="search" onsubmit="doSearch(event)">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input id="searchInput" placeholder="Search for jobs, admit card, results...">
 </form>
-<div class="social">
-<a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-<a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-<a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-<a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-</div>
 </header>
+
 <nav class="nav">
-<a class="active" href="/"><i class="fa-solid fa-house"></i> HOME</a>
-<a href="https://nijuktipath.blogspot.com/search/label/Government%20Jobs">GOVERNMENT JOBS</a>
-<a href="https://nijuktipath.blogspot.com/search/label/Odisha%20Jobs">ODISHA JOBS</a>
-<a href="https://nijuktipath.blogspot.com/search/label/Answer%20Key">ANSWER KEY</a>
-<a href="https://nijuktipath.blogspot.com/search/label/Admit%20Card">ADMIT CARD</a>
-<a href="https://nijuktipath.blogspot.com/search/label/Results">RESULTS</a>
-<a href="https://nijuktipath.blogspot.com/search/label/Education">EDUCATION</a>
+<a href="/">HOME</a>
+<a href="/?label=Government%20Jobs">GOVERNMENT JOBS</a>
+<a href="/?label=Odisha%20Jobs">ODISHA JOBS</a>
+<a href="/?label=Answer%20Key">ANSWER KEY</a>
+<a href="/?label=Admit%20Card">ADMIT CARD</a>
+<a href="/?label=Results">RESULTS</a>
+<a href="/?label=Education">EDUCATION</a>
 </nav>
-<div class="hero-copy">
-<h2>Latest Government <span class="gold">Jobs</span>, Admit Card,<br>Answer Keys, <span class="green">Results</span> &amp; More</h2>
+
+<section class="hero">
+<h2>Latest Government <span class="yellow">Jobs</span>, Admit Card,<br>Answer Keys, <span class="green">Results</span> &amp; More</h2>
 <p>Get all latest updates, official notifications and important details in one place.</p>
 <div class="line"></div>
-</div>
+</section>
+
 <div class="quick">
-<a class="q" href="https://nijuktipath.blogspot.com/search/label/Government%20Jobs"><div class="icon" style="background:#f59e0b22;color:#f59e0b"><i class="fa-solid fa-briefcase"></i></div><div><strong>GOVERNMENT JOBS</strong><span>Latest Posts</span></div></a>
-<a class="q" href="https://nijuktipath.blogspot.com/search/label/Odisha%20Jobs"><div class="icon" style="background:#22c55e22;color:#22c55e"><i class="fa-solid fa-building-columns"></i></div><div><strong>ODISHA JOBS</strong><span>Latest Posts</span></div></a>
-<a class="q" href="https://nijuktipath.blogspot.com/search/label/Answer%20Key"><div class="icon" style="background:#ef444422;color:#ef4444"><i class="fa-solid fa-file-circle-check"></i></div><div><strong>ANSWER KEY</strong><span>Latest Posts</span></div></a>
-<a class="q" href="https://nijuktipath.blogspot.com/search/label/Admit%20Card"><div class="icon" style="background:#a855f722;color:#c084fc"><i class="fa-solid fa-id-card"></i></div><div><strong>ADMIT CARD</strong><span>Latest Posts</span></div></a>
-<a class="q" href="https://nijuktipath.blogspot.com/search/label/Results"><div class="icon" style="background:#f9731622;color:#fb923c"><i class="fa-solid fa-trophy"></i></div><div><strong>RESULTS</strong><span>Latest Posts</span></div></a>
+<a class="q" href="/?label=Government%20Jobs"><div class="qi jobs"><i class="fa-solid fa-briefcase"></i></div><div><strong>GOVERNMENT JOBS</strong><span>Latest Posts</span></div></a>
+<a class="q" href="/?label=Odisha%20Jobs"><div class="qi odisha"><i class="fa-solid fa-building-columns"></i></div><div><strong>ODISHA JOBS</strong><span>Latest Posts</span></div></a>
+<a class="q" href="/?label=Answer%20Key"><div class="qi answer"><i class="fa-solid fa-file-circle-check"></i></div><div><strong>ANSWER KEY</strong><span>Latest Posts</span></div></a>
+<a class="q" href="/?label=Admit%20Card"><div class="qi admit"><i class="fa-solid fa-id-card"></i></div><div><strong>ADMIT CARD</strong><span>Latest Posts</span></div></a>
+<a class="q" href="/?label=Results"><div class="qi result"><i class="fa-solid fa-trophy"></i></div><div><strong>RESULTS</strong><span>Latest Posts</span></div></a>
 </div>
 </div>
-</section>
+</div>
 
-<main class="jobs">
-<div class="container">
-<div class="section-head"><h2 class="section-title">Latest Updates</h2><a class="view" href="https://nijuktipath.blogspot.com/search">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
-<div class="grid" id="latest"><div class="loading">Loading latest updates...</div></div>
-
-<section class="extra">
-<div class="section-head"><h2 class="section-title">Popular Jobs</h2><a class="view" href="https://nijuktipath.blogspot.com/search">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
-<div class="popular">
-<a href="https://nijuktipath.blogspot.com/search/label/Government%20Jobs">Indian Army Agniveer Recruitment 2026 <i class="fa-solid fa-arrow-right"></i></a>
-<a href="https://nijuktipath.blogspot.com/search/label/Odisha%20Jobs">Odisha Police Constable Recruitment 2026 <i class="fa-solid fa-arrow-right"></i></a>
-</div>
-</section>
-
-<section class="extra">
-<div class="section-head"><h2 class="section-title">Top Categories</h2><a class="view" href="https://nijuktipath.blogspot.com/search">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
-<div class="catgrid">
-<a class="cat" href="https://nijuktipath.blogspot.com/search/label/Government%20Jobs"><div class="ci"><i class="fa-solid fa-briefcase"></i></div><div><strong>Government Jobs</strong><span>View Posts</span></div></a>
-<a class="cat" href="https://nijuktipath.blogspot.com/search/label/Odisha%20Jobs"><div class="ci"><i class="fa-solid fa-building-columns"></i></div><div><strong>Odisha Jobs</strong><span>View Posts</span></div></a>
-<a class="cat" href="https://nijuktipath.blogspot.com/search/label/Answer%20Key"><div class="ci"><i class="fa-solid fa-file-circle-check"></i></div><div><strong>Answer Key</strong><span>View Posts</span></div></a>
-<a class="cat" href="https://nijuktipath.blogspot.com/search/label/Admit%20Card"><div class="ci"><i class="fa-solid fa-id-card"></i></div><div><strong>Admit Card</strong><span>View Posts</span></div></a>
-<a class="cat" href="https://nijuktipath.blogspot.com/search/label/Results"><div class="ci"><i class="fa-solid fa-trophy"></i></div><div><strong>Results</strong><span>View Posts</span></div></a>
-<a class="cat" href="https://nijuktipath.blogspot.com/search/label/Education"><div class="ci"><i class="fa-solid fa-graduation-cap"></i></div><div><strong>Education</strong><span>View Posts</span></div></a>
-</div>
-</section>
+<main>
+<div class="wrap">
+<div id="app"><div class="empty">Loading NIJUKTI PATH...</div></div>
 </div>
 </main>
-<footer><div class="container"><p><strong>NIJUKTI PATH</strong> — Sarkari Naukri, Sarkari Bharosa</p><p style="margin-top:5px">© 2026 NIJUKTI PATH. All Rights Reserved.</p></div></footer>
+
+<footer class="footer">NIJUKTI PATH — Sarkari Naukri, Sarkari Bharosa<br><br>© 2026 NIJUKTI PATH. All Rights Reserved.</footer>
 
 <script>
-(function(){
-const target=document.getElementById('latest');
-const colors=[
- {b:'red',i:'fa-file-circle-check',btn:'red'},
- {b:'green',i:'fa-tree',btn:'green'},
- {b:'purple',i:'fa-address-card',btn:'purple'},
- {b:'orange',i:'fa-trophy',btn:'orange'}
-];
-function clean(s){const d=document.createElement('div');d.innerHTML=s||'';return (d.textContent||'').replace(/\s+/g,' ').trim();}
-function urlOf(e){const l=e.link||[];for(let x of l)if(x.rel==='alternate')return x.href;return '#'}
-function render(data){
- const entries=(data.feed&&data.feed.entry)||[];
- if(!entries.length){target.innerHTML='<div class="loading">No recent posts found.</div>';return}
- target.innerHTML=entries.slice(0,4).map((e,n)=>{
-   const title=e.title.$t, url=urlOf(e);
-   const date=new Date(e.published.$t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-   const label=e.category?.[0]?.term||'LATEST UPDATE';
-   const text=clean(e.summary?.$t||e.content?.$t||'').slice(0,150)+(clean(e.summary?.$t||e.content?.$t||'').length>150?'...':'');
-   const c=colors[n%colors.length];
-   const lower=(label+' '+title).toLowerCase();
-   const isAnswer=lower.includes('answer')||lower.includes('answer key');
-   const external=(()=>{
-      const raw=e.content?.$t||'';
-      const m=raw.match(/href=["'](https?:\/\/[^"']+)["']/i);
-      return m?m[1]:url;
-   })();
-   return `<article class="card">
-    <div>
-     <div class="cardtop"><span class="badge ${c.b}">${label}</span><span class="date"><i class="fa-regular fa-calendar"></i> ${date}</span></div>
-     <div class="cardmid"><h3><a href="${url}">${title}</a></h3><div class="iconcircle ${c.b}" style="background:var(--bg);"><i class="fa-solid ${c.i}"></i></div></div>
-     <div class="org"><i class="fa-solid fa-landmark"></i> NIJUKTI PATH</div>
-     <p class="desc">${text}</p>
-    </div>
-    <div class="actions">
-      <a class="btn more" href="${url}">SEE MORE <i class="fa-solid fa-arrow-right"></i></a>
-      ${isAnswer?`<a class="btn apply" href="${url}">CHECK ANSWER KEY <i class="fa-solid fa-check"></i></a>`:
-      `<a class="btn apply" href="${external}" target="_blank" rel="noopener">APPLY NOW <i class="fa-solid fa-arrow-up-right-from-square"></i></a>`}
-    </div>
-   </article>`
- }).join('');
+const FEED='https://nijuktipath.blogspot.com/feeds/posts/default?alt=json&max-results=50';
+
+function esc(s){
+return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 }
-// Blogger JSON feed via JSONP: works without relying on cross-origin fetch.
-window.npFeed=function(data){render(data)};
-const s=document.createElement('script');
-s.src='https://nijuktipath.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=4&callback=npFeed';
-s.onerror=function(){target.innerHTML='<div class="loading">Latest updates could not be loaded. Open the Blogger site to view posts.</div>'};
-document.body.appendChild(s);
-})();
+function strip(s){return String(s||'').replace(/<[^>]*>/g,' ').replace(/\\s+/g,' ').trim();}
+function getUrl(e){
+return '/?post='+encodeURIComponent(e.id.$t);
+}
+function getLabels(e){return (e.category||[]).map(x=>x.term);}
+function hasLabel(e,label){return getLabels(e).some(x=>x.toLowerCase()===label.toLowerCase());}
+function applyLink(e){
+let html=(e.content&&e.content.$t)||'';
+let box=document.createElement('div'); box.innerHTML=html;
+let links=[...box.querySelectorAll('a[href]')];
+let found=links.find(a=>/apply|application|online form|registration|register/i.test((a.textContent||'')+' '+(a.href||'')));
+return found ? found.href : '';
+}
+function postId(e){return e.id.$t}
+function dateOf(e){return new Date(e.published.$t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function iconFor(e){
+if(hasLabel(e,'Answer Key')) return 'fa-file-circle-check';
+if(hasLabel(e,'Admit Card')) return 'fa-id-card';
+if(hasLabel(e,'Results')) return 'fa-trophy';
+if(hasLabel(e,'Government Jobs')||hasLabel(e,'Odisha Jobs')) return 'fa-briefcase';
+return 'fa-bell';
+}
+function card(e){
+let labels=getLabels(e);
+let label=labels[0]||'LATEST UPDATE';
+let desc=strip((e.summary&&e.summary.$t)||(e.content&&e.content.$t)||'').slice(0,150)+'...';
+let a=applyLink(e);
+return `<article class="card">
+<div class="top"><span class="badge">${esc(label)}</span><span class="date"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</span></div>
+<div class="mid"><h3><a href="${getUrl(e)}">${esc(e.title.$t)}</a></h3><div class="icon"><i class="fa-solid ${iconFor(e)}"></i></div></div>
+<div class="org"><i class="fa-solid fa-landmark"></i> NIJUKTI PATH</div>
+<p class="desc">${esc(desc)}</p>
+<a class="btn" href="${getUrl(e)}">SEE MORE <i class="fa-solid fa-arrow-right"></i></a>
+${a?`<a class="btn apply" href="${esc(a)}" target="_blank" rel="noopener">APPLY NOW <i class="fa-solid fa-up-right-from-square"></i></a>`:''}
+</article>`;
+}
+function listPage(entries,label,query){
+let title=label?label:'Latest Updates';
+let filtered=entries.filter(e=>{
+if(label) return hasLabel(e,label);
+if(query) return e.title.$t.toLowerCase().includes(query.toLowerCase());
+return true;
+});
+document.getElementById('app').innerHTML=`
+<div class="section-head"><h2 class="title">${esc(title)}</h2><a class="view" href="/">HOME</a></div>
+<div class="grid">${filtered.length?filtered.slice(0,20).map(card).join(''):'<div class="empty" style="grid-column:1/-1">No posts found.</div>'}</div>`;
+}
+function showPost(e){
+let body=(e.content&&e.content.$t)||'<p>No content available.</p>';
+let a=applyLink(e);
+let bodyBox=document.createElement('div');
+bodyBox.innerHTML=body;
+[...bodyBox.querySelectorAll('a[href]')].forEach(link=>{
+  if(/nijuktipath\.blogspot\.com/i.test(link.href)){
+    link.target='_blank';
+    link.rel='noopener';
+  }
+});
+body=bodyBox.innerHTML;
+document.getElementById('app').innerHTML=`
+<a class="back" href="javascript:history.back()"><i class="fa-solid fa-arrow-left"></i>&nbsp; BACK</a>
+<article class="single">
+<h1>${esc(e.title.$t)}</h1>
+<div class="meta"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</div>
+${a?`<div class="apply-box"><strong>Application / Official Link</strong><br><br><a class="apply-now" href="${esc(a)}" target="_blank" rel="noopener">APPLY NOW &nbsp; <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>`:''}
+<div class="body">${body}</div>
+</article>`;
+}
+function doSearch(ev){
+ev.preventDefault();
+let q=document.getElementById('searchInput').value.trim();
+if(q) location.href='/?q='+encodeURIComponent(q);
+}
+fetch(FEED)
+.then(r=>r.json())
+.then(data=>{
+let entries=data.feed.entry||[];
+let p=new URLSearchParams(location.search);
+let pid=p.get('post'), label=p.get('label'), q=p.get('q');
+if(pid){
+let e=entries.find(x=>postId(x)===pid);
+if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
+}else if(label||q){
+listPage(entries,label,q);
+}else{
+document.getElementById('app').innerHTML=`
+<div class="section-head"><h2 class="title">Latest Updates</h2><a class="view" href="/?label=Government%20Jobs">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
+<div class="grid">${entries.slice(0,4).map(card).join('')}</div>
+<div class="section-head" style="margin-top:40px"><h2 class="title">Latest Posts</h2></div>
+<div class="grid">${entries.slice(4,12).map(card).join('')}</div>
+`;
+}
+})
+.catch(()=>document.getElementById('app').innerHTML='<div class="empty">Unable to load posts. Please refresh.</div>');
 </script>
 </body>
 </html>
