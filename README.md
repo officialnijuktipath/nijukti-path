@@ -1,0 +1,2 @@
+# nijukti-path
+NIJUKTI PATH 
