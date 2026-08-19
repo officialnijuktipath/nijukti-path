@@ -122,6 +122,102 @@ body{
 }
 </style>
 
+
+<style id="india-odisha-heritage-header">
+/* 🇮🇳 NIJUKTI PATH — India + Odisha heritage background */
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 115%, rgba(246,190,72,.14), transparent 32%),
+    linear-gradient(135deg,#061936 0%,#0a2850 52%,#071a37 100%) !important;
+}
+
+/* Soft heritage silhouettes */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:auto -5% 0 -5%;
+  height:42%;
+  opacity:.10;
+  background:
+    linear-gradient(to top,rgba(245,194,80,.65),transparent 70%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 52px,
+      rgba(255,255,255,.22) 52px 54px,
+      transparent 54px 104px
+    );
+  clip-path:polygon(
+    0 100%,0 82%,8% 82%,8% 72%,11% 72%,11% 82%,
+    20% 82%,20% 69%,23% 69%,23% 82%,
+    31% 82%,31% 74%,34% 74%,34% 82%,
+    42% 82%,42% 66%,45% 66%,45% 82%,
+    53% 82%,53% 71%,56% 71%,56% 82%,
+    64% 82%,64% 68%,67% 68%,67% 82%,
+    76% 82%,76% 73%,79% 73%,79% 82%,
+    88% 82%,88% 70%,91% 70%,91% 82%,
+    100% 82%,100% 100%
+  );
+  pointer-events:none;
+}
+
+/* Konark-inspired wheel */
+.hero::after{
+  content:"☼";
+  position:absolute;
+  right:4%;
+  bottom:-42px;
+  width:190px;
+  height:190px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:10px solid rgba(246,190,72,.16);
+  border-radius:50%;
+  color:rgba(246,190,72,.13);
+  font-size:112px;
+  line-height:1;
+  transform:rotate(8deg);
+  text-shadow:
+    0 0 0 rgba(246,190,72,.12),
+    0 0 18px rgba(246,190,72,.06);
+  pointer-events:none;
+}
+
+/* Keep all existing hero content above decoration */
+.hero > *{
+  position:relative;
+  z-index:2;
+}
+
+/* Small India-inspired tricolour accent under the hero */
+.hero .accent-line{
+  background:linear-gradient(
+    90deg,
+    #f29b20 0 33%,
+    rgba(255,255,255,.9) 33% 66%,
+    #22a65a 66% 100%
+  ) !important;
+}
+
+/* Mobile refinement */
+@media(max-width:700px){
+  .hero::after{
+    width:125px;
+    height:125px;
+    right:-18px;
+    bottom:-28px;
+    font-size:72px;
+    border-width:7px;
+  }
+  .hero::before{
+    height:30%;
+    opacity:.075;
+  }
+}
+</style>
+
 </head>
 <body>
 
