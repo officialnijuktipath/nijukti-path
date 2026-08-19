@@ -3,210 +3,228 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NIJUKTI PATH - Admin Panel</title>
 
 <style>
 *{
   box-sizing:border-box;
-  margin:0;
-  padding:0;
 }
 
 body{
-  font-family:Arial, sans-serif;
-  background:#f4f7fb;
-  color:#17213a;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fa;
+  color:#172033;
 }
 
 .header{
-  background:#071a38;
+  background:linear-gradient(135deg,#063b63,#087ea4);
   color:white;
-  padding:18px 25px;
+  padding:18px 6%;
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
 
-.logo{
+.brand{
   display:flex;
   align-items:center;
   gap:12px;
 }
 
-.logo-box{
-  width:48px;
-  height:48px;
-  border:2px solid #eab308;
-  border-radius:10px;
+.logo{
+  width:42px;
+  height:42px;
+  border:2px solid #f5c542;
+  border-radius:8px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
   font-weight:bold;
-  color:#eab308;
+  color:#f5c542;
+  font-size:18px;
 }
 
-.logo h1{
-  font-size:21px;
+.brand h2{
+  margin:0;
+  font-size:20px;
 }
 
-.logo p{
-  font-size:10px;
-  color:#aeb9cc;
-  margin-top:3px;
+.brand small{
+  display:block;
+  font-size:9px;
+  opacity:.9;
+  letter-spacing:.5px;
 }
 
 .container{
+  width:92%;
   max-width:1100px;
   margin:30px auto;
-  padding:0 18px;
 }
 
-.title{
-  margin-bottom:25px;
+h1{
+  margin-bottom:5px;
 }
 
-.title h2{
-  font-size:28px;
-  margin-bottom:7px;
+.subtitle{
+  color:#6b7280;
+  margin-top:0;
 }
 
-.title p{
-  color:#68748a;
+.blogger-box{
+  background:white;
+  border-radius:14px;
+  padding:22px;
+  margin:25px 0;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
+  border-left:5px solid #087ea4;
 }
 
-.grid{
+.blogger-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.blogger-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.status{
+  margin-top:6px;
+  color:#777;
+}
+
+.connect-btn{
+  border:0;
+  background:#4285f4;
+  color:white;
+  padding:13px 22px;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.connect-btn:hover{
+  opacity:.9;
+}
+
+.disconnect-btn{
+  display:none;
+  border:0;
+  background:#dc3545;
+  color:white;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.cards{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:18px;
-  margin-bottom:25px;
+  gap:15px;
+  margin:25px 0;
 }
 
 .card{
   background:white;
-  border:1px solid #e2e7ef;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 4px 15px rgba(0,0,0,.05);
+  padding:22px;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,.06);
 }
 
 .card h3{
-  font-size:16px;
-  margin-bottom:10px;
+  margin:0 0 15px;
+  font-size:15px;
 }
 
-.number{
-  font-size:30px;
+.count{
+  color:#d19a00;
+  font-size:26px;
   font-weight:bold;
-  color:#eab308;
 }
 
-.form-card{
+.form-box{
   background:white;
-  border-radius:15px;
   padding:25px;
-  border:1px solid #e2e7ef;
-  box-shadow:0 4px 15px rgba(0,0,0,.05);
+  border-radius:14px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
-.form-card h2{
-  margin-bottom:20px;
+.form-group{
+  margin-bottom:18px;
 }
 
 label{
   display:block;
   font-weight:bold;
-  margin:15px 0 7px;
+  margin-bottom:7px;
 }
 
-input,
-textarea,
-select{
+input,select,textarea{
   width:100%;
-  padding:13px;
-  border:1px solid #d6dce6;
-  border-radius:9px;
-  font-size:15px;
-  outline:none;
+  border:1px solid #ddd;
+  border-radius:7px;
+  padding:12px;
+  font-size:14px;
 }
 
 textarea{
-  min-height:120px;
+  min-height:140px;
   resize:vertical;
 }
 
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:#eab308;
-}
-
-button{
+.add-btn{
+  background:#d89b18;
+  color:white;
   border:0;
-  border-radius:9px;
-  padding:13px 22px;
+  padding:13px 24px;
+  border-radius:7px;
   font-weight:bold;
   cursor:pointer;
 }
 
-.btn{
-  background:#eab308;
-  color:#071a38;
-  margin-top:20px;
+.message{
+  margin-top:15px;
+  padding:12px;
+  border-radius:7px;
+  display:none;
 }
 
-.btn:hover{
-  opacity:.9;
+.success{
+  background:#e8f7ed;
+  color:#177245;
 }
 
-.posts{
-  margin-top:25px;
+.error{
+  background:#fdecec;
+  color:#b42318;
 }
 
-.post{
+.recent{
   background:white;
-  border:1px solid #e2e7ef;
-  border-radius:12px;
-  padding:17px;
-  margin-bottom:12px;
+  margin-top:25px;
+  padding:25px;
+  border-radius:14px;
 }
 
-.post strong{
-  display:block;
-  margin-bottom:6px;
-}
-
-.badge{
-  display:inline-block;
-  background:#e8f0ff;
-  color:#2563eb;
-  padding:5px 9px;
-  border-radius:6px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-@media(max-width:800px){
-  .grid{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(max-width:550px){
-  .header{
-    padding:15px;
-  }
-
-  .grid{
+@media(max-width:700px){
+  .cards{
     grid-template-columns:1fr;
   }
 
-  .title h2{
-    font-size:23px;
+  .blogger-top{
+    flex-direction:column;
+    align-items:flex-start;
   }
 
-  .container{
-    margin-top:20px;
+  .header{
+    padding:15px 4%;
   }
 }
 </style>
@@ -215,103 +233,541 @@ button{
 <body>
 
 <header class="header">
-  <div class="logo">
-    <div class="logo-box">NP</div>
+
+  <div class="brand">
+
+    <div class="logo">NP</div>
+
     <div>
-      <h1>NIJUKTI PATH</h1>
-      <p>SARKARI NAUKRI, SARKARI BHAROSA</p>
+      <h2>NIJUKTI PATH</h2>
+      <small>SARKARI NAUKRI • SARKARI BHAROSA</small>
     </div>
+
   </div>
+
 </header>
+
 
 <main class="container">
 
-  <div class="title">
-    <h2>Admin Panel</h2>
-    <p>Manage NIJUKTI PATH website updates</p>
-  </div>
+<h1>Admin Panel</h1>
 
-  <div class="grid">
+<p class="subtitle">
+Manage NIJUKTI PATH website updates
+</p>
 
-    <div class="card">
-      <h3>Government Jobs</h3>
-      <div class="number">0</div>
-    </div>
 
-    <div class="card">
-      <h3>Odisha Jobs</h3>
-      <div class="number">0</div>
-    </div>
+<!-- BLOGGER CONNECTION -->
 
-    <div class="card">
-      <h3>Answer Keys</h3>
-      <div class="number">0</div>
-    </div>
+<section class="blogger-box">
 
-    <div class="card">
-      <h3>Admit Cards</h3>
-      <div class="number">0</div>
-    </div>
+  <div class="blogger-top">
 
-    <div class="card">
-      <h3>Results</h3>
-      <div class="number">0</div>
-    </div>
+    <div>
 
-    <div class="card">
-      <h3>Education</h3>
-      <div class="number">0</div>
-    </div>
+      <div class="blogger-title">
+        📝 Blogger Connection
+      </div>
 
-  </div>
-
-  <div class="form-card">
-
-    <h2>Add New Post</h2>
-
-    <label>Post Title</label>
-    <input type="text" placeholder="Enter job/post title">
-
-    <label>Category</label>
-    <select>
-      <option>Government Jobs</option>
-      <option>Odisha Jobs</option>
-      <option>Answer Key</option>
-      <option>Admit Card</option>
-      <option>Results</option>
-      <option>Education</option>
-    </select>
-
-    <label>Description</label>
-    <textarea placeholder="Enter post description"></textarea>
-
-    <label>Official Link</label>
-    <input type="url" placeholder="https://">
-
-    <button class="btn" onclick="addPost()">ADD POST</button>
-
-  </div>
-
-  <div class="posts">
-    <div class="form-card">
-      <h2>Recent Posts</h2>
-
-      <div class="post">
-        <span class="badge">ANSWER KEY</span>
-        <strong>No posts added yet</strong>
-        <small>Your added posts will appear here.</small>
+      <div id="bloggerStatus" class="status">
+        Blogger is not connected
       </div>
 
     </div>
+
+
+    <div>
+
+      <button
+        id="connectBtn"
+        class="connect-btn"
+        onclick="connectBlogger()">
+        🔗 CONNECT BLOGGER
+      </button>
+
+      <button
+        id="disconnectBtn"
+        class="disconnect-btn"
+        onclick="disconnectBlogger()">
+        Disconnect
+      </button>
+
+    </div>
+
   </div>
+
+</section>
+
+
+<!-- DASHBOARD CARDS -->
+
+<section class="cards">
+
+  <div class="card">
+    <h3>Government Jobs</h3>
+    <div class="count" id="governmentCount">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Odisha Jobs</h3>
+    <div class="count" id="odishaCount">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Answer Keys</h3>
+    <div class="count" id="answerCount">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Admit Cards</h3>
+    <div class="count" id="admitCount">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Results</h3>
+    <div class="count" id="resultCount">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Education</h3>
+    <div class="count" id="educationCount">0</div>
+  </div>
+
+</section>
+
+
+<!-- ADD POST -->
+
+<section class="form-box">
+
+<h2>Add New Post</h2>
+
+
+<div class="form-group">
+
+<label for="postTitle">
+Post Title
+</label>
+
+<input
+  id="postTitle"
+  type="text"
+  placeholder="Enter job/post title">
+
+</div>
+
+
+<div class="form-group">
+
+<label for="category">
+Category
+</label>
+
+<select id="category">
+
+<option value="Government Jobs">
+Government Jobs
+</option>
+
+<option value="Odisha Jobs">
+Odisha Jobs
+</option>
+
+<option value="Answer Key">
+Answer Key
+</option>
+
+<option value="Admit Card">
+Admit Card
+</option>
+
+<option value="Results">
+Results
+</option>
+
+<option value="Education">
+Education
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="description">
+Description
+</label>
+
+<textarea
+  id="description"
+  placeholder="Enter post description"></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="officialLink">
+Official Link
+</label>
+
+<input
+  id="officialLink"
+  type="url"
+  placeholder="https://">
+
+</div>
+
+
+<button
+  class="add-btn"
+  onclick="addPost()">
+
+ADD POST
+
+</button>
+
+
+<div id="message" class="message"></div>
+
+</section>
+
+
+<section class="recent">
+
+<h2>Recent Posts</h2>
+
+<div id="recentPosts">
+
+<p>No posts added yet</p>
+
+</div>
+
+</section>
 
 </main>
 
+
 <script>
-function addPost(){
-  alert("Post form ready. Blogger connection will be added in the next step.");
+
+/* ==========================================
+   BLOGGER CONNECT
+========================================== */
+
+function connectBlogger(){
+
+  window.location.href =
+    "/api/auth/login";
+
 }
+
+
+/* ==========================================
+   CHECK BLOGGER CONNECTION
+========================================== */
+
+async function checkBlogger(){
+
+  try{
+
+    const response =
+      await fetch("/api/auth/status");
+
+    if(!response.ok){
+      throw new Error("Status unavailable");
+    }
+
+    const data =
+      await response.json();
+
+    if(data.connected){
+
+      document.getElementById("bloggerStatus")
+        .textContent =
+        "🟢 Blogger Connected";
+
+      document.getElementById("connectBtn")
+        .style.display="none";
+
+      document.getElementById("disconnectBtn")
+        .style.display="inline-block";
+
+    }
+
+  }catch(error){
+
+    console.log(
+      "Blogger status check:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   DISCONNECT
+========================================== */
+
+function disconnectBlogger(){
+
+  document.cookie =
+    "BLOGGER_REFRESH_TOKEN=; Max-Age=0; path=/";
+
+  document.getElementById("bloggerStatus")
+    .textContent =
+    "Blogger is not connected";
+
+  document.getElementById("connectBtn")
+    .style.display="inline-block";
+
+  document.getElementById("disconnectBtn")
+    .style.display="none";
+
+}
+
+
+/* ==========================================
+   ADD POST
+========================================== */
+
+async function addPost(){
+
+  const title =
+    document.getElementById("postTitle")
+      .value.trim();
+
+  const category =
+    document.getElementById("category")
+      .value;
+
+  const description =
+    document.getElementById("description")
+      .value.trim();
+
+  const officialLink =
+    document.getElementById("officialLink")
+      .value.trim();
+
+  const message =
+    document.getElementById("message");
+
+
+  if(!title){
+
+    showMessage(
+      "Please enter post title.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  if(!description){
+
+    showMessage(
+      "Please enter description.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  if(!officialLink){
+
+    showMessage(
+      "Please enter official link.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch("/api/posts",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:JSON.stringify({
+
+          title:title,
+
+          category:category,
+
+          description:description,
+
+          officialLink:officialLink
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "Failed to add post"
+      );
+
+    }
+
+
+    showMessage(
+      "✅ Post added successfully!",
+      false
+    );
+
+
+    document.getElementById("postTitle")
+      .value="";
+
+    document.getElementById("description")
+      .value="";
+
+    document.getElementById("officialLink")
+      .value="";
+
+
+    loadPosts();
+
+
+  }catch(error){
+
+    showMessage(
+      "❌ "+error.message,
+      true
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   MESSAGE
+========================================== */
+
+function showMessage(text,error){
+
+  const box =
+    document.getElementById("message");
+
+  box.style.display="block";
+
+  box.textContent=text;
+
+  box.className =
+    "message " +
+    (error ? "error" : "success");
+
+}
+
+
+/* ==========================================
+   LOAD POSTS
+========================================== */
+
+async function loadPosts(){
+
+  try{
+
+    const response =
+      await fetch("/api/posts");
+
+    if(!response.ok) return;
+
+    const posts =
+      await response.json();
+
+    if(!Array.isArray(posts))
+      return;
+
+
+    document.getElementById("recentPosts")
+      .innerHTML =
+      posts.length
+      ? posts.map(post => `
+
+        <div style="
+          padding:12px 0;
+          border-bottom:1px solid #eee;
+        ">
+
+          <strong>
+            ${escapeHtml(post.title || "")}
+          </strong>
+
+          <div style="
+            font-size:13px;
+            color:#777;
+            margin-top:4px;
+          ">
+
+            ${escapeHtml(post.category || "")}
+
+          </div>
+
+        </div>
+
+      `).join("")
+      : "<p>No posts added yet</p>";
+
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
+
+/* ==========================================
+   SAFE HTML
+========================================== */
+
+function escapeHtml(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent=text;
+
+  return div.innerHTML;
+
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
+checkBlogger();
+
+loadPosts();
+
 </script>
 
 </body>
-  </html>
+</html>
