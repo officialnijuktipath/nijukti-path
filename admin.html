@@ -537,125 +537,95 @@ function disconnectBlogger(){
 async function addPost(){
 
   const title =
-    document.getElementById("postTitle")
-      .value.trim();
+    document.getElementById("postTitle").value.trim();
 
   const category =
-    document.getElementById("category")
-      .value;
+    document.getElementById("category").value;
 
   const description =
-    document.getElementById("description")
-      .value.trim();
+    document.getElementById("description").value.trim();
 
   const officialLink =
-    document.getElementById("officialLink")
-      .value.trim();
-
-  const message =
-    document.getElementById("message");
-
+    document.getElementById("officialLink").value.trim();
 
   if(!title){
-
-    showMessage(
-      "Please enter post title.",
-      true
-    );
-
+    showMessage("Please enter post title.", true);
     return;
-
   }
-
 
   if(!description){
-
-    showMessage(
-      "Please enter description.",
-      true
-    );
-
+    showMessage("Please enter description.", true);
     return;
-
   }
-
 
   if(!officialLink){
-
-    showMessage(
-      "Please enter official link.",
-      true
-    );
-
+    showMessage("Please enter official link.", true);
     return;
-
   }
-
 
   try{
 
-    const response =
-      await fetch("/api/posts",{
+    showMessage("⏳ Publishing post...", false);
 
-        method:"POST",
+    const response = await fetch("/api/posts", {
+      method: "POST",
 
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
 
-        body:JSON.stringify({
+      body: JSON.stringify({
+        title: title,
+        category: category,
+        description: description,
+        officialLink: officialLink
+      })
+    });
 
-          title:title,
+    const raw = await response.text();
 
-          category:category,
+    let data = {};
 
-          description:description,
+    try{
+      data = raw ? JSON.parse(raw) : {};
+    }
+    catch(parseError){
 
-          officialLink:officialLink
+      console.error("API returned:", raw);
 
-        })
-
-      });
-
-
-    const data =
-      await response.json();
-
+      throw new Error(
+        "Server returned an invalid response."
+      );
+    }
 
     if(!response.ok){
 
       throw new Error(
         data.error ||
-        "Failed to add post"
+        data.message ||
+        "Failed to add post."
       );
-
     }
-
 
     showMessage(
       "✅ Post added successfully!",
       false
     );
 
-
-    document.getElementById("postTitle")
-      .value="";
-
-    document.getElementById("description")
-      .value="";
-
-    document.getElementById("officialLink")
-      .value="";
-
+    document.getElementById("postTitle").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("officialLink").value = "";
 
     loadPosts();
 
+  }
+  catch(error){
 
-  }catch(error){
+    console.error("ADD POST ERROR:", error);
 
     showMessage(
-      "❌ "+error.message,
+      "❌ " + error.message,
       true
     );
 
