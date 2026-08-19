@@ -123,98 +123,90 @@ body{
 </style>
 
 
-<style id="india-odisha-heritage-header">
-/* 🇮🇳 NIJUKTI PATH — India + Odisha heritage background */
-.hero{
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 115%, rgba(246,190,72,.14), transparent 32%),
-    linear-gradient(135deg,#061936 0%,#0a2850 52%,#071a37 100%) !important;
-}
 
-/* Soft heritage silhouettes */
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:auto -5% 0 -5%;
-  height:42%;
-  opacity:.10;
+
+
+<style id="india-odisha-heritage-final">
+.hero{
+  position:relative !important;
+  overflow:hidden !important;
+  isolation:isolate;
   background:
-    linear-gradient(to top,rgba(245,194,80,.65),transparent 70%),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 52px,
-      rgba(255,255,255,.22) 52px 54px,
-      transparent 54px 104px
-    );
-  clip-path:polygon(
-    0 100%,0 82%,8% 82%,8% 72%,11% 72%,11% 82%,
-    20% 82%,20% 69%,23% 69%,23% 82%,
-    31% 82%,31% 74%,34% 74%,34% 82%,
-    42% 82%,42% 66%,45% 66%,45% 82%,
-    53% 82%,53% 71%,56% 71%,56% 82%,
-    64% 82%,64% 68%,67% 68%,67% 82%,
-    76% 82%,76% 73%,79% 73%,79% 82%,
-    88% 82%,88% 70%,91% 70%,91% 82%,
-    100% 82%,100% 100%
-  );
+    radial-gradient(circle at 50% 118%, rgba(244,183,70,.13), transparent 34%),
+    linear-gradient(135deg,#061832 0%,#092a53 52%,#061a37 100%) !important;
+}
+.hero .heritage-layer{
+  position:absolute;
+  inset:0;
+  z-index:0;
   pointer-events:none;
 }
-
-/* Konark-inspired wheel */
-.hero::after{
-  content:"☼";
+.hero .heritage-layer svg{
   position:absolute;
-  right:4%;
-  bottom:-42px;
+  fill:none;
+  stroke:rgba(245,190,78,.22);
+  stroke-width:2;
+  vector-effect:non-scaling-stroke;
+}
+.hero .heritage-layer .india-gate{
+  left:1%;
+  bottom:-2px;
+  width:175px;
+  height:150px;
+  opacity:.24;
+}
+.hero .heritage-layer .parliament{
+  left:50%;
+  bottom:-8px;
+  width:240px;
+  height:125px;
+  transform:translateX(-50%);
+  opacity:.12;
+}
+.hero .heritage-layer .konark-wheel{
+  right:1.5%;
+  top:18px;
   width:190px;
   height:190px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:10px solid rgba(246,190,72,.16);
-  border-radius:50%;
-  color:rgba(246,190,72,.13);
-  font-size:112px;
-  line-height:1;
-  transform:rotate(8deg);
-  text-shadow:
-    0 0 0 rgba(246,190,72,.12),
-    0 0 18px rgba(246,190,72,.06);
-  pointer-events:none;
+  opacity:.19;
 }
-
-/* Keep all existing hero content above decoration */
-.hero > *{
+.hero .heritage-layer .jagannath{
+  right:17%;
+  bottom:-2px;
+  width:150px;
+  height:145px;
+  opacity:.12;
+}
+.hero .heritage-layer .ground{
+  left:0;
+  bottom:0;
+  width:100%;
+  height:70px;
+  opacity:.12;
+}
+.hero > h2,.hero > p,.hero > .line{
   position:relative;
   z-index:2;
 }
-
-/* Small India-inspired tricolour accent under the hero */
-.hero .accent-line{
-  background:linear-gradient(
-    90deg,
-    #f29b20 0 33%,
-    rgba(255,255,255,.9) 33% 66%,
-    #22a65a 66% 100%
-  ) !important;
+.hero .line{
+  position:relative;
+  z-index:3;
+  background:linear-gradient(90deg,#f59e0b 0 33%,#f4f4f4 33% 66%,#22a65a 66% 100%) !important;
 }
-
-/* Mobile refinement */
 @media(max-width:700px){
-  .hero::after{
-    width:125px;
-    height:125px;
-    right:-18px;
-    bottom:-28px;
-    font-size:72px;
-    border-width:7px;
+  .hero .heritage-layer .india-gate{
+    left:-18px;width:105px;height:105px;opacity:.17;
   }
-  .hero::before{
-    height:30%;
-    opacity:.075;
+  .hero .heritage-layer .parliament{
+    width:150px;height:82px;opacity:.09;
   }
+  .hero .heritage-layer .konark-wheel{
+    right:-24px;top:25px;width:135px;height:135px;opacity:.15;
+  }
+  .hero .heritage-layer .jagannath{
+    right:13%;width:90px;height:90px;opacity:.08;
+  }
+  .hero .heritage-layer .ground{height:48px;opacity:.08}
 }
 </style>
 
@@ -245,6 +237,57 @@ body{
 </nav>
 
 <section class="hero">
+
+<div class="heritage-layer" aria-hidden="true">
+  <!-- India Gate inspired silhouette -->
+  <svg class="india-gate" viewBox="0 0 180 155">
+    <path d="M28 151V48h124v103M20 48h140M40 48V31h100v17"/>
+    <path d="M52 151V93c0-18 12-31 38-31s38 13 38 31v58"/>
+    <path d="M52 93h76M60 151V72M120 151V72"/>
+    <path d="M40 31l10-14h80l10 14M74 17v-8h32v8"/>
+  </svg>
+
+  <!-- Parliament inspired dome/colonnade -->
+  <svg class="parliament" viewBox="0 0 260 135">
+    <path d="M12 120h236M25 108h210M35 108V76h190v32"/>
+    <path d="M45 76c12-39 30-58 85-65 55 7 73 26 85 65"/>
+    <path d="M58 76V108M78 76V108M98 76V108M118 76V108M138 76V108M158 76V108M178 76V108M198 76V108"/>
+    <path d="M120 11V4M110 6h20"/>
+  </svg>
+
+  <!-- Konark Sun Temple wheel inspired mark -->
+  <svg class="konark-wheel" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="82"/>
+    <circle cx="100" cy="100" r="12"/>
+    <circle cx="100" cy="100" r="68"/>
+    <g>
+      <path d="M100 18v70M100 112v70"/>
+      <path d="M18 100h70M112 100h70"/>
+      <path d="M42 42l41 41M117 117l41 41"/>
+      <path d="M158 42l-41 41M83 117l-41 41"/>
+    </g>
+    <g opacity=".8">
+      <path d="M100 27v20M100 153v20M27 100h20M153 100h20"/>
+      <path d="M48 48l14 14M138 138l14 14M152 48l-14 14M62 138l-14 14"/>
+    </g>
+  </svg>
+
+  <!-- Jagannath/Odisha temple inspired silhouette -->
+  <svg class="jagannath" viewBox="0 0 160 150">
+    <path d="M25 145V93h110v52M18 93h124"/>
+    <path d="M42 93V73h76v20M50 73V57h60v16"/>
+    <path d="M58 57V43h44v14M65 43V30h30v13"/>
+    <path d="M72 30V18h16v12M80 18V7"/>
+    <path d="M80 7c12 6 17 6 23 0"/>
+    <path d="M40 145V112M55 145V112M70 145V112M90 145V112M105 145V112M120 145V112"/>
+  </svg>
+
+  <!-- Soft architectural baseline -->
+  <svg class="ground" viewBox="0 0 1200 90" preserveAspectRatio="none">
+    <path d="M0 80h1200"/>
+    <path d="M0 80V65h65V50h35v15h80V42h48v23h90V52h42v13h95V45h55v20h90V54h45v11h100V48h50v17h95V53h55v12h95V45h50v20h110"/>
+  </svg>
+</div>
 <h2>Latest Government <span class="yellow">Jobs</span>, Admit Card,<br>Answer Keys, <span class="green">Results</span> &amp; More</h2>
 <p>Get all latest updates, official notifications and important details in one place.</p>
 <div class="line"></div>
