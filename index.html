@@ -51,6 +51,17 @@ body{
 }
 </style>
 
+
+<style id="active-menu-style">
+.nav a.active-menu{
+  color:#ffd54a !important;
+  background:rgba(255,193,7,.10);
+  border:1px solid rgba(255,193,7,.55);
+  box-shadow:0 2px 10px rgba(255,193,7,.08);
+  border-radius:7px;
+}
+</style>
+
 </head>
 <body>
 
@@ -306,5 +317,45 @@ function loadFeed(){
 }
 loadFeed();
 </script>
+
+<script id="active-menu-script">
+(function(){
+  function markActiveMenu(){
+    var links = document.querySelectorAll('.nav a');
+    var path = (location.pathname + location.search).toLowerCase();
+
+    links.forEach(function(a){
+      a.classList.remove('active-menu');
+      var text = (a.textContent || '').trim().toLowerCase();
+      var href = (a.getAttribute('href') || '').toLowerCase();
+
+      var active = false;
+
+      if (text === 'home') {
+        active = path === '/' || path === '/index.html';
+      } else if (/government jobs/i.test(text)) {
+        active = /[?&]label=government%20jobs|[?&]label=government%20jobs\b|government[-_ ]jobs/i.test(path);
+      } else if (/odisha jobs/i.test(text)) {
+        active = /[?&]label=odisha%20jobs|odisha[-_ ]jobs/i.test(path);
+      } else if (/answer key/i.test(text)) {
+        active = /[?&]label=answer%20key|answer[-_ ]key/i.test(path);
+      } else if (/admit card/i.test(text)) {
+        active = /[?&]label=admit%20card|admit[-_ ]card/i.test(path);
+      } else if (/results/i.test(text)) {
+        active = /[?&]label=results\b|result/i.test(path);
+      } else if (/education/i.test(text)) {
+        active = /[?&]label=education\b|education/i.test(path);
+      }
+
+      if(active) a.classList.add('active-menu');
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', markActiveMenu);
+  window.addEventListener('load', markActiveMenu);
+  setTimeout(markActiveMenu, 500);
+})();
+</script>
+
 </body>
 </html>
