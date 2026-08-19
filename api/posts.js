@@ -1,7 +1,5 @@
-const https = require("https");
-
 function sendJSON(res, status, data) {
-  res.status(status).json(data);
+  return res.status(status).json(data);
 }
 
 function getCookie(req, name) {
@@ -73,7 +71,7 @@ async function getMyBlogs(accessToken) {
     {
       headers: {
         Authorization:
-          Bearer ${accessToken}
+          `Bearer ${accessToken}`
       }
     }
   );
@@ -128,13 +126,13 @@ async function createBloggerPost(
   `;
 
   const response = await fetch(
-    https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts,
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts`,
     {
       method: "POST",
 
       headers: {
         Authorization:
-          Bearer ${accessToken},
+          `Bearer ${accessToken}`,
 
         "Content-Type":
           "application/json"
@@ -166,14 +164,17 @@ async function createBloggerPost(
   return data;
 }
 
-async function getBloggerPosts(accessToken, blogId) {
+async function getBloggerPosts(
+  accessToken,
+  blogId
+) {
 
   const response = await fetch(
-    https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?maxResults=20,
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?maxResults=20`,
     {
       headers: {
         Authorization:
-          Bearer ${accessToken}
+          `Bearer ${accessToken}`
       }
     }
   );
@@ -194,9 +195,10 @@ module.exports = async function handler(req, res) {
 
   try {
 
-    if (req.method !== "POST" &&
-        req.method !== "GET") {
-
+    if (
+      req.method !== "POST" &&
+      req.method !== "GET"
+    ) {
       return sendJSON(
         res,
         405,
@@ -214,7 +216,6 @@ module.exports = async function handler(req, res) {
       );
 
     if (!refreshToken) {
-
       return sendJSON(
         res,
         401,
@@ -225,9 +226,10 @@ module.exports = async function handler(req, res) {
       );
     }
 
-    if (!process.env.BLOGGER_CLIENT_ID ||
-        !process.env.BLOGGER_CLIENT_SECRET) {
-
+    if (
+      !process.env.BLOGGER_CLIENT_ID ||
+      !process.env.BLOGGER_CLIENT_SECRET
+    ) {
       return sendJSON(
         res,
         500,
@@ -249,7 +251,6 @@ module.exports = async function handler(req, res) {
       );
 
     if (!blogs.length) {
-
       return sendJSON(
         res,
         404,
@@ -260,19 +261,8 @@ module.exports = async function handler(req, res) {
       );
     }
 
-    /*
-      First blog of the connected
-      Google account is used.
-    */
-
     const blogId =
       blogs[0].id;
-
-    /*
-      GET /api/posts
-      ----------------
-      Load recent Blogger posts
-    */
 
     if (req.method === "GET") {
 
@@ -287,27 +277,15 @@ module.exports = async function handler(req, res) {
         200,
         posts.map(post => ({
           id: post.id,
-
-          title:
-            post.title || "",
-
+          title: post.title || "",
           category:
             post.labels?.[0] || "",
-
-          url:
-            post.url || "",
-
+          url: post.url || "",
           published:
             post.published || ""
         }))
       );
     }
-
-    /*
-      POST /api/posts
-      ----------------
-      Create Blogger post
-    */
 
     const {
       title,
@@ -317,7 +295,6 @@ module.exports = async function handler(req, res) {
     } = req.body || {};
 
     if (!title) {
-
       return sendJSON(
         res,
         400,
@@ -329,7 +306,6 @@ module.exports = async function handler(req, res) {
     }
 
     if (!description) {
-
       return sendJSON(
         res,
         400,
@@ -341,7 +317,6 @@ module.exports = async function handler(req, res) {
     }
 
     if (!officialLink) {
-
       return sendJSON(
         res,
         400,
