@@ -62,6 +62,66 @@ body{
 }
 </style>
 
+
+<style id="header-alignment-fix">
+/* Premium header alignment */
+.header-inner{
+  position:relative;
+  display:grid !important;
+  grid-template-columns:auto minmax(280px, 520px) auto;
+  align-items:center;
+  column-gap:24px;
+}
+
+/* Search bar centered in the header */
+.header-search,
+.search-box,
+.search-wrap{
+  justify-self:center;
+  width:min(100%, 520px) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+/* Navigation stays centered and evenly spaced */
+.nav{
+  display:flex !important;
+  align-items:center;
+  justify-content:center !important;
+  gap:8px !important;
+  flex-wrap:wrap;
+}
+
+.nav a{
+  white-space:nowrap;
+}
+
+/* Mobile: compact but still centered */
+@media (max-width: 700px){
+  .header-inner{
+    grid-template-columns:auto 1fr auto;
+    column-gap:10px;
+  }
+
+  .header-search,
+  .search-box,
+  .search-wrap{
+    width:min(100%, 300px) !important;
+  }
+
+  .nav{
+    justify-content:flex-start !important;
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    scrollbar-width:none;
+  }
+
+  .nav::-webkit-scrollbar{
+    display:none;
+  }
+}
+</style>
+
 </head>
 <body>
 
