@@ -199,6 +199,18 @@ body{
 .home-empty{grid-column:1/-1;text-align:center;padding:28px;background:#fff;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b;font-size:12px}
 @media(max-width:700px){.notice-strip{align-items:flex-start}.notice-label{font-size:9px;padding:6px 8px}.notice-text{font-size:10px}.home-tools{align-items:flex-start;flex-direction:column}.home-count{align-self:flex-end}}
 </style>
+
+<style id="clean-public-card-copy">
+.card .desc{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:38px;
+  line-height:1.55;
+}
+.edu-card .desc{-webkit-line-clamp:2;min-height:31px}
+</style>
 </head>
 <body>
 
@@ -357,11 +369,37 @@ function educationTags(e){
   if(/\b(scholarship|admission|education|college|university|school)\b/i.test(text) && !tags.length) tags.push('Education Update');
   return tags;
 }
+
+function cleanPublicSummary(e){
+  const raw=strip((e.summary?.$t||'')+(e.content?.$t||''));
+  if(!raw) return 'Official update and important information.';
+
+  // Remove common admin/test metadata from the public card preview.
+  let s=raw
+    .replace(/\bThis is a test notification\b[:\-]?\s*/ig,'')
+    .replace(/\bTest notification\b[:\-]?\s*/ig,'')
+    .replace(/\bCategory\s*:\s*[^|•\n]+/ig,'')
+    .replace(/\bUpdate Type\s*:\s*[^|•\n]+/ig,'')
+    .replace(/\bOrganization\s*:\s*/ig,'')
+    .replace(/\bCourse\s*\/\s*Class\s*:\s*/ig,'')
+    .replace(/\bPost Name\s*:\s*/ig,'')
+    .replace(/\bExam Name\s*:\s*/ig,'')
+    .replace(/\bOfficial Notification Link\s*:\s*\S+/ig,'')
+    .replace(/\bApplication \/ Registration Number Information\s*:\s*[^|•\n]+/ig,'')
+    .replace(/\s{2,}/g,' ')
+    .replace(/^[\s:|•\-]+|[\s:|•\-]+$/g,'');
+
+  // Prefer the first useful sentence/line instead of exposing long Blogger HTML-derived text.
+  s=s.split(/\n+/).map(x=>x.trim()).filter(Boolean).slice(0,2).join(' ');
+  if(!s) s='Official update and important information.';
+  return s.length>155 ? s.slice(0,152).replace(/\s+\S*$/,'')+'…' : s;
+}
+
 function card(e){
   let labels=getLabels(e);
   let label=labels[0]||'LATEST UPDATE';
   let isEdu=hasLabel(e,'Education');
-  let desc=strip((e.summary&&e.summary.$t)||(e.content&&e.content.$t)||'').slice(0,150)+'...';
+  let desc=cleanPublicSummary(e);
   let a=applyLink(e);
   let action=actionLabel(e);
   if(isEdu){
