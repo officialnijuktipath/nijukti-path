@@ -108,6 +108,11 @@
 @media(max-width:760px){.profileMenu{right:-4px}.profileBtn .who{display:none}}
 
 </style>
+
+<style id="blogger-connection-css">
+#bloggerReconnectBtn{transition:.18s}#bloggerReconnectBtn:disabled{opacity:.65;cursor:wait}
+#bloggerStatusBadge{transition:.18s}.blogger-ok{background:#dcfce7!important;color:#16803b!important}.blogger-warn{background:#fff7df!important;color:#a56a00!important}.blogger-bad{background:#fdecec!important;color:#c62828!important}.blogger-check{background:#eef5ff!important;color:#0755c9!important}
+</style>
 </head><body>
 <div id="adminLoginGate">
   <div class="login-page">
@@ -200,7 +205,7 @@
 </div></div></div></header>
 <section class="content" id="dashboard"><div class="heading"><div><h1>Dashboard</h1><p>Welcome back, Admin! Here's what's happening on your website today.</p></div><div class="date">▣ &nbsp; 20 August 2026, Thursday</div></div>
 <div class="stats"><div class="stat"><div class="si blue">▣</div><div><h4>Government Jobs</h4><div class="num" id="gov">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si green">♧</div><div><h4>Odisha Jobs</h4><div class="num" id="odisha">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si orange">🔗</div><div><h4>Answer Keys</h4><div class="num" id="answer">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si purple">▣</div><div><h4>Admit Cards</h4><div class="num" id="admit">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si teal">▥</div><div><h4>Results</h4><div class="num" id="result">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si pink">🎓</div><div><h4>Education</h4><div class="num" id="education">0</div><div class="view">View all →</div></div></div></div>
-<div class="row2"><div class="card connection" id="connection"><div class="linkcircle">🔗</div><div><h3>Blogger Connection</h3><span class="ok">● Connected</span><p>Your Blogger site is connected and working fine.</p></div><button class="outline" onclick="loadPosts()">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b>0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
+<div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b>0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
 <div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form">
 <div class="formgrid">
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
@@ -392,4 +397,52 @@ setPostType("Government Jobs");loadPosts();
 })();
 </script>
 
+
+<script id="blogger-connection-js">
+(function(){
+  const badge=document.getElementById("bloggerStatusBadge");
+  const text=document.getElementById("bloggerStatusText");
+  const checked=document.getElementById("bloggerChecked");
+  const btn=document.getElementById("bloggerReconnectBtn");
+  const icon=document.getElementById("bloggerLinkIcon");
+  if(!badge||!text||!btn)return;
+
+  function setState(state,message){
+    badge.className="ok "+(state==="connected"?"blogger-ok":state==="checking"?"blogger-check":state==="warning"?"blogger-warn":"blogger-bad");
+    if(state==="connected"){badge.textContent="● Connected";icon.textContent="🔗";}
+    else if(state==="checking"){badge.textContent="● Checking...";icon.textContent="⏳";}
+    else if(state==="warning"){badge.textContent="● Reconnect Required";icon.textContent="⚠️";}
+    else{badge.textContent="● Disconnected";icon.textContent="🔌";}
+    text.textContent=message;
+    checked.textContent=state==="checking"?"":"Last checked: "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+  }
+
+  async function checkBloggerConnection(){
+    setState("checking","Checking your Blogger connection...");
+    btn.disabled=true;
+    try{
+      const r=await fetch("/api/auth/status",{cache:"no-store",credentials:"same-origin"});
+      const raw=await r.text();
+      let d={};try{d=raw?JSON.parse(raw):{};}catch(e){}
+      if(!r.ok)throw new Error(d.error||d.message||"Status unavailable");
+      if(d.connected){
+        const site=d.blogName||d.blogTitle||d.blogUrl;
+        setState("connected",site?"Connected to "+site:"Your Blogger site is connected and ready to publish.");
+      }else{
+        setState("warning","Blogger authorization is not active. Reconnect to continue publishing.");
+      }
+    }catch(e){
+      setState("bad","Unable to verify Blogger connection right now. Please try Reconnect.");
+    }finally{btn.disabled=false;}
+  }
+
+  btn.addEventListener("click",function(){
+    btn.disabled=true;btn.textContent="⏳ Connecting...";
+    window.location.href="/api/auth/login";
+  });
+
+  window.checkBloggerConnection=checkBloggerConnection;
+  checkBloggerConnection();
+})();
+</script>
 </body></html>
