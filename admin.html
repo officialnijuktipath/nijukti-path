@@ -303,6 +303,32 @@ button:disabled{opacity:.55;cursor:not-allowed}
   .form-section-title small{display:none}
 }
 </style>
+
+<style id="exam-date-manual-polish">
+.exam-date-mode{
+  margin-top:8px;padding:9px 10px;border:1px solid #e3eaf4;
+  border-radius:10px;background:#f8faff;
+}
+.exam-date-mode-title{
+  font-size:10px;font-weight:800;color:#17355f;margin-bottom:7px;
+}
+.exam-date-options{
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.exam-date-option{
+  display:inline-flex;align-items:center;gap:5px;padding:6px 8px;
+  border:1px solid #dce5f1;border-radius:8px;background:#fff;
+  font-size:9px;color:#34445a;cursor:pointer;
+}
+.exam-date-option input{margin:0}
+.exam-date-manual{
+  display:none;margin-top:8px;
+}
+.exam-date-manual.show{display:block}
+.exam-date-help{
+  margin-top:4px;font-size:8.5px;color:#7a8799;line-height:1.35;
+}
+</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -1029,5 +1055,19 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   });
 });
+</script>
+
+<script id="exam-date-manual-script">
+(function(){
+  const wrap = document.getElementById('examDateManualWrap');
+  const radios = document.querySelectorAll('input[name="examDateType"]');
+  if(!wrap || !radios.length) return;
+  function syncExamDateMode(){
+    const selected = document.querySelector('input[name="examDateType"]:checked');
+    wrap.classList.toggle('show', selected && selected.value === 'manual');
+  }
+  radios.forEach(r => r.addEventListener('change', syncExamDateMode));
+  syncExamDateMode();
+})();
 </script>
 </body></html>
