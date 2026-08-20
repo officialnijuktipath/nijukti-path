@@ -94,6 +94,19 @@
 .login-motto{text-align:center;margin-top:20px;font-size:20px;font-style:italic;color:#153a75}.login-motto span{color:#e5a500}
 @media(max-width:900px){.login-safety{display:none}.login-main{grid-template-columns:1fr}.login-hero{padding-top:20px}.login-card{max-width:620px}.login-wordmark{font-size:48px}.login-tagline{font-size:14px}.login-hero-copy{font-size:16px}.login-bottom{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.login-page{padding:16px}.login-main{margin-top:12px;gap:12px}.login-hero{padding:10px 0}.login-logo-mark{font-size:65px}.login-wordmark{font-size:39px}.login-tagline{font-size:11px;letter-spacing:2px}.login-hero-copy{font-size:14px;margin:18px auto}.login-features{gap:8px}.login-feature{padding:10px}.login-feature-icon{width:34px;height:34px;font-size:17px}.login-feature b{font-size:11px}.login-feature small{font-size:8px}.login-card{padding:28px 18px;border-radius:22px}.login-title{font-size:30px}.login-lock{width:48px;height:48px}.login-field input{height:68px;padding-left:62px}.login-field label{left:62px}.login-field .field-icon{left:16px}.login-bottom{grid-template-columns:1fr 1fr}.login-stat{padding:12px 6px}.login-stat b{font-size:16px}.login-motto{font-size:16px}}
+
+.profileWrap{position:relative}
+.profileBtn{display:flex;align-items:center;gap:10px;border:0;background:transparent;color:#fff;padding:2px;cursor:pointer}
+.profileBtn .avatar{flex:none}
+.profileMenu{display:none;position:absolute;right:0;top:50px;width:220px;background:#fff;color:#17233b;border:1px solid #dfe5ee;border-radius:12px;box-shadow:0 15px 35px #10264a25;overflow:hidden;z-index:100}
+.profileMenu.open{display:block}
+.profileMenuHead{padding:13px 14px;border-bottom:1px solid #e7ebf1;background:#f8fbff}
+.profileMenuHead b{display:block;font-size:12px}.profileMenuHead small{color:#738096;font-size:10px}
+.profileMenu button{width:100%;border:0;background:#fff;text-align:left;padding:11px 14px;font-size:11px;cursor:pointer;color:#24334d}
+.profileMenu button:hover{background:#f3f7fd}
+.profileMenu .logoutItem{color:#d72848;border-top:1px solid #edf0f4;font-weight:bold}
+@media(max-width:760px){.profileMenu{right:-4px}.profileBtn .who{display:none}}
+
 </style>
 </head><body>
 <div id="adminLoginGate">
@@ -171,7 +184,20 @@
 
 <div class="app"><aside class="side" id="side"><div class="brand"><div class="logo">NP</div><div><b>NIJUKTI PATH</b><small>SARKARI NAUKRI • SARKARI BHAROSA</small></div></div><div class="mt">Main</div><nav class="nav">
 <a class="active" href="#dashboard">⌂ Dashboard</a><a href="#add">✎ Add New Post</a><a href="#recent">☷ All Posts</a><a href="#categories">▱ Categories</a><a href="#add">▣ Admit Cards</a><a href="#add">▥ Results</a><a href="#add">🔗 Answer Keys</a><a href="#add">🎓 Education</a><a href="#notifications">♧ Recent Notifications</a></nav><div class="mt">Tools</div><nav class="nav"><a href="#connection">🔗 Blogger Connection</a><a href="#backup">▣ Backup & Restore</a></nav><div class="mt">Settings</div><nav class="nav"><a href="#settings">⚙ Site Settings</a><a href="#profile">● Profile Settings</a></nav><div class="sidebox"><div class="crown">♛</div><b>Nijukti Path</b><span>Empowering Aspirants</span></div></aside>
-<main class="main"><header class="top"><button class="hamb" onclick="side.classList.toggle('open')">☰</button><div class="search">⌕ <input id="search" placeholder="Search posts, categories, admit cards..." oninput="filterPosts()"></div><div class="topright"><span>♧</span><div class="avatar">A</div><div class="who"><b>Admin</b><small>Super Admin</small></div><span>⌄</span></div></header>
+<main class="main"><header class="top"><button class="hamb" onclick="side.classList.toggle('open')">☰</button><div class="search">⌕ <input id="search" placeholder="Search posts, categories, admit cards..." oninput="filterPosts()"></div><div class="topright">
+<span>♧</span>
+<div class="profileWrap">
+<button class="profileBtn" id="profileBtn" type="button">
+<div class="avatar">A</div>
+<div class="who"><b>Admin</b><small>Super Admin</small></div><span>⌄</span>
+</button>
+<div class="profileMenu" id="profileMenu">
+<div class="profileMenuHead"><b>Admin</b><small>Super Admin</small></div>
+<button type="button">👤 Profile</button>
+<button type="button">⚙️ Profile Settings</button>
+<button type="button">🔐 Change Password</button>
+<button type="button" class="logoutItem" id="logoutAdminBtn">🚪 Logout</button>
+</div></div></div></header>
 <section class="content" id="dashboard"><div class="heading"><div><h1>Dashboard</h1><p>Welcome back, Admin! Here's what's happening on your website today.</p></div><div class="date">▣ &nbsp; 20 August 2026, Thursday</div></div>
 <div class="stats"><div class="stat"><div class="si blue">▣</div><div><h4>Government Jobs</h4><div class="num" id="gov">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si green">♧</div><div><h4>Odisha Jobs</h4><div class="num" id="odisha">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si orange">🔗</div><div><h4>Answer Keys</h4><div class="num" id="answer">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si purple">▣</div><div><h4>Admit Cards</h4><div class="num" id="admit">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si teal">▥</div><div><h4>Results</h4><div class="num" id="result">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si pink">🎓</div><div><h4>Education</h4><div class="num" id="education">0</div><div class="view">View all →</div></div></div></div>
 <div class="row2"><div class="card connection" id="connection"><div class="linkcircle">🔗</div><div><h3>Blogger Connection</h3><span class="ok">● Connected</span><p>Your Blogger site is connected and working fine.</p></div><button class="outline" onclick="loadPosts()">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b>0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
@@ -337,4 +363,33 @@ setPostType("Government Jobs");loadPosts();
   checkAdmin();
 })();
 </script>
+
+<script id="profile-logout-js">
+(function(){
+  const btn=document.getElementById("profileBtn");
+  const menu=document.getElementById("profileMenu");
+  const logout=document.getElementById("logoutAdminBtn");
+
+  if(btn) btn.addEventListener("click",function(e){
+    e.stopPropagation();
+    menu.classList.toggle("open");
+  });
+
+  document.addEventListener("click",function(e){
+    if(menu && !e.target.closest(".profileWrap")) menu.classList.remove("open");
+  });
+
+  if(logout) logout.addEventListener("click",async function(){
+    try{
+      await fetch("/api/auth/admin/admin-logout",{
+        method:"POST",
+        credentials:"same-origin"
+      });
+    }catch(e){}
+    localStorage.removeItem("nijuktiAdminEmail");
+    location.reload();
+  });
+})();
+</script>
+
 </body></html>
