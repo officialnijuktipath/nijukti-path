@@ -133,6 +133,20 @@ button:disabled{opacity:.55;cursor:not-allowed}
 #notificationList .successDot{color:#16a34a}
 #notificationList .errorDot{color:#dc2626}
 </style>
+
+<style id="professional-icons-css">
+.uiico{width:17px;height:17px;display:inline-block;vertical-align:-3px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav .uiico{width:16px;height:16px;vertical-align:-3px}
+.si .uiico{width:20px;height:20px;stroke-width:1.8}
+.linkcircle .uiico{width:22px;height:22px}
+.qitem>.uiico{width:16px;height:16px;margin-top:2px}
+.head .uiico{width:16px;height:16px}
+.login-feature-icon .uiico{width:20px;height:20px}
+.profileMenu button .uiico{margin-right:7px}
+.professional-icon-label{display:inline-flex;align-items:center;gap:6px}
+.sidebox .crown{font-size:0}
+.sidebox .crown .uiico{width:27px;height:27px;color:#f1c026;stroke-width:1.6}
+</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -269,17 +283,17 @@ const schemas={
 };
 
 const actionLabels={
-  "Government Jobs":"📝 Apply Online Link",
-  "Odisha Jobs":"📝 Apply Online Link",
-  "Admit Cards":"🎫 Download Admit Card Link",
-  "Results":"📊 Check Result Link",
-  "Answer Keys":"🔑 Answer Key / Response Sheet Link",
-  "Education":"🎓 Apply / Admission Link"
+  "Government Jobs":"Apply Online Link",
+  "Odisha Jobs":"Apply Online Link",
+  "Admit Cards":"Download Admit Card Link",
+  "Results":"Check Result Link",
+  "Answer Keys":"Answer Key / Response Sheet Link",
+  "Education":"Apply / Admission Link"
 };
 
 function updateLinkLabels(type){
-  $("link1Label").innerHTML='📄 Official / Notification Link <span class="optional">(Optional)</span>';
-  $("link2Label").innerHTML=(actionLabels[type]||"🔗 Main Action Link")+' <span class="optional">(Optional)</span>';
+  $("link1Label").innerHTML='<span class="professional-icon-label">'+uiIcon("posts")+' Official / Notification Link <span class="optional">(Optional)</span></span>';
+  $("link2Label").innerHTML='<span class="professional-icon-label">'+uiIcon((type==="Admit Cards"?"admit":type==="Results"?"result":type==="Answer Keys"?"answer":type==="Education"?"education":"send"))+' '+(actionLabels[type]||"Main Action Link")+' <span class="optional">(Optional)</span></span>';
 }
 
 function setPostType(type){
@@ -359,7 +373,7 @@ async function saveDraft(){
     editingId=null;
     $("editingPostId").value="";
     $("draftCheck").checked=true;
-    showMsg("💾 Draft saved on Blogger.");
+    showMsg("Draft saved on Blogger.");
     resetForm();
     await loadPosts();
   }catch(e){showErr(e.message)}finally{setLoading(false)}
@@ -544,7 +558,7 @@ async function editPost(id){
 
     $("add").scrollIntoView({behavior:"smooth",block:"start"});
     $("title").focus();
-    showMsg("✏️ Draft opened. Details restored. Uncheck Draft and press Publish when ready.");
+    showMsg("Draft opened. Details restored. Uncheck Draft and press Publish when ready.");
   }catch(e){
     showErr("Draft open failed: "+e.message);
   }finally{setLoading(false)}
@@ -557,7 +571,7 @@ async function deletePost(id){
     const r=await fetch("/api/posts?id="+encodeURIComponent(id),{method:"DELETE"});
     const d=await r.json();
     if(!r.ok)throw Error(d.error||"Delete failed");
-    showMsg("🗑️ Post/draft deleted successfully.");
+    showMsg("Post/draft deleted successfully.");
     await loadPosts();
   }catch(e){showErr(e.message)}finally{setLoading(false)}
 }
@@ -762,6 +776,137 @@ loadPosts();
 
   window.checkBloggerConnection=checkBloggerConnection;
   checkBloggerConnection();
+})();
+</script>
+
+<script id="professional-icon-system">
+(function(){
+  const paths={
+    dashboard:'<path d="m3 10 7-7 7 7"/><path d="M5 9v8h4v-5h2v5h4V9"/>',
+    add:'<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="4"/>',
+    posts:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    category:'<path d="M4 5h16M4 12h16M4 19h16"/><circle cx="8" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="10" cy="19" r="1"/>',
+    admit:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16M3 9h18M12 13h5M12 16h3"/>',
+    result:'<path d="M5 20V10M12 20V4M19 20v-7"/><path d="M3 20h18"/>',
+    answer:'<path d="M5 4h10l4 4v12H5z"/><path d="M15 4v5h5M8 13h8M8 16h6"/>',
+    education:'<path d="m3 9 9-5 9 5-9 5z"/><path d="M7 11v5c2 2 10 2 10 0v-5M21 9v6"/>',
+    bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>',
+    link:'<path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"/>',
+    backup:'<path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h6"/><path d="M7 5V3h10v2"/>',
+    settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5h2.6v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"/>',
+    user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    lock:'<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+    logout:'<path d="M10 17l5-5-5-5M15 12H3"/><path d="M13 4h6v16h-6"/>',
+    calendar:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18"/>',
+    search:'<circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/>',
+    refresh:'<path d="M20 11a8 8 0 0 0-14-5L4 8"/><path d="M4 4v4h4M4 13a8 8 0 0 0 14 5l2-2"/><path d="M20 20v-4h-4"/>',
+    edit:'<path d="m4 16-.8 4.8L8 20l11-11-4-4z"/><path d="m13 6 4 4"/>',
+    trash:'<path d="M4 7h16M10 11v6M14 11v6"/><path d="M9 7V4h6v3M6 7l1 14h10l1-14"/>',
+    save:'<path d="M5 3h12l3 3v15H4V3z"/><path d="M8 3v6h8V3M8 16h8"/>',
+    send:'<path d="m3 4 18 8-18 8 4-8z"/><path d="M7 12h14"/>',
+    shield:'<path d="M12 3 20 6v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/>'
+  };
+  function icon(name, cls){
+    return '<svg class="uiico '+(cls||'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(paths[name]||paths.posts)+'</svg>';
+  }
+  window.uiIcon=icon;
+
+  function replaceNav(){
+    document.querySelectorAll('.nav a').forEach(a=>{
+      const t=a.textContent.trim().replace(/\s+/g,' ');
+      let n='posts';
+      if(t.includes('Dashboard'))n='dashboard';
+      else if(t.includes('Add New'))n='add';
+      else if(t.includes('All Posts'))n='posts';
+      else if(t.includes('Categories'))n='category';
+      else if(t.includes('Admit'))n='admit';
+      else if(t.includes('Results'))n='result';
+      else if(t.includes('Answer'))n='answer';
+      else if(t.includes('Education'))n='education';
+      else if(t.includes('Notifications'))n='bell';
+      else if(t.includes('Blogger'))n='link';
+      else if(t.includes('Backup'))n='backup';
+      else if(t.includes('Site Settings'))n='settings';
+      else if(t.includes('Profile'))n='user';
+      const label=t.replace(/^[^A-Za-z]+/,'');
+      a.innerHTML=icon(n)+'<span>'+label+'</span>';
+    });
+  }
+
+  function replaceStatIcons(){
+    const map=['posts','education','answer','admit','result','education'];
+    document.querySelectorAll('.si').forEach((el,i)=>el.innerHTML=icon(map[i]||'posts'));
+  }
+
+  function replaceQuickIcons(){
+    const map=['posts','send','posts','result'];
+    document.querySelectorAll('.qitem').forEach((el,i)=>{
+      const first=el.firstChild;
+      if(first && first.nodeType===3) first.remove();
+      if(!el.querySelector('.uiico')) el.insertAdjacentHTML('afterbegin',icon(map[i]||'posts'));
+    });
+  }
+
+  function replaceHeader(){
+    const sc=document.querySelector('.search');
+    if(sc && !sc.querySelector('.uiico')) sc.insertAdjacentHTML('afterbegin',icon('search'));
+    const date=document.querySelector('.date');
+    if(date)date.innerHTML=icon('calendar')+'<span>20 August 2026, Thursday</span>';
+    const conn=document.querySelector('#bloggerLinkIcon');
+    if(conn)conn.innerHTML=icon('link');
+    const rec=document.querySelector('#bloggerReconnectBtn');
+    if(rec)rec.innerHTML=icon('refresh')+'<span>Reconnect</span>';
+  }
+
+  function replaceProfileMenu(){
+    document.querySelectorAll('.profileMenu button').forEach(b=>{
+      const t=b.textContent.trim();
+      let n=t.includes('Logout')?'logout':t.includes('Password')?'lock':t.includes('Settings')?'settings':'user';
+      b.innerHTML=icon(n)+'<span>'+t.replace(/^[^A-Za-z]+/,'')+'</span>';
+    });
+  }
+
+  function replaceLoginFeatures(){
+    const map=['posts','admit','result','answer','education','bell'];
+    document.querySelectorAll('.login-feature-icon').forEach((el,i)=>el.innerHTML=icon(map[i]||'posts'));
+    const sec=document.querySelector('.login-secure');
+    if(sec)sec.innerHTML=icon('shield')+'<span>Secure Admin Access</span>';
+    const lk=document.querySelector('.login-lock');
+    if(lk)lk.innerHTML=icon('lock');
+  }
+
+  function replaceBrand(){
+    const c=document.querySelector('.sidebox .crown');
+    if(c)c.innerHTML=icon('shield');
+  }
+
+  function initial(){
+    replaceNav();replaceStatIcons();replaceQuickIcons();replaceHeader();
+    replaceProfileMenu();replaceLoginFeatures();replaceBrand();
+    const heads=document.querySelectorAll('.head h3');
+    heads.forEach(h=>{
+      const t=h.textContent;
+      if(t.includes('Add New Post'))h.innerHTML=icon('add')+'<span>Add New Post</span>';
+      if(t.includes('Drafts'))h.innerHTML=icon('save')+'<span>Drafts</span>';
+      if(t.includes('Recent Posts'))h.innerHTML=icon('posts')+'<span>Recent Posts</span>';
+      if(t.includes('Notifications'))h.innerHTML=icon('bell')+'<span>Notifications</span>';
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initial);else initial();
+
+  // Professional labels for the two standard links.
+  const labels={
+    "Government Jobs":["save","Apply Online Link"],
+    "Odisha Jobs":["save","Apply Online Link"],
+    "Admit Cards":["admit","Download Admit Card Link"],
+    "Results":["result","Check Result Link"],
+    "Answer Keys":["answer","Answer Key / Response Sheet Link"],
+    "Education":["education","Apply / Admission Link"]
+  };
+  window.professionalLinkLabel=function(type){
+    const a=labels[type]||["link","Main Action Link"];
+    return icon('posts')+' Official / Notification Link <span class="optional">(Optional)</span>';
+  };
 })();
 </script>
 </body></html>
