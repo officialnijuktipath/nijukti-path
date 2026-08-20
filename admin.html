@@ -404,26 +404,46 @@ function viewPost(url){if(url)window.open(url,"_blank");else showErr("Post URL i
 
 async function editPost(id){
   try{
-    const r=await fetch("/api/posts?id="+encodeURIComponent(id),{cache:"no-store"});
-    const p=await r.json();
-    if(!r.ok)throw Error(p.error||"Post details could not be loaded.");
+    // First use the draft already loaded in the dashboard.
+    // This avoids a second API call failing on some Vercel routes.
+    let p=drafts.find(x=>String(x.id)===String(id));
+
+    // Fallback: fetch the post if it is not in the current draft list.
+    if(!p){
+      const r=await fetch("/api/posts?id="+encodeURIComponent(id),{cache:"no-store"});
+      p=await r.json();
+      if(!r.ok)throw Error(p.error||"Post details could not be loaded.");
+    }
+
     const meta=extractDraftData(p.content||"");
     editingId=id;
-    setPostType(p.category||meta.category||"Government Jobs");
+
+    const selectedType=p.category||meta.category||"Government Jobs";
+    setPostType(selectedType);
+
     $("title").value=p.title||"";
     $("desc").value=meta.description||extractDescription(p.content||"")||"";
     $("link").value=meta.officialLink||"";
     $("link2").value=meta.secondLink||"";
     $("instructions").value=meta.instructions||"";
     $("chars").textContent=$("desc").value.length;
+
+    // Rebuild the selected category fields first, then restore their values.
     fillFields(meta.fields||{});
-    $("draftCheck").checked=(p.status==="draft");
+
+    // Editing a draft should keep it as a draft until the user explicitly
+    // unchecks Draft and presses Publish.
+    $("draftCheck").checked=true;
+
     const publishBtn=document.querySelector('button.publish');
-    if(publishBtn)publishBtn.textContent=p.status==="draft"?"➤ Publish Draft":"➤ Update Post";
-    $("add").scrollIntoView({behavior:"smooth"});
+    if(publishBtn)publishBtn.textContent="➤ Publish Draft";
+
+    $("add").scrollIntoView({behavior:"smooth",block:"start"});
     $("title").focus();
-    showMsg(p.status==="draft"?"✏️ Draft opened. Edit it and publish when ready.":"✏️ Edit mode enabled.");
-  }catch(e){showErr(e.message)}
+    showMsg("✏️ Draft opened. Details restored. Uncheck Draft and press Publish when ready.");
+  }catch(e){
+    showErr("Draft open failed: "+e.message);
+  }
 }
 
 async function deletePost(id){
