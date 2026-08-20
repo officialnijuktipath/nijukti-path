@@ -33,6 +33,33 @@ main{padding:38px 0 60px}.section-head{display:flex;justify-content:space-betwee
 @media(max-width:480px){.quick{grid-template-columns:repeat(2,1fr)}.wrap{padding:0 14px}.cat-grid{grid-template-columns:1fr}.popular-box,.categories-box{padding:18px}}
 </style>
 
+
+<style id="education-premium-style">
+/* Education / Scholarship / Admission premium presentation */
+.edu-card{position:relative;overflow:hidden}
+.edu-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#2563eb,#16a34a)}
+.edu-badge{background:#eef2ff;color:#3730a3}
+.edu-badge.scholarship{background:#ecfdf5;color:#15803d}
+.edu-badge.admission{background:#fff7ed;color:#c2410c}
+.edu-icon{background:#f0fdf4;color:#16a34a}
+.edu-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.edu-tag{font-size:9px;font-weight:800;padding:4px 7px;border-radius:999px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.edu-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0 14px}
+.edu-meta-item{background:#f8fafc;border:1px solid #eef2f7;border-radius:8px;padding:7px 9px;font-size:9px;color:#64748b}
+.edu-meta-item strong{display:block;color:#334155;font-size:9px;margin-top:2px}
+.edu-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.edu-detail-icon{width:52px;height:52px;border-radius:14px;background:#ecfdf5;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.edu-info-box{margin:20px 0;padding:16px;border:1px solid #dbeafe;background:linear-gradient(135deg,#f8fbff,#f0fdf4);border-radius:14px}
+.edu-info-title{font-size:12px;font-weight:900;color:#0f172a;margin-bottom:10px}
+.edu-info-row{display:flex;gap:8px;align-items:flex-start;font-size:11px;color:#475569;margin:7px 0}
+.edu-info-row i{width:16px;color:#2563eb;margin-top:2px}
+@media(max-width:480px){
+  .edu-meta{grid-template-columns:1fr}
+  .edu-detail-head{gap:10px}
+  .edu-detail-icon{width:44px;height:44px;font-size:17px}
+}
+</style>
+
 <style id="premium-soft-polish">
 /* Soft premium finish */
 body{
@@ -122,6 +149,39 @@ body{
 }
 </style>
 
+
+<style id="education-nav-dropdown">
+.nav-dropdown{position:relative;display:flex;align-items:center}
+.nav-drop-main{display:flex!important;align-items:center;gap:6px}
+.nav-drop-main i{font-size:8px;transition:transform .18s ease}
+.nav-dropdown:hover .nav-drop-main i{transform:rotate(180deg)}
+.nav-drop-menu{
+  position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(-4px);
+  min-width:220px;padding:7px;border-radius:12px;background:#fff;
+  border:1px solid #e2e8f0;box-shadow:0 12px 30px rgba(15,23,42,.14);
+  opacity:0;visibility:hidden;pointer-events:none;transition:.18s ease;z-index:1000;
+}
+.nav-drop-menu a{
+  display:flex!important;align-items:center;gap:7px;
+  padding:9px 10px!important;border:0!important;border-radius:8px!important;
+  color:#334155!important;background:transparent!important;font-size:10.5px!important;
+}
+.nav-drop-menu a:hover{background:#f1f5f9!important;color:#0f172a!important}
+.nav-dropdown:hover .nav-drop-menu,
+.nav-dropdown:focus-within .nav-drop-menu{
+  opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0);
+}
+@media(max-width:700px){
+  .nav-dropdown{position:static}
+  .nav-drop-menu{
+    left:14px;right:14px;transform:translateY(-4px);min-width:0;
+  }
+  .nav-dropdown:hover .nav-drop-menu,
+  .nav-dropdown:focus-within .nav-drop-menu{
+    transform:translateY(0);
+  }
+}
+</style>
 </head>
 <body>
 
@@ -145,7 +205,16 @@ body{
 <a href="/?label=Answer%20Key">ANSWER KEY</a>
 <a href="/?label=Admit%20Card">ADMIT CARD</a>
 <a href="/?label=Results">RESULTS</a>
-<a href="/?label=Education">EDUCATION</a>
+<div class="nav-dropdown">
+  <a href="/?label=Education" class="nav-drop-main">EDUCATION <i class="fa-solid fa-chevron-down"></i></a>
+  <div class="nav-drop-menu">
+    <a href="/?label=Education&edu=Scholarship">🎓 Scholarship</a>
+    <a href="/?label=Education&edu=%2B2%20Admission">🏫 +2 Admission</a>
+    <a href="/?label=Education&edu=%2B3%20Admission">🎓 +3 Admission</a>
+    <a href="/?label=Education&edu=School%20%2F%20College%20Updates">📚 School / College Updates</a>
+    <a href="/?label=Education&edu=Education%20Notifications">📝 Education Notifications</a>
+  </div>
+</div>
 </nav>
 
 <section class="hero">
@@ -242,19 +311,61 @@ if(hasLabel(e,'Results')) return 'fa-trophy';
 if(hasLabel(e,'Government Jobs')||hasLabel(e,'Odisha Jobs')) return 'fa-briefcase';
 return 'fa-bell';
 }
+function educationKind(e){
+  const text=(e.title?.$t||'')+' '+strip((e.summary?.$t||'')+(e.content?.$t||''));
+  if(/scholarship/i.test(text)) return 'scholarship';
+  if(/\+?\s*2\s*(admission|admission form|apply)/i.test(text)) return 'admission';
+  if(/\+?\s*3\s*(admission|admission form|apply)/i.test(text)) return 'admission';
+  if(/\b(admission|application form)\b/i.test(text)) return 'admission';
+  return 'education';
+}
+function educationLabel(e){
+  const k=educationKind(e);
+  if(k==='scholarship') return 'SCHOLARSHIP';
+  if(k==='admission') return 'ADMISSION';
+  return 'EDUCATION';
+}
+function educationIcon(e){
+  const k=educationKind(e);
+  if(k==='scholarship') return 'fa-graduation-cap';
+  if(k==='admission') return 'fa-school';
+  return 'fa-book-open';
+}
+function educationTags(e){
+  const text=(e.title?.$t||'')+' '+strip((e.summary?.$t||'')+(e.content?.$t||''));
+  const tags=[];
+  if(/scholarship/i.test(text)) tags.push('Scholarship');
+  if(/\+?\s*2\s*(admission|admission form|apply)/i.test(text)) tags.push('+2 Admission');
+  if(/\+?\s*3\s*(admission|admission form|apply)/i.test(text)) tags.push('+3 Admission');
+  if(/\b(scholarship|admission|education|college|university|school)\b/i.test(text) && !tags.length) tags.push('Education Update');
+  return tags;
+}
 function card(e){
   let labels=getLabels(e);
   let label=labels[0]||'LATEST UPDATE';
+  let isEdu=hasLabel(e,'Education');
   let desc=strip((e.summary&&e.summary.$t)||(e.content&&e.content.$t)||'').slice(0,150)+'...';
   let a=applyLink(e);
   let action=actionLabel(e);
+  if(isEdu){
+    const tags=educationTags(e);
+    return `<article class="card edu-card">
+      <div class="top"><span class="badge edu-badge ${educationKind(e)}">${educationLabel(e)}</span><span class="date"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</span></div>
+      <div class="mid"><h3><a href="${getUrl(e)}">${esc(e.title.$t)}</a></h3><div class="icon edu-icon"><i class="fa-solid ${educationIcon(e)}"></i></div></div>
+      <div class="org"><i class="fa-solid fa-building-columns"></i> NIJUKTI PATH</div>
+      ${tags.length?`<div class="edu-tags">${tags.map(t=>`<span class="edu-tag">${esc(t)}</span>`).join('')}</div>`:''}
+      <p class="desc">${esc(desc)}</p>
+      <a class="btn" href="${getUrl(e)}">VIEW DETAILS <i class="fa-solid fa-arrow-right"></i></a>
+      ${a?`<a class="btn apply" href="${esc(a)}" target="_blank" rel="noopener">APPLY / OFFICIAL LINK <i class="fa-solid fa-up-right-from-square"></i></a>`:''}
+    </article>`;
+  }
   return `<article class="card">
-  <div class="top"><span class="badge">${esc(label)}</span><span class="date"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</span></div>
-  <div class="mid"><h3><a href="${getUrl(e)}">${esc(e.title.$t)}</a></h3><div class="icon"><i class="fa-solid ${iconFor(e)}"></i></div></div>
-  <div class="org"><i class="fa-solid fa-landmark"></i> NIJUKTI PATH</div>
-  <p class="desc">${esc(desc)}</p>
-  <a class="btn" href="${getUrl(e)}">SEE MORE <i class="fa-solid fa-arrow-right"></i></a>
-  ${a?`<a class="btn ${action[2]}" href="${esc(a)}" target="_blank" rel="noopener">${action[0]} <i class="fa-solid ${action[1]}"></i></a>`:''}
+    <div class="top"><span class="badge">${esc(label)}</span><span class="date"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</span></div>
+    <div class="mid"><h3><a href="${getUrl(e)}">${esc(e.title.$t)}</a></h3><div class="icon"><i class="fa-solid ${iconFor(e)}"></i></div></div>
+    <div class="org"><i class="fa-solid fa-landmark"></i> NIJUKTI PATH</div>
+    <p class="desc">${esc(desc)}</p>
+    <a class="btn" href="${getUrl(e)}">SEE MORE <i class="fa-solid fa-arrow-right"></i></a>
+    ${a?`<a class="btn ${action[2]}" href="${esc(a)}" target="_blank" rel="noopener">${action[0]} <i class="fa-solid ${action[1]}"></i></a>`:''}
   </article>`;
 }
 function listPage(entries,label,query){
@@ -288,11 +399,13 @@ bodyBox.innerHTML=body;
   }
 });
 body=bodyBox.innerHTML;
+const isEdu=hasLabel(e,'Education');
+const eduTags=isEdu?educationTags(e):[];
 document.getElementById('app').innerHTML=`
 <a class="back" href="javascript:history.back()"><i class="fa-solid fa-arrow-left"></i>&nbsp; BACK</a>
 <article class="single">
-<h1>${esc(e.title.$t)}</h1>
-<div class="meta"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}</div>
+${isEdu?`<div class="edu-detail-head"><div><span class="badge edu-badge ${educationKind(e)}">${educationLabel(e)}</span><h1 style="margin-top:10px">${esc(e.title.$t)}</h1></div><div class="edu-detail-icon"><i class="fa-solid ${educationIcon(e)}"></i></div></div>`:`<h1>${esc(e.title.$t)}</h1>`}
+<div class="meta"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}${eduTags.length?` &nbsp; • &nbsp; ${eduTags.map(t=>esc(t)).join(' • ')}`:''}</div>
 ${a?`<div class="apply-box"><strong>${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'Download / Official Link':getLabels(e).some(x=>/results/i.test(x))?'Result / Official Link':'Application / Official Link'}</strong><br><br><a class="apply-now" href="${esc(a)}" target="_blank" rel="noopener">${getLabels(e).some(x=>/answer\s*key/i.test(x))?'CHECK ANSWER KEY':getLabels(e).some(x=>/admit\s*card/i.test(x))?'DOWNLOAD NOW':getLabels(e).some(x=>/results/i.test(x))?'CHECK NOW':'APPLY NOW'} &nbsp; <i class="fa-solid ${getLabels(e).some(x=>/answer\s*key/i.test(x))?'fa-check-circle':getLabels(e).some(x=>/admit\s*card/i.test(x))?'fa-download':getLabels(e).some(x=>/results/i.test(x))?'fa-check-circle':'fa-arrow-up-right-from-square'}"></i></a></div>`:''}
 <div class="body">${body}</div>
 </article>`;
