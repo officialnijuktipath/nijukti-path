@@ -113,7 +113,21 @@
 #bloggerReconnectBtn{transition:.18s}#bloggerReconnectBtn:disabled{opacity:.65;cursor:wait}
 #bloggerStatusBadge{transition:.18s}.blogger-ok{background:#dcfce7!important;color:#16803b!important}.blogger-warn{background:#fff7df!important;color:#a56a00!important}.blogger-bad{background:#fdecec!important;color:#c62828!important}.blogger-check{background:#eef5ff!important;color:#0755c9!important}
 </style>
+
+<style id="admin-polish-css">
+#opLoading{display:none;position:fixed;inset:0;background:rgba(8,22,48,.18);z-index:9999;align-items:center;justify-content:center}
+#opLoading.show{display:flex}
+#opLoading .box{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 10px 30px rgba(0,0,0,.15);font-size:12px;font-weight:700;color:#15345f}
+#toast{position:fixed;right:16px;bottom:16px;z-index:10000;display:none;max-width:330px;padding:12px 14px;border-radius:10px;background:#173b68;color:#fff;font-size:12px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+#toast.show{display:block}
+#toast.error{background:#b42318}
+button:disabled{opacity:.55;cursor:not-allowed}
+.fieldError{border-color:#d92d20!important;box-shadow:0 0 0 2px rgba(217,45,32,.08)}
+</style>
 </head><body>
+<div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
+<div id="toast"></div>
+
 <div id="adminLoginGate">
   <div class="login-page">
     <div class="login-safety"><span class="shield">🛡️</span>100% Safe &nbsp;|&nbsp; Fast &nbsp;|&nbsp; Reliable</div>
@@ -292,7 +306,28 @@ function quick(v){setPostType(v);$("add").scrollIntoView({behavior:"smooth"});$(
 function collectFields(){const out={},schema=schemas[$("type").value]||[];schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});return out}
 function fillFields(data){(schemas[$("type").value]||[]).forEach(f=>{const e=$("f_"+f[0]);if(e)e.value=(data||{})[f[0]]||""})}
 function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
+function clearFieldErrors(){
+  document.querySelectorAll(".fieldError").forEach(e=>e.classList.remove("fieldError"));
+}
+function validatePostForm(){
+  clearFieldErrors();
+  const checks=[["title","Post title is required."],["desc","Description is required."]];
+  for(const [id,msg] of checks){
+    const el=$(id);
+    if(!el.value.trim()){el.classList.add("fieldError");el.focus();showErr(msg);return false;}
+  }
+  const urlFields=[["link","Official / Notification Link"],["link2","Main Action Link"]];
+  for(const [id,label] of urlFields){
+    const el=$(id), value=el.value.trim();
+    if(value && !/^https?:\/\//i.test(value)){
+      el.classList.add("fieldError");el.focus();showErr(label+" must start with http:// or https://");return false;
+    }
+  }
+  return true;
+}
 async function saveDraft(){
+  if(!validatePostForm())return;
+  setLoading(true,"Saving draft to Blogger...");
   const payload={
     title:$("title").value.trim(),
     category:$("cat").value||$("type").value,
@@ -320,8 +355,23 @@ async function saveDraft(){
     await loadPosts();
   }catch(e){showErr(e.message)}
 }
-function showMsg(t){$("msg").textContent=t;$("msg").style.display="block";$("err").style.display="none"}
-function showErr(t){$("err").textContent="❌ "+t;$("err").style.display="block";$("msg").style.display="none"}
+function showMsg(t){
+  const el=$("toast"); if(!el)return;
+  el.textContent="✓ "+t; el.className="show"; el.style.display="block";
+  setTimeout(()=>{el.className="";el.style.display="none"},3500);
+}
+function showErr(t){
+  const el=$("toast"); if(!el)return;
+  el.textContent="✕ "+t; el.className="show error"; el.style.display="block";
+  setTimeout(()=>{el.className="";el.style.display="none"},5000);
+}
+function setLoading(on,text="Please wait..."){
+  const el=$("opLoading"), tx=$("opText");
+  if(!el)return;
+  tx.textContent=text;
+  el.classList.toggle("show",!!on);
+  document.querySelectorAll("button").forEach(b=>b.disabled=!!on);
+}
 $("desc").addEventListener("input",()=>{$("chars").textContent=$("desc").value.length});
 
 function filterPosts(){
@@ -405,6 +455,7 @@ async function loadPosts(){
 function viewPost(url){if(url)window.open(url,"_blank");else showErr("Post URL is not available.")}
 
 async function editPost(id){
+  setLoading(true,"Opening draft...");
   try{
     // First use the draft already loaded in the dashboard.
     // This avoids a second API call failing on some Vercel routes.
@@ -446,23 +497,26 @@ async function editPost(id){
     showMsg("✏️ Draft opened. Details restored. Uncheck Draft and press Publish when ready.");
   }catch(e){
     showErr("Draft open failed: "+e.message);
-  }
+  }finally{setLoading(false)}
 }
 
 async function deletePost(id){
   if(!id||!confirm("Delete this Blogger post/draft?"))return;
+  setLoading(true,"Deleting...");
   try{
     const r=await fetch("/api/posts?id="+encodeURIComponent(id),{method:"DELETE"});
     const d=await r.json();
     if(!r.ok)throw Error(d.error||"Delete failed");
     showMsg("🗑️ Post/draft deleted successfully.");
     await loadPosts();
-  }catch(e){showErr(e.message)}
+  }catch(e){showErr(e.message)}finally{setLoading(false)}
 }
 
 $("form").addEventListener("submit",async e=>{
   e.preventDefault();
   $("msg").style.display="none";$("err").style.display="none";
+  if(!validatePostForm())return;
+  setLoading(true,"Saving to Blogger...");
   const currentEditId=editingId||$("editingPostId").value||"";
   const isEditing=!!currentEditId;
   const publishButtonClicked=!!(e.submitter&&e.submitter.classList.contains("publish"));
@@ -494,7 +548,7 @@ $("form").addEventListener("submit",async e=>{
     if(publishBtn)publishBtn.textContent="➤ Publish Post";
     setPostType("Government Jobs");
     await loadPosts();
-  }catch(x){showErr(x.message)}
+  }catch(x){showErr(x.message)}finally{setLoading(false)}
 });
 
 setPostType("Government Jobs");
