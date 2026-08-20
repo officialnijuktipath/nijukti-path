@@ -182,6 +182,23 @@ body{
   }
 }
 </style>
+
+<style id="homepage-upgrade">
+.notice-strip{margin:22px 0 30px;background:#fff;border:1px solid #e6ebf2;border-radius:14px;display:flex;align-items:center;gap:12px;padding:10px 14px;box-shadow:0 5px 18px rgba(15,23,42,.045)}
+.notice-label{display:flex;align-items:center;gap:7px;background:#fff7ed;color:#c2410c;border-radius:8px;padding:7px 10px;font-size:10px;font-weight:900;white-space:nowrap}
+.notice-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:700;color:#334155}
+.notice-text a:hover{color:#2563eb}
+.home-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 16px}
+.update-tabs{display:flex;gap:7px;overflow:auto;scrollbar-width:none}.update-tabs::-webkit-scrollbar{display:none}
+.update-tab{border:1px solid #dbe3ee;background:#fff;color:#64748b;padding:7px 11px;border-radius:999px;font-size:10px;font-weight:900;white-space:nowrap;cursor:pointer}
+.update-tab.active,.update-tab:hover{background:#0f172a;color:#fff;border-color:#0f172a}
+.home-count{font-size:10px;color:#64748b;font-weight:800;white-space:nowrap}
+.hero{padding-top:34px}
+.quick .q{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.quick .q:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.12);border-color:rgba(255,255,255,.22)}
+.quick .qi{flex-shrink:0}
+.home-empty{grid-column:1/-1;text-align:center;padding:28px;background:#fff;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b;font-size:12px}
+@media(max-width:700px){.notice-strip{align-items:flex-start}.notice-label{font-size:9px;padding:6px 8px}.notice-text{font-size:10px}.home-tools{align-items:flex-start;flex-direction:column}.home-count{align-self:flex-end}}
+</style>
 </head>
 <body>
 
@@ -426,12 +443,19 @@ if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="em
 }else if(label||q){
 listPage(entries,label,q);
 }else{
+const latest=entries.slice(0,12);
+const notice=entries[0];
 document.getElementById('app').innerHTML=`
+${notice?`<div class="notice-strip"><span class="notice-label"><i class="fa-solid fa-bell"></i> IMPORTANT</span><div class="notice-text"><a href="${getUrl(notice)}">${esc(notice.title.$t)}</a></div><a class="view" style="padding:6px 10px" href="${getUrl(notice)}">OPEN</a></div>`:''}
 <div class="section-head"><h2 class="title">Latest Updates</h2><a class="view" href="/?label=Government%20Jobs">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
-<div class="grid">${entries.slice(0,4).map(card).join('')}</div>
-
-<div class="section-head" style="margin-top:40px"><h2 class="title">Latest Posts</h2></div>
-<div class="grid">${entries.slice(4,12).map(card).join('')}</div>
+<div class="home-tools"><div class="update-tabs" id="homeTabs">
+<button class="update-tab active" data-filter="all">All</button>
+<button class="update-tab" data-filter="Government Jobs">Jobs</button>
+<button class="update-tab" data-filter="Admit Card">Admit Card</button>
+<button class="update-tab" data-filter="Results">Results</button>
+<button class="update-tab" data-filter="Education">Education</button>
+</div><span class="home-count">${entries.length} updates available</span></div>
+<div class="grid" id="latestGrid">${latest.map(card).join('')}</div>
 
 <section class="popular-box">
   <div class="section-head" style="margin-bottom:18px"><h2 class="title">Popular Jobs</h2><a class="view" href="/?label=Government%20Jobs">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
@@ -453,6 +477,15 @@ document.getElementById('app').innerHTML=`
   </div>
 </section>
 `;
+const tabs=document.querySelectorAll('#homeTabs .update-tab');
+const grid=document.getElementById('latestGrid');
+tabs.forEach(tab=>tab.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('active')); tab.classList.add('active');
+  const f=tab.dataset.filter;
+  const filtered=f==='all'?latest:latest.filter(e=>hasLabel(e,f));
+  grid.innerHTML=filtered.length?filtered.map(card).join(''):'<div class="home-empty">No updates found in this category.</div>';
+}));
+
 }
 }
 let feedAttempts=0;
