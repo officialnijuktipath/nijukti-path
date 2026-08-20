@@ -218,6 +218,91 @@ button:disabled{opacity:.55;cursor:not-allowed}
   content:none!important;
 }
 </style>
+
+<style id="premium-stats-cards">
+/* Premium dashboard statistics cards */
+.stats-grid,.stat-grid,.dashboard-stats{
+  gap:12px !important;
+}
+.stat-card,.stats-card,.dashboard-stat,.category-stat{
+  position:relative !important;
+  overflow:hidden !important;
+  border:1px solid #e4eaf3 !important;
+  border-radius:14px !important;
+  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%) !important;
+  box-shadow:0 3px 12px rgba(18,43,78,.06) !important;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease !important;
+}
+.stat-card:hover,.stats-card:hover,.dashboard-stat:hover,.category-stat:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 18px rgba(18,43,78,.10) !important;
+  border-color:#d5e1f2 !important;
+}
+.stat-card::after,.stats-card::after,.dashboard-stat::after,.category-stat::after{
+  content:"";
+  position:absolute;right:-24px;bottom:-28px;width:82px;height:82px;
+  border-radius:50%;background:rgba(20,101,216,.045);pointer-events:none;
+}
+.stat-card .np-icon-box,.stats-card .np-icon-box,.dashboard-stat .np-icon-box,.category-stat .np-icon-box{
+  width:44px !important;height:44px !important;border-radius:12px !important;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.035);
+}
+.stat-card .stat-value,.stats-card .stat-value,.dashboard-stat .stat-value,
+.stat-card .number,.stats-card .number,.dashboard-stat .number{
+  font-size:25px !important;
+  line-height:1.05 !important;
+  font-weight:800 !important;
+  letter-spacing:-.4px !important;
+}
+.stat-card .stat-label,.stats-card .stat-label,.dashboard-stat .stat-label{
+  font-size:12px !important;
+  font-weight:600 !important;
+}
+.stat-card a,.stats-card a,.dashboard-stat a,.category-stat a{
+  font-size:10.5px !important;
+  font-weight:700 !important;
+  text-decoration:none !important;
+}
+@media(max-width:700px){
+  .stat-card,.stats-card,.dashboard-stat,.category-stat{border-radius:12px !important}
+  .stat-card .stat-value,.stats-card .stat-value,.dashboard-stat .stat-value{font-size:22px !important}
+}
+</style>
+
+<style id="add-post-section-polish">
+.form-section-title{
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:10px 0 1px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:#f5f8fd;
+  border:1px solid #e3eaf4;
+  color:#16345f;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.15px;
+}
+.form-section-title .section-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#1465d8;display:inline-block;flex:0 0 7px;
+}
+.form-section-title small{
+  margin-left:auto;
+  color:#7a8799;
+  font-size:9px;
+  font-weight:600;
+}
+.link-section{
+  margin-top:6px!important;
+}
+@media(max-width:700px){
+  .form-section-title{font-size:10.5px;padding:8px 10px}
+  .form-section-title small{display:none}
+}
+</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -316,6 +401,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b id="draftCount">0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
 <div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form"><input id="editingPostId" type="hidden" value="">
 <div class="formgrid">
+<div class="form-section-title"><span class="section-dot"></span>Basic Information<small>Post identity & category</small></div>
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
 <option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
@@ -324,9 +410,12 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </select></div>
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
+<div class="form-section-title"><span class="section-dot"></span>Job / Post Details<small>Category-specific information</small></div>
 <div id="dynamicFields" class="full"></div>
-<div class="full linkBox"><label id="link1Label">📄 Official / Notification Link <span class="optional">(Optional)</span></label><input id="link" type="url" placeholder="https://"></div>
-<div class="full linkBox"><label id="link2Label">🔗 Main Action Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
+<div class="form-section-title link-section"><span class="section-dot"></span>Important Links<small>Official source + one action link</small></div>
+<div class="full linkBox"><label id="link1Label">Official / Notification Link <span class="optional">(Optional)</span></label><input id="link" type="url" placeholder="https://"></div>
+<div class="full linkBox"><label id="link2Label">Main Action Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
+<div class="form-section-title link-section"><span class="section-dot"></span>Instructions<small>Optional notes for applicants</small></div>
 <div class="full"><label>Important Instructions <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div><div id="previewContent" style="font-size:11px;line-height:1.55;color:#344054"></div></div>
 </div>
 <div class="actions">
@@ -354,17 +443,17 @@ const schemas={
 };
 
 const actionLabels={
-  "Government Jobs":"📝 Apply Online Link",
-  "Odisha Jobs":"📝 Apply Online Link",
-  "Admit Cards":"🎫 Download Admit Card Link",
-  "Results":"📊 Check Result Link",
-  "Answer Keys":"🔑 Answer Key / Response Sheet Link",
-  "Education":"🎓 Apply / Admission Link"
+  "Government Jobs":"Apply Online Link",
+  "Odisha Jobs":"Apply Online Link",
+  "Admit Cards":"Download Admit Card Link",
+  "Results":"Check Result Link",
+  "Answer Keys":"Answer Key / Response Sheet Link",
+  "Education":"Apply / Admission Link"
 };
 
 function updateLinkLabels(type){
-  $("link1Label").innerHTML='📄 Official / Notification Link <span class="optional">(Optional)</span>';
-  $("link2Label").innerHTML=(actionLabels[type]||"🔗 Main Action Link")+' <span class="optional">(Optional)</span>';
+  $("link1Label").innerHTML='Official / Notification Link <span class="optional">(Optional)</span>';
+  $("link2Label").innerHTML=(actionLabels[type]||"Main Action Link")+' <span class="optional">(Optional)</span>';
 }
 
 function setPostType(type){
@@ -428,7 +517,7 @@ async function saveDraft(){
     description:$("desc").value.trim(),
     officialLink:$("link").value.trim(),
     secondLink:$("link2").value.trim(),
-    secondLinkLabel:actionLabels[$("type").value]||"🔗 Main Action Link",
+    secondLinkLabel:actionLabels[$("type").value]||"Main Action Link",
     instructions:$("instructions").value.trim(),
     fields:collectFields(),
     draft:true
@@ -662,7 +751,7 @@ $("form").addEventListener("submit",async e=>{
     description:$("desc").value.trim(),
     officialLink:$("link").value.trim(),
     secondLink:$("link2").value.trim(),
-    secondLinkLabel:actionLabels[$("type").value]||"🔗 Main Action Link",
+    secondLinkLabel:actionLabels[$("type").value]||"Main Action Link",
     instructions:$("instructions").value.trim(),
     fields:collectFields(),
     draft:isDraft,
@@ -928,5 +1017,17 @@ loadPosts();
   const obs=new MutationObserver(run);
   obs.observe(document.documentElement,{childList:true,subtree:true});
 })();
+</script>
+
+<script id="stats-accessibility-polish">
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.stat-card,.stats-card,.dashboard-stat,.category-stat').forEach((card,i)=>{
+    const link=card.querySelector('a');
+    if(link && !link.getAttribute('aria-label')){
+      const label=(card.textContent||'').replace(/\s+/g,' ').trim().slice(0,80);
+      link.setAttribute('aria-label', label ? 'View '+label : 'View category posts');
+    }
+  });
+});
 </script>
 </body></html>
