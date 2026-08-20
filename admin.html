@@ -199,6 +199,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .postactions .viewIcon,.postactions .editIcon{width:34px;height:34px}
 .postactions .viewIcon svg,.postactions .editIcon svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
 </style>
+
+<style id="quick-action-single-icon-fix">
+.quick-action-label{display:inline-block;line-height:1.15}
+.quick-actions .np-svg-icon,.quickActions .np-svg-icon{margin-bottom:3px}
+</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -886,10 +891,11 @@ loadPosts();
       ['Upload Answer Key','key'],['Education Update','cap']
     ];
     document.querySelectorAll('button,a').forEach(el=>{
-      const t=(el.textContent||'').replace(/\s+/g,' ').trim();
-      const hit=map.find(x=>t.includes(x[0]));
-      if(hit && !el.querySelector('.np-svg-icon')){
-        el.insertAdjacentHTML('afterbegin',svg(hit[1]));
+      const raw=(el.textContent||'').replace(/\s+/g,' ').trim();
+      const hit=map.find(x=>raw.includes(x[0]));
+      if(hit && !el.dataset.quickIconFixed){
+        el.innerHTML=svg(hit[1])+'<span class="quick-action-label">'+hit[0]+'</span>';
+        el.dataset.quickIconFixed='1';
       }
     });
   }
