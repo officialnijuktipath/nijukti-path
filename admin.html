@@ -204,6 +204,20 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .quick-action-label{display:inline-block;line-height:1.15}
 .quick-actions .np-svg-icon,.quickActions .np-svg-icon{margin-bottom:3px}
 </style>
+
+<style id="single-delete-svg-fix">
+.postactions button.del .np-svg-icon,
+.postactions button[title*="Delete"] .np-svg-icon,
+.postactions button[title*="delete"] .np-svg-icon{
+  width:15px!important;height:15px!important;display:inline-flex!important;
+}
+.postactions button.del::before,
+.postactions button[title*="Delete"]::before,
+.postactions button[title*="delete"]::before{
+  display:none!important;
+  content:none!important;
+}
+</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
