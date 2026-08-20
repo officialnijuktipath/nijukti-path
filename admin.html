@@ -490,11 +490,29 @@ function setPostType(type){
   $("dynamicFields").innerHTML='<div class="dynamicGrid">'+schema.map(f=>{
     const id=f[0],label=f[1],kind=f[2]||"text";
     let c;
-    if(kind==="textarea") c='<textarea id="f_'+id+'" placeholder="Enter '+label.toLowerCase()+'..."></textarea>';
+    if(id==="examDate" && (type==="Admit Cards" || type==="Results" || type==="Answer Keys")){
+      c='<div class="exam-date-mode">'+
+        '<div class="exam-date-mode-title">Exam date format</div>'+
+        '<div class="exam-date-options">'+
+          '<label class="exam-date-option"><input type="radio" name="examDateType" value="date" checked> Single date</label>'+
+          '<label class="exam-date-option"><input type="radio" name="examDateType" value="manual"> Manual / Multiple dates</label>'+
+        '</div>'+
+        '<div id="examDatePickerWrap" style="margin-top:8px"><input id="f_examDatePicker" type="date"></div>'+
+        '<div id="examDateManualWrap" class="exam-date-manual"><input id="f_examDateManual" type="text" placeholder="e.g. 24–27 August 2026 / 24, 25 & 27 August 2026"><div class="exam-date-help">Use this when the exam is held on multiple days or the date is a date range.</div></div>'+
+        '<input id="f_examDate" type="hidden">'+
+      '</div>';
+    } else if(kind==="textarea") c='<textarea id="f_'+id+'" placeholder="Enter '+label.toLowerCase()+'..."></textarea>';
     else if(kind==="select") c='<select id="f_'+id+'"><option value="">Select '+label+'</option>'+f[3].split("|").map(x=>"<option>"+x+"</option>").join("")+'</select>';
     else c='<input id="f_'+id+'" type="'+kind+'" placeholder="'+(kind==="url"?"https://":"Enter "+label.toLowerCase()+'...')+'">';
     return '<div><label>'+label+' <span class="optional">(Optional)</span></label>'+c+'</div>';
   }).join("")+'</div>';
+  if($("f_examDate")){
+    const picker=$("f_examDatePicker"), manual=$("f_examDateManual");
+    if(picker)picker.addEventListener("change",syncExamDateValue);
+    if(manual)manual.addEventListener("input",syncExamDateValue);
+    document.querySelectorAll('input[name="examDateType"]').forEach(r=>r.addEventListener("change",syncExamDateValue));
+    syncExamDateValue();
+  }
 }
 
 function togglePreview(){
@@ -512,8 +530,38 @@ function togglePreview(){
 }
 
 function quick(v){setPostType(v);$("add").scrollIntoView({behavior:"smooth"});$("title").focus()}
-function collectFields(){const out={},schema=schemas[$("type").value]||[];schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});return out}
-function fillFields(data){(schemas[$("type").value]||[]).forEach(f=>{const e=$("f_"+f[0]);if(e)e.value=(data||{})[f[0]]||""})}
+function syncExamDateValue(){
+  const hidden=$("f_examDate");
+  if(!hidden)return;
+  const manual=document.querySelector('input[name="examDateType"]:checked')?.value==="manual";
+  const picker=$("f_examDatePicker"), manualInput=$("f_examDateManual");
+  const wrap=$("examDateManualWrap"), pickerWrap=$("examDatePickerWrap");
+  if(wrap)wrap.classList.toggle("show",manual);
+  if(pickerWrap)pickerWrap.style.display=manual?"none":"block";
+  hidden.value=(manual ? (manualInput?.value||"") : (picker?.value||"")).trim();
+}
+function collectFields(){
+  syncExamDateValue();
+  const out={},schema=schemas[$("type").value]||[];
+  schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});
+  return out;
+}
+function fillFields(data){
+  (schemas[$("type").value]||[]).forEach(f=>{
+    const value=(data||{})[f[0]]||"";
+    const e=$("f_"+f[0]);
+    if(f[0]==="examDate" && ($("type").value==="Admit Cards" || $("type").value==="Results" || $("type").value==="Answer Keys")){
+      if(e)e.value=value;
+      const picker=$("f_examDatePicker"), manualInput=$("f_examDateManual");
+      const isDate=/^\d{4}-\d{2}-\d{2}$/.test(value);
+      if(picker)picker.value=isDate?value:"";
+      if(manualInput)manualInput.value=isDate?"":value;
+      const radio=document.querySelector('input[name="examDateType"][value="'+(isDate?"date":"manual")+'"]');
+      if(radio)radio.checked=true;
+      syncExamDateValue();
+    }else if(e)e.value=value;
+  });
+}
 function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
 function clearFieldErrors(){
   document.querySelectorAll(".fieldError").forEach(e=>e.classList.remove("fieldError"));
@@ -1058,16 +1106,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script id="exam-date-manual-script">
-(function(){
-  const wrap = document.getElementById('examDateManualWrap');
-  const radios = document.querySelectorAll('input[name="examDateType"]');
-  if(!wrap || !radios.length) return;
-  function syncExamDateMode(){
-    const selected = document.querySelector('input[name="examDateType"]:checked');
-    wrap.classList.toggle('show', selected && selected.value === 'manual');
-  }
-  radios.forEach(r => r.addEventListener('change', syncExamDateMode));
-  syncExamDateMode();
-})();
+/* Exam date UI is bound inside setPostType() because the fields are dynamic. */
 </script>
 </body></html>
