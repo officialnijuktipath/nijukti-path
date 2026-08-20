@@ -353,7 +353,7 @@ async function saveDraft(){
     showMsg("💾 Draft saved on Blogger.");
     resetForm();
     await loadPosts();
-  }catch(e){showErr(e.message)}
+  }catch(e){showErr(e.message)}finally{setLoading(false)}
 }
 function showMsg(t){
   const el=$("toast"); if(!el)return;
