@@ -217,13 +217,13 @@
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
 <div id="dynamicFields" class="full"></div>
-<div class="full"><label>Official / Notification Link <span class="optional">(Optional)</span></label><input id="link" type="url" placeholder="https://"></div>
-<div class="full"><label>Apply / Result / Admit Card / Response Sheet Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
-<div class="full"><label>Important Instructions <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important instructions..."></textarea></div>
+<div class="full linkBox"><label id="link1Label">📄 Official / Notification Link <span class="optional">(Optional)</span></label><input id="link" type="url" placeholder="https://"></div>
+<div class="full linkBox"><label id="link2Label">🔗 Main Action Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
+<div class="full"><label>Important Instructions <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div><div id="previewContent" style="font-size:11px;line-height:1.55;color:#344054"></div></div>
 </div>
 <div class="actions">
 <label class="check"><input id="draftCheck" type="checkbox"> Save as Draft</label>
-<button class="btn publish" type="submit">➤ Publish Post</button>
+<button class="btn publish" type="submit">➤ Publish Post</button><button class="btn" type="button" onclick="togglePreview()">👁️ Preview</button>
 <button class="btn" type="button" onclick="saveDraft()">▣ Save Draft</button>
 <button class="btn reset" type="button" onclick="resetForm()">↻ Reset</button>
 </div>
@@ -236,31 +236,61 @@ const $=x=>document.getElementById(x);
 let posts=[],editingId=null;
 
 const schemas={
-"Government Jobs":[["department","Department / Organization"],["postName","Post Name"],["totalVacancies","Total Vacancies"],["postWiseVacancy","Post-wise Vacancy"],["qualification","Qualification"],["ageLimit","Age Limit"],["ageRelaxation","Age Relaxation"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary / Pay Scale"],["jobLocation","Job Location"],["importantDates","Important Dates"],["notificationPdf","Official Notification PDF / Link","url"],["detailedDescription","Detailed Description","textarea"]],
-"Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["notificationPdf","Official Notification","url"],["importantInformation","Important Information","textarea"]],
-"Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["admitCardLink","Official Admit Card Link","url"],["admitCardPdf","Admit Card PDF","url"],["instructions2","Instructions","textarea"]],
-"Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["resultLink","Official Result Link","url"],["resultPdf","Result PDF","url"],["cutoff","Cut-off Link / PDF","url"]],
-"Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper","url"],["answerKeyPdf","Answer Key PDF","url"],["responseSheet","Response Sheet Link","url"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionLink","Objection Link","url"]],
-"Education":[["updateType","Update Type","select","Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["courseClass","Course / Class"],["eligibility","Eligibility"],["importantDates","Important Dates"],["applicationFee","Application Fee"],["applicationLink","Application / Admission Link","url"],["officialNotification","Official Notification","url"],["educationDescription","Description","textarea"]]
+"Government Jobs":[["department","Department / Organization"],["postName","Post Name"],["totalVacancies","Total Vacancies"],["postWiseVacancy","Post-wise Vacancy"],["qualification","Qualification"],["ageLimit","Age Limit"],["ageRelaxation","Age Relaxation"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary / Pay Scale"],["jobLocation","Job Location"],["importantDates","Important Dates"],["detailedDescription","Detailed Description","textarea"]],
+"Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["importantInformation","Important Information","textarea"]],
+"Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
+"Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off Link / PDF","url"]],
+"Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionLink","Objection Link","url"]],
+"Education":[["updateType","Update Type","select","Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["courseClass","Course / Class"],["eligibility","Eligibility"],["importantDates","Important Dates"],["applicationFee","Application Fee"],["educationDescription","Description","textarea"]]
 };
+
+const actionLabels={
+  "Government Jobs":"📝 Apply Online Link",
+  "Odisha Jobs":"📝 Apply Online Link",
+  "Admit Cards":"🎫 Download Admit Card Link",
+  "Results":"📊 Check Result Link",
+  "Answer Keys":"🔑 Answer Key / Response Sheet Link",
+  "Education":"🎓 Apply / Admission Link"
+};
+
+function updateLinkLabels(type){
+  $("link1Label").innerHTML='📄 Official / Notification Link <span class="optional">(Optional)</span>';
+  $("link2Label").innerHTML=(actionLabels[type]||"🔗 Main Action Link")+' <span class="optional">(Optional)</span>';
+}
 
 function setPostType(type){
   if(!type) return;
   $("type").value=type;$("cat").value=type;
+  updateLinkLabels(type);
   const schema=schemas[type]||[];
   $("dynamicFields").innerHTML='<div class="dynamicGrid">'+schema.map(f=>{
     const id=f[0],label=f[1],kind=f[2]||"text";
     let c;
     if(kind==="textarea") c='<textarea id="f_'+id+'" placeholder="Enter '+label.toLowerCase()+'..."></textarea>';
-    else if(kind==="select") c='<select id="f_'+id+'"><option value="">Select '+label+'</option>'+f[3].split("|").map(x=>"<option>"+x+"</option>").join("")+"</select>";
-    else c='<input id="f_'+id+'" type="'+kind+'" placeholder="'+(kind==="url"?"https://":"Enter "+label.toLowerCase()+"...")+'">';
+    else if(kind==="select") c='<select id="f_'+id+'"><option value="">Select '+label+'</option>'+f[3].split("|").map(x=>"<option>"+x+"</option>").join("")+'</select>';
+    else c='<input id="f_'+id+'" type="'+kind+'" placeholder="'+(kind==="url"?"https://":"Enter "+label.toLowerCase()+'...')+'">';
     return '<div><label>'+label+' <span class="optional">(Optional)</span></label>'+c+'</div>';
   }).join("")+'</div>';
 }
+
+function togglePreview(){
+  const box=$("postPreview");
+  if(box.style.display!=="none"){box.style.display="none";return;}
+  const title=esc($("title").value.trim()||"Untitled Post");
+  const type=esc($("type").value||"Post");
+  const desc=esc($("desc").value.trim()||"No short description.");
+  const link1=$("link").value.trim(), link2=$("link2").value.trim();
+  const instructions=esc($("instructions").value.trim());
+  const fields=collectFields();
+  const fieldHtml=Object.entries(fields).filter(([k,v])=>v).map(([k,v])=>'<div><b>'+esc(k.replace(/([A-Z])/g," $1"))+':</b> '+esc(v)+'</div>').join("");
+  $("previewContent").innerHTML='<div style="font-size:16px;font-weight:800;color:#12203b">'+title+'</div><div style="margin:4px 0 8px;color:#0755c9;font-weight:700">'+type+'</div><div>'+desc+'</div>'+(fieldHtml?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #e1e8f2">'+fieldHtml+'</div>':'')+(link1?'<div style="margin-top:8px"><b>Official Link:</b> '+esc(link1)+'</div>':'')+(link2?'<div><b>'+esc(actionLabels[$("type").value]||"Main Action Link")+':</b> '+esc(link2)+'</div>':'')+(instructions?'<div style="margin-top:8px"><b>Instructions:</b> '+instructions+'</div>':'');
+  box.style.display="block";
+}
+
 function quick(v){setPostType(v);$("add").scrollIntoView({behavior:"smooth"});$("title").focus()}
 function collectFields(){const out={},schema=schemas[$("type").value]||[];schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});return out}
 function fillFields(data){(schemas[$("type").value]||[]).forEach(f=>{const e=$("f_"+f[0]);if(e)e.value=(data||{})[f[0]]||""})}
-function resetForm(){editingId=null;$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";setPostType("Government Jobs")}
+function resetForm(){editingId=null;$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
 function saveDraft(){localStorage.setItem("nijuktiDraft",JSON.stringify({title:$("title").value.trim(),category:$("cat").value||$("type").value,description:$("desc").value.trim(),officialLink:$("link").value.trim(),secondLink:$("link2").value.trim(),instructions:$("instructions").value.trim(),fields:collectFields()}));showMsg("💾 Draft saved on this device.")}
 function showMsg(t){$("msg").textContent=t;$("msg").style.display="block";$("err").style.display="none"}
 function showErr(t){$("err").textContent="❌ "+t;$("err").style.display="block";$("msg").style.display="none"}
@@ -284,7 +314,7 @@ $("form").addEventListener("submit",async e=>{
  if(!payload.title)return showErr("Post title is required.");
  try{let r=await fetch("/api/posts",{method:editingId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(editingId?{...payload,id:editingId}:payload)}),d=await r.json();if(!r.ok)throw Error(d.error||"Post could not be published");editingId=null;showMsg("✅ "+(payload.draft?"Draft saved":"Post published successfully on Blogger!"));$("form").reset();$("chars").textContent="0";setPostType("Government Jobs");loadPosts()}catch(x){showErr(x.message)}
 });
-setPostType("Government Jobs");loadPosts();
+setPostType("Government Jobs");updateLinkLabels("Government Jobs");loadPosts();
 </script>
 <script id="admin-login-js">
 (function(){
