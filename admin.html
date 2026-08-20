@@ -465,7 +465,7 @@ const schemas={
 "Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
 "Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
 "Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
-"Education":[["updateType","Update Type","select","Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["courseClass","Course / Class"],["eligibility","Eligibility"],["importantDates","Important Dates"],["applicationFee","Application Fee"],["educationDescription","Description","textarea"]]
+"Education":[["updateType","Update Type","select","+2 Admission|+3 Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
 };
 
 const actionLabels={
@@ -474,7 +474,7 @@ const actionLabels={
   "Admit Cards":"Download Admit Card Link",
   "Results":"Check Result Link",
   "Answer Keys":"Answer Key / Response Sheet Link",
-  "Education":"Apply / Admission Link"
+  "Education":"Apply Online Link"
 };
 
 function updateLinkLabels(type){
@@ -506,8 +506,26 @@ function setPostType(type){
     else c='<input id="f_'+id+'" type="'+kind+'" placeholder="'+(kind==="url"?"https://":"Enter "+label.toLowerCase()+'...')+'">';
     return '<div><label>'+label+' <span class="optional">(Optional)</span></label>'+c+'</div>';
   }).join("")+'</div>';
-  if($("f_examDate")){
-    const picker=$("f_examDatePicker"), manual=$("f_examDateManual");
+  if(type === "Education") {
+    const educationSelect = $("f_updateType");
+    const applyEducationMode = () => {
+      const mode = educationSelect ? educationSelect.value : "";
+      const common = new Set([
+        "f_updateType","f_organization","f_admissionSession","f_collegeInstitution",
+        "f_courseClass","f_streamHonours","f_eligibility","f_seatVacancy",
+        "f_applicationStart","f_lastDate","f_applicationFee","f_selectionProcess",
+        "f_educationDescription"
+      ]);
+      if(mode === "Scholarship") ["f_incomeLimit","f_scholarshipBenefits","f_renewalLastDate","f_requiredDocuments"].forEach(id=>common.add(id));
+      document.querySelectorAll("#dynamicFields .dynamicGrid > div").forEach(box=>{
+        const field=box.querySelector("input,select,textarea");
+        if(field) box.style.display=common.has(field.id)?"":"none";
+      });
+    };
+    if(educationSelect) educationSelect.addEventListener("change",applyEducationMode);
+    setTimeout(applyEducationMode,0);
+  }
+  if($('f_examDate')){
     if(picker)picker.addEventListener("change",syncExamDateValue);
     if(manual)manual.addEventListener("input",syncExamDateValue);
     document.querySelectorAll('input[name="examDateType"]').forEach(r=>r.addEventListener("change",syncExamDateValue));
@@ -1107,5 +1125,38 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 <script id="exam-date-manual-script">
 /* Exam date UI is bound inside setPostType() because the fields are dynamic. */
+</script>
+
+<script id="education-smart-fields">
+(function(){
+  function applyEducationFields(){
+    const type=document.getElementById("type");
+    if(!type || type.value!=="Education") return;
+    const mode=document.getElementById("f_updateType")?.value || "";
+    const common=new Set([
+      "f_updateType","f_organization","f_admissionSession","f_collegeInstitution",
+      "f_courseClass","f_streamHonours","f_eligibility","f_seatVacancy",
+      "f_applicationStart","f_lastDate","f_applicationFee",
+      "f_selectionProcess","f_educationDescription"
+    ]);
+    const allowed=new Set(common);
+    if(mode==="Scholarship"){
+      ["f_incomeLimit","f_scholarshipBenefits","f_renewalLastDate","f_requiredDocuments"]
+        .forEach(id=>allowed.add(id));
+    }
+    document.querySelectorAll("#dynamicFields .dynamicGrid > div").forEach(box=>{
+      const field=box.querySelector("input,select,textarea");
+      if(field) box.style.display=allowed.has(field.id)?"":"none";
+    });
+  }
+
+  document.addEventListener("change",function(e){
+    if(e.target && e.target.id==="f_updateType") applyEducationFields();
+  });
+
+  const observer=new MutationObserver(applyEducationFields);
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  document.addEventListener("DOMContentLoaded",applyEducationFields);
+})();
 </script>
 </body></html>
