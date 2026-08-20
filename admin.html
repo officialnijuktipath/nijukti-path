@@ -239,8 +239,8 @@ const schemas={
 "Government Jobs":[["department","Department / Organization"],["postName","Post Name"],["totalVacancies","Total Vacancies"],["postWiseVacancy","Post-wise Vacancy"],["qualification","Qualification"],["ageLimit","Age Limit"],["ageRelaxation","Age Relaxation"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary / Pay Scale"],["jobLocation","Job Location"],["importantDates","Important Dates"],["detailedDescription","Detailed Description","textarea"]],
 "Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["importantInformation","Important Information","textarea"]],
 "Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
-"Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off Link / PDF","url"]],
-"Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionLink","Objection Link","url"]],
+"Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
+"Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
 "Education":[["updateType","Update Type","select","Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["courseClass","Course / Class"],["eligibility","Eligibility"],["importantDates","Important Dates"],["applicationFee","Application Fee"],["educationDescription","Description","textarea"]]
 };
 
@@ -262,7 +262,7 @@ function setPostType(type){
   if(!type) return;
   $("type").value=type;$("cat").value=type;
   updateLinkLabels(type);
-  const schema=schemas[type]||[];
+  const schema=(schemas[type]||[]).filter(f=>f[2]!=="url");
   $("dynamicFields").innerHTML='<div class="dynamicGrid">'+schema.map(f=>{
     const id=f[0],label=f[1],kind=f[2]||"text";
     let c;
