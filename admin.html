@@ -206,7 +206,7 @@
 <section class="content" id="dashboard"><div class="heading"><div><h1>Dashboard</h1><p>Welcome back, Admin! Here's what's happening on your website today.</p></div><div class="date">▣ &nbsp; 20 August 2026, Thursday</div></div>
 <div class="stats"><div class="stat"><div class="si blue">▣</div><div><h4>Government Jobs</h4><div class="num" id="gov">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si green">♧</div><div><h4>Odisha Jobs</h4><div class="num" id="odisha">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si orange">🔗</div><div><h4>Answer Keys</h4><div class="num" id="answer">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si purple">▣</div><div><h4>Admit Cards</h4><div class="num" id="admit">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si teal">▥</div><div><h4>Results</h4><div class="num" id="result">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si pink">🎓</div><div><h4>Education</h4><div class="num" id="education">0</div><div class="view">View all →</div></div></div></div>
 <div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b id="draftCount">0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
-<div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form">
+<div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form"><input id="editingPostId" type="hidden" value="">
 <div class="formgrid">
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
 <option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
@@ -291,7 +291,7 @@ function togglePreview(){
 function quick(v){setPostType(v);$("add").scrollIntoView({behavior:"smooth"});$("title").focus()}
 function collectFields(){const out={},schema=schemas[$("type").value]||[];schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});return out}
 function fillFields(data){(schemas[$("type").value]||[]).forEach(f=>{const e=$("f_"+f[0]);if(e)e.value=(data||{})[f[0]]||""})}
-function resetForm(){editingId=null;$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
+function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
 async function saveDraft(){
   const payload={
     title:$("title").value.trim(),
@@ -307,11 +307,13 @@ async function saveDraft(){
   if(!payload.title)return showErr("Post title is required.");
   if(!payload.description)return showErr("Description is required.");
   try{
-    const body=editingId?{...payload,id:editingId,publish:false}:{...payload};
-    const r=await fetch("/api/posts",{method:editingId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const currentEditId=editingId||$("editingPostId").value||"";
+    const body=currentEditId?{...payload,id:currentEditId,publish:false}:{...payload};
+    const r=await fetch("/api/posts",{method:currentEditId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const d=await r.json();
     if(!r.ok)throw Error(d.error||"Draft could not be saved");
     editingId=null;
+    $("editingPostId").value="";
     $("draftCheck").checked=true;
     showMsg("💾 Draft saved on Blogger.");
     resetForm();
@@ -417,6 +419,7 @@ async function editPost(id){
 
     const meta=extractDraftData(p.content||"");
     editingId=id;
+    $("editingPostId").value=String(id);
 
     const selectedType=p.category||meta.category||"Government Jobs";
     setPostType(selectedType);
@@ -460,7 +463,10 @@ async function deletePost(id){
 $("form").addEventListener("submit",async e=>{
   e.preventDefault();
   $("msg").style.display="none";$("err").style.display="none";
-  const isDraft=$("draftCheck").checked;
+  const currentEditId=editingId||$("editingPostId").value||"";
+  const isEditing=!!currentEditId;
+  const publishButtonClicked=!!(e.submitter&&e.submitter.classList.contains("publish"));
+  const isDraft=isEditing ? !publishButtonClicked : $("draftCheck").checked;
   const payload={
     title:$("title").value.trim(),
     category:$("cat").value||$("type").value,
@@ -476,11 +482,12 @@ $("form").addEventListener("submit",async e=>{
   if(!payload.title)return showErr("Post title is required.");
   if(!payload.description)return showErr("Description is required.");
   try{
-    const body=editingId?{...payload,id:editingId}:payload;
-    const r=await fetch("/api/posts",{method:editingId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const body=isEditing?{...payload,id:currentEditId}:payload;
+    const r=await fetch("/api/posts",{method:isEditing?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const d=await r.json();
     if(!r.ok)throw Error(d.error||"Post could not be saved");
     editingId=null;
+    $("editingPostId").value="";
     showMsg("✅ "+(isDraft?"Draft saved on Blogger.":"Post published successfully on Blogger!"));
     $("form").reset();$("chars").textContent="0";$("draftCheck").checked=false;
     const publishBtn=document.querySelector('button.publish');
