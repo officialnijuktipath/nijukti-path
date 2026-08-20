@@ -17,6 +17,21 @@
 .dynamicGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .dynamicGrid .full{grid-column:1/-1}
 @media(max-width:760px){.dynamicGrid{grid-template-columns:1fr}.dynamicGrid .full{grid-column:auto}.recentHead{align-items:flex-start}}
+
+/* Compact Add New Post panel with internal scrolling */
+#add .body{
+  max-height:620px;
+  overflow-y:auto;
+  padding-right:10px;
+}
+#add .body::-webkit-scrollbar{width:7px}
+#add .body::-webkit-scrollbar-track{background:#f1f4f8;border-radius:10px}
+#add .body::-webkit-scrollbar-thumb{background:#b8c7dc;border-radius:10px}
+#add .body{scrollbar-width:thin;scrollbar-color:#b8c7dc #f1f4f8}
+#add .head{position:sticky;top:0;z-index:3}
+@media(max-width:760px){
+  #add .body{max-height:560px}
+}
 </style></head><body>
 <div class="app"><aside class="side" id="side"><div class="brand"><div class="logo">NP</div><div><b>NIJUKTI PATH</b><small>SARKARI NAUKRI • SARKARI BHAROSA</small></div></div><div class="mt">Main</div><nav class="nav">
 <a class="active" href="#dashboard">⌂ Dashboard</a><a href="#add">✎ Add New Post</a><a href="#recent">☷ All Posts</a><a href="#categories">▱ Categories</a><a href="#add">▣ Admit Cards</a><a href="#add">▥ Results</a><a href="#add">🔗 Answer Keys</a><a href="#add">🎓 Education</a><a href="#notifications">♧ Recent Notifications</a></nav><div class="mt">Tools</div><nav class="nav"><a href="#connection">🔗 Blogger Connection</a><a href="#backup">▣ Backup & Restore</a></nav><div class="mt">Settings</div><nav class="nav"><a href="#settings">⚙ Site Settings</a><a href="#profile">● Profile Settings</a></nav><div class="sidebox"><div class="crown">♛</div><b>Nijukti Path</b><span>Empowering Aspirants</span></div></aside>
