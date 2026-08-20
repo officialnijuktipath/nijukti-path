@@ -332,11 +332,11 @@ module.exports = async function handler(req, res) {
       return sendJSON(res,404,{error:"No Blogger blog found for this Google account."});
 
     const blogId = blogs[0].id;
-    const id = req.query?.id;
+    const id = req.query?.id || req.body?.id;
 
     if (req.method === "GET") {
-      if (id) {
-        const post = await getPost(accessToken,blogId,id);
+      if (req.query?.id) {
+        const post = await getPost(accessToken,blogId,req.query.id);
         return sendJSON(res,200,normalizePost(post,post.status === "DRAFT" ? "draft" : "published"));
       }
       const status = req.query?.status || "live";
