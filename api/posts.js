@@ -191,192 +191,210 @@ async function getBloggerPosts(
   return data.items || [];
 }
 
+
+function buildContent({description, category, officialLink, secondLink, secondLinkLabel, instructions, fields}) {
+  const entries = fields && typeof fields === "object"
+    ? Object.entries(fields).filter(([,v]) => v !== undefined && v !== null && String(v).trim())
+    : [];
+  const fieldHtml = entries.map(([k,v]) =>
+    `<p><strong>${escapeHtml(k.replace(/([A-Z])/g," $1"))}:</strong> ${escapeHtml(v)}</p>`
+  ).join("");
+  const officialHtml = officialLink
+    ? `<p><a href="${escapeHtml(officialLink)}" target="_blank" rel="noopener noreferrer">📄 Official / Notification Link</a></p>` : "";
+  const secondHtml = secondLink
+    ? `<p><a href="${escapeHtml(secondLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(secondLinkLabel || "🔗 Main Action Link")}</a></p>` : "";
+  const instructionsHtml = instructions
+    ? `<hr><p><strong>Important Instructions</strong></p><p>${escapeHtml(instructions)}</p>` : "";
+  const meta = Buffer.from(JSON.stringify({
+    description: description || "",
+    category: category || "",
+    officialLink: officialLink || "",
+    secondLink: secondLink || "",
+    secondLinkLabel: secondLinkLabel || "",
+    instructions: instructions || "",
+    fields: fields || {}
+  }), "utf8").toString("base64");
+  return `<!-- NIJUKTI_PATH_META:${meta} --><div><p>${escapeHtml(description)}</p><p><strong>Category:</strong> ${escapeHtml(category)}</p>${fieldHtml}${officialHtml}${secondHtml}${instructionsHtml}<hr><p><strong>NIJUKTI PATH</strong><br>Sarkari Naukri • Sarkari Bharosa</p></div>`;
+}
+
+async function bloggerRequest(url, options = {}) {
+  const response = await fetch(url, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error?.message || "Blogger API request failed");
+  return data;
+}
+
+function normalizePost(post, status) {
+  let meta = {};
+  const match = String(post.content || "").match(/NIJUKTI_PATH_META:([^\s-]+)\s*-->/);
+  if (match) {
+    try { meta = JSON.parse(Buffer.from(match[1], "base64").toString("utf8")); } catch (_) {}
+  }
+  return {
+    id: post.id,
+    title: post.title || "",
+    category: meta.category || post.labels?.[0] || "",
+    url: post.url || "",
+    published: post.published || "",
+    updated: post.updated || "",
+    status,
+    description: meta.description || "",
+    officialLink: meta.officialLink || "",
+    secondLink: meta.secondLink || "",
+    secondLinkLabel: meta.secondLinkLabel || "",
+    instructions: meta.instructions || "",
+    fields: meta.fields || {},
+    content: post.content || ""
+  };
+}
+
+async function listPosts(accessToken, blogId, status) {
+  const data = await bloggerRequest(
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?maxResults=50&status=${encodeURIComponent(status)}&fetchBodies=true`,
+    {headers:{Authorization:`Bearer ${accessToken}`}}
+  );
+  return data.items || [];
+}
+
+async function getPost(accessToken, blogId, id) {
+  return bloggerRequest(
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${id}?fetchBody=true`,
+    {headers:{Authorization:`Bearer ${accessToken}`}}
+  );
+}
+
+async function createPost(accessToken, blogId, data, isDraft) {
+  return bloggerRequest(
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?isDraft=${isDraft ? "true" : "false"}`,
+    {
+      method:"POST",
+      headers:{Authorization:`Bearer ${accessToken}`,"Content-Type":"application/json"},
+      body:JSON.stringify({
+        kind:"blogger#post",
+        title:data.title,
+        content:buildContent(data),
+        labels:[data.category || "Government Jobs"]
+      })
+    }
+  );
+}
+
+async function updatePost(accessToken, blogId, id, data, publish) {
+  return bloggerRequest(
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${id}`,
+    {
+      method:"PUT",
+      headers:{Authorization:`Bearer ${accessToken}`,"Content-Type":"application/json"},
+      body:JSON.stringify({
+        kind:"blogger#post",
+        id:String(id),
+        title:data.title,
+        content:buildContent(data),
+        labels:[data.category || "Government Jobs"]
+      })
+    }
+  );
+}
+
+async function publishPost(accessToken, blogId, id) {
+  return bloggerRequest(
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${id}/publish`,
+    {method:"POST",headers:{Authorization:`Bearer ${accessToken}`}}
+  );
+}
+
+async function deletePost(accessToken, blogId, id) {
+  const response = await fetch(
+    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${id}`,
+    {method:"DELETE",headers:{Authorization:`Bearer ${accessToken}`}}
+  );
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error?.message || "Unable to delete Blogger post");
+  }
+}
+
 module.exports = async function handler(req, res) {
-
   try {
+    if (!["GET","POST","PUT","DELETE"].includes(req.method))
+      return sendJSON(res,405,{error:"Method not allowed"});
 
-    if (
-      req.method !== "POST" &&
-      req.method !== "GET"
-    ) {
-      return sendJSON(
-        res,
-        405,
-        {
-          error:
-            "Method not allowed"
-        }
-      );
-    }
+    const refreshToken = getCookie(req,"BLOGGER_REFRESH_TOKEN");
+    if (!refreshToken)
+      return sendJSON(res,401,{error:"Blogger is not connected. Please connect Blogger first."});
 
-    const refreshToken =
-      getCookie(
-        req,
-        "BLOGGER_REFRESH_TOKEN"
-      );
+    if (!process.env.BLOGGER_CLIENT_ID || !process.env.BLOGGER_CLIENT_SECRET)
+      return sendJSON(res,500,{error:"BLOGGER_CLIENT_ID or BLOGGER_CLIENT_SECRET is missing in Vercel Environment Variables."});
 
-    if (!refreshToken) {
-      return sendJSON(
-        res,
-        401,
-        {
-          error:
-            "Blogger is not connected. Please connect Blogger first."
-        }
-      );
-    }
+    const accessToken = await getAccessToken(refreshToken);
+    const blogs = await getMyBlogs(accessToken);
+    if (!blogs.length)
+      return sendJSON(res,404,{error:"No Blogger blog found for this Google account."});
 
-    if (
-      !process.env.BLOGGER_CLIENT_ID ||
-      !process.env.BLOGGER_CLIENT_SECRET
-    ) {
-      return sendJSON(
-        res,
-        500,
-        {
-          error:
-            "BLOGGER_CLIENT_ID or BLOGGER_CLIENT_SECRET is missing in Vercel Environment Variables."
-        }
-      );
-    }
-
-    const accessToken =
-      await getAccessToken(
-        refreshToken
-      );
-
-    const blogs =
-      await getMyBlogs(
-        accessToken
-      );
-
-    if (!blogs.length) {
-      return sendJSON(
-        res,
-        404,
-        {
-          error:
-            "No Blogger blog found for this Google account."
-        }
-      );
-    }
-
-    const blogId =
-      blogs[0].id;
+    const blogId = blogs[0].id;
+    const id = req.query?.id;
 
     if (req.method === "GET") {
-
-      const posts =
-        await getBloggerPosts(
-          accessToken,
-          blogId
-        );
-
-      return sendJSON(
-        res,
-        200,
-        posts.map(post => ({
-          id: post.id,
-          title: post.title || "",
-          category:
-            post.labels?.[0] || "",
-          url: post.url || "",
-          published:
-            post.published || ""
-        }))
-      );
-    }
-
-    const {
-      title,
-      category,
-      description,
-      officialLink
-    } = req.body || {};
-
-    if (!title) {
-      return sendJSON(
-        res,
-        400,
-        {
-          error:
-            "Post title is required."
-        }
-      );
-    }
-
-    if (!description) {
-      return sendJSON(
-        res,
-        400,
-        {
-          error:
-            "Description is required."
-        }
-      );
-    }
-
-    if (!officialLink) {
-      return sendJSON(
-        res,
-        400,
-        {
-          error:
-            "Official link is required."
-        }
-      );
-    }
-
-    const post =
-      await createBloggerPost(
-        accessToken,
-        blogId,
-        title,
-        category || "Government Jobs",
-        description,
-        officialLink
-      );
-
-    return sendJSON(
-      res,
-      200,
-      {
-        success: true,
-
-        message:
-          "Post published successfully on Blogger.",
-
-        post: {
-          id:
-            post.id,
-
-          title:
-            post.title,
-
-          url:
-            post.url,
-
-          published:
-            post.published
-        }
+      if (id) {
+        const post = await getPost(accessToken,blogId,id);
+        return sendJSON(res,200,normalizePost(post,post.status === "DRAFT" ? "draft" : "published"));
       }
-    );
+      const status = req.query?.status || "live";
+      if (status === "all") {
+        const [drafts,live] = await Promise.all([
+          listPosts(accessToken,blogId,"draft"),
+          listPosts(accessToken,blogId,"live")
+        ]);
+        return sendJSON(res,200,{
+          drafts:drafts.map(p=>normalizePost(p,"draft")),
+          posts:live.map(p=>normalizePost(p,"published"))
+        });
+      }
+      const items = await listPosts(accessToken,blogId,status === "draft" ? "draft" : "live");
+      return sendJSON(res,200,items.map(p=>normalizePost(p,status === "draft" ? "draft" : "published")));
+    }
 
+    if (req.method === "DELETE") {
+      if (!id) return sendJSON(res,400,{error:"Post ID is required."});
+      await deletePost(accessToken,blogId,id);
+      return sendJSON(res,200,{success:true,message:"Post deleted successfully."});
+    }
+
+    const body = req.body || {};
+    const data = {
+      title:body.title,
+      category:body.category || "Government Jobs",
+      description:body.description || "",
+      officialLink:body.officialLink || "",
+      secondLink:body.secondLink || "",
+      secondLinkLabel:body.secondLinkLabel || "",
+      instructions:body.instructions || "",
+      fields:body.fields || {}
+    };
+
+    if (!data.title) return sendJSON(res,400,{error:"Post title is required."});
+    if (!data.description) return sendJSON(res,400,{error:"Description is required."});
+
+    if (req.method === "POST") {
+      const created = await createPost(accessToken,blogId,data,Boolean(body.draft));
+      return sendJSON(res,200,{
+        success:true,
+        message:body.draft ? "Draft saved successfully on Blogger." : "Post published successfully on Blogger.",
+        post:normalizePost(created,body.draft ? "draft" : "published")
+      });
+    }
+
+    if (req.method === "PUT") {
+      if (!id) return sendJSON(res,400,{error:"Post ID is required for update."});
+      const updated = await updatePost(accessToken,blogId,id,data,false);
+      if (body.publish) {
+        const published = await publishPost(accessToken,blogId,id);
+        return sendJSON(res,200,{success:true,message:"Post published successfully.",post:normalizePost(published,"published")});
+      }
+      return sendJSON(res,200,{success:true,message:"Draft updated successfully.",post:normalizePost(updated,"draft")});
+    }
   } catch (error) {
-
-    console.error(
-      "Blogger Posts API Error:",
-      error
-    );
-
-    return sendJSON(
-      res,
-      500,
-      {
-        error:
-          error.message ||
-          "Internal server error"
-      }
-    );
+    console.error("Blogger Posts API Error:",error);
+    return sendJSON(res,500,{error:error.message || "Internal server error"});
   }
 };
