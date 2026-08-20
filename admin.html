@@ -205,7 +205,7 @@
 </div></div></div></header>
 <section class="content" id="dashboard"><div class="heading"><div><h1>Dashboard</h1><p>Welcome back, Admin! Here's what's happening on your website today.</p></div><div class="date">▣ &nbsp; 20 August 2026, Thursday</div></div>
 <div class="stats"><div class="stat"><div class="si blue">▣</div><div><h4>Government Jobs</h4><div class="num" id="gov">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si green">♧</div><div><h4>Odisha Jobs</h4><div class="num" id="odisha">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si orange">🔗</div><div><h4>Answer Keys</h4><div class="num" id="answer">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si purple">▣</div><div><h4>Admit Cards</h4><div class="num" id="admit">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si teal">▥</div><div><h4>Results</h4><div class="num" id="result">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si pink">🎓</div><div><h4>Education</h4><div class="num" id="education">0</div><div class="view">View all →</div></div></div></div>
-<div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b>0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
+<div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b id="draftCount">0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
 <div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form">
 <div class="formgrid">
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
@@ -230,6 +230,7 @@
 <div id="msg" class="message success"></div><div id="err" class="message error"></div>
 </form></div></section>
 <section><div class="card qa"><div class="head" style="margin:-14px -14px 14px"><h3>⚡ Quick Actions</h3><small>Add new updates quickly</small></div><div class="qagrid"><button onclick="quick('Government Jobs')">💼<br>Add Government Job</button><button onclick="quick('Odisha Jobs')">👥<br>Add Odisha Job</button><button onclick="quick('Admit Cards')">🪪<br>Upload Admit Card</button><button onclick="quick('Results')">📊<br>Add Result</button><button onclick="quick('Answer Keys')">🔗<br>Upload Answer Key</button><button onclick="quick('Education')">🎓<br>Education Update</button></div></div><div class="card notify" id="notifications"><div class="head"><h3>♧ Notifications</h3></div><div class="note"><span class="greenDot">●</span>New post published successfully</div><div class="note"><span class="greenDot">●</span>Blogger connection checked</div><div class="note"><span class="greenDot">●</span>Dashboard loaded successfully</div></div></section>
+<section class="card recent" id="drafts"><div class="head recentHead"><div><h3>▤ &nbsp; Drafts</h3><small id="draftSub">Saved on Blogger</small></div><button class="viewAll" type="button" onclick="loadPosts()">↻ Refresh</button></div><div class="posts" id="draftPosts">Loading drafts...</div></section>
 <section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" onclick="location.hash='recent'">View All</button></div><div class="posts" id="posts">Loading posts...</div></section></div><div class="footer">© 2026 Nijukti Path. All rights reserved.</div></section></main></div>
 <script>
 const $=x=>document.getElementById(x);
@@ -291,30 +292,187 @@ function quick(v){setPostType(v);$("add").scrollIntoView({behavior:"smooth"});$(
 function collectFields(){const out={},schema=schemas[$("type").value]||[];schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});return out}
 function fillFields(data){(schemas[$("type").value]||[]).forEach(f=>{const e=$("f_"+f[0]);if(e)e.value=(data||{})[f[0]]||""})}
 function resetForm(){editingId=null;$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
-function saveDraft(){localStorage.setItem("nijuktiDraft",JSON.stringify({title:$("title").value.trim(),category:$("cat").value||$("type").value,description:$("desc").value.trim(),officialLink:$("link").value.trim(),secondLink:$("link2").value.trim(),instructions:$("instructions").value.trim(),fields:collectFields()}));showMsg("💾 Draft saved on this device.")}
+async function saveDraft(){
+  const payload={
+    title:$("title").value.trim(),
+    category:$("cat").value||$("type").value,
+    description:$("desc").value.trim(),
+    officialLink:$("link").value.trim(),
+    secondLink:$("link2").value.trim(),
+    secondLinkLabel:actionLabels[$("type").value]||"🔗 Main Action Link",
+    instructions:$("instructions").value.trim(),
+    fields:collectFields(),
+    draft:true
+  };
+  if(!payload.title)return showErr("Post title is required.");
+  if(!payload.description)return showErr("Description is required.");
+  try{
+    const body=editingId?{...payload,id:editingId,publish:false}:{...payload};
+    const r=await fetch("/api/posts",{method:editingId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const d=await r.json();
+    if(!r.ok)throw Error(d.error||"Draft could not be saved");
+    editingId=null;
+    $("draftCheck").checked=true;
+    showMsg("💾 Draft saved on Blogger.");
+    resetForm();
+    await loadPosts();
+  }catch(e){showErr(e.message)}
+}
 function showMsg(t){$("msg").textContent=t;$("msg").style.display="block";$("err").style.display="none"}
 function showErr(t){$("err").textContent="❌ "+t;$("err").style.display="block";$("msg").style.display="none"}
 $("desc").addEventListener("input",()=>{$("chars").textContent=$("desc").value.length});
 
-function filterPosts(){let q=$("search").value.toLowerCase();render(posts.filter(p=>(p.title||"").toLowerCase().includes(q)||(p.category||"").toLowerCase().includes(q)))}
-function render(a){
- if(!a.length){$("posts").innerHTML='<div style="padding:14px;color:#8792a4;font-size:11px">No posts added yet.</div>';return}
- $("posts").innerHTML=a.slice(0,5).map(p=>'<article class="post"><div class="posttop"><span class="tag">'+esc(p.category||"Post")+'</span><span class="status">Published</span></div><h4>'+esc(p.title||"Untitled")+'</h4><div class="meta">▣ '+esc(p.published||"Published")+'</div><div class="postactions"><button title="View" onclick="viewPost(\''+esc(p.url||"")+'\')">◉</button><button class="edit" title="Edit" onclick="editPost(\''+esc(p.id||"")+'\')">✎</button><button class="del" title="Delete" onclick="deletePost(\''+esc(p.id||"")+'\')">▥</button></div></article>').join("")
+function filterPosts(){
+  const q=$("search").value.toLowerCase();
+  render(posts.filter(p=>(p.title||"").toLowerCase().includes(q)||(p.category||"").toLowerCase().includes(q)));
 }
+
+function extractDraftData(content){
+  const out={};
+  const m=String(content||"").match(/NIJUKTI_PATH_DATA:([\s\S]*?)\s*-->/);
+  if(!m)return out;
+  try{
+    const decoded=m[1]
+      .replace(/&quot;/g,'"').replace(/&#039;/g,"'")
+      .replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&");
+    return JSON.parse(decoded);
+  }catch(e){return out}
+}
+
+function extractDescription(content){
+  const text=String(content||"")
+    .replace(/<!--[\s\S]*?-->/g,"")
+    .replace(/<[^>]+>/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+  return text;
+}
+
+function render(a){
+  if(!a.length){
+    $("posts").innerHTML='<div style="padding:14px;color:#8792a4;font-size:11px">No posts added yet.</div>';
+    return;
+  }
+  $("posts").innerHTML=a.slice(0,5).map(p=>{
+    const isDraft=p.status==="draft";
+    return '<article class="post"><div class="posttop"><span class="tag">'+esc(p.category||"Post")+'</span><span class="status">'+(isDraft?"Draft":"Published")+'</span></div><h4>'+esc(p.title||"Untitled")+'</h4><div class="meta">▣ '+esc(p.updated||p.published||"")+'</div><div class="postactions">'+
+      (p.url&&!isDraft?'<button title="View" onclick="viewPost(\''+esc(p.url)+'\')">◉</button>':'')+
+      '<button class="edit" title="Edit" onclick="editPost(\''+esc(p.id||"")+'\')">✎</button>'+
+      '<button class="del" title="Delete" onclick="deletePost(\''+esc(p.id||"")+'\')">▥</button></div></article>';
+  }).join("");
+}
+
+function renderDrafts(a){
+  if(!a.length){
+    $("draftPosts").innerHTML='<div style="padding:14px;color:#8792a4;font-size:11px">No drafts saved yet.</div>';
+    return;
+  }
+  $("draftPosts").innerHTML=a.slice(0,10).map(p=>
+    '<article class="post"><div class="posttop"><span class="tag">'+esc(p.category||"Draft")+'</span><span class="status">Draft</span></div><h4>'+esc(p.title||"Untitled")+'</h4><div class="meta">▣ '+esc(p.updated||"Recently saved")+'</div><div class="postactions"><button class="edit" title="Continue Editing" onclick="editPost(\''+esc(p.id||"")+'\')">✎</button><button class="del" title="Delete Draft" onclick="deletePost(\''+esc(p.id||"")+'\')">▥</button></div></article>'
+  ).join("");
+}
+
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
-function counts(){let m={"Government Jobs":"gov","Odisha Jobs":"odisha","Answer Keys":"answer","Admit Cards":"admit","Results":"result","Education":"education"};Object.keys(m).forEach(k=>$(m[k]).textContent=posts.filter(p=>(p.category||"")===k).length);$("total").textContent=posts.length;$("published").textContent=posts.length}
-async function loadPosts(){try{let r=await fetch("/api/posts",{cache:"no-store"}),d=await r.json();if(!r.ok)throw Error(d.error||"Unable to load posts");posts=Array.isArray(d)?d:[];render(posts);counts()}catch(e){$("posts").innerHTML='<div style="padding:14px;color:#c62828;font-size:11px">Unable to load posts.</div>'}}
+
+function counts(){
+  const m={"Government Jobs":"gov","Odisha Jobs":"odisha","Answer Keys":"answer","Admit Cards":"admit","Results":"result","Education":"education"};
+  Object.keys(m).forEach(k=>$(m[k]).textContent=posts.filter(p=>(p.category||"")===k).length);
+  $("total").textContent=posts.length;
+  $("published").textContent=posts.length;
+  $("draftCount").textContent=drafts.length;
+}
+
+let drafts=[];
+
+async function loadPosts(){
+  try{
+    const r=await fetch("/api/posts?status=all",{cache:"no-store"});
+    const d=await r.json();
+    if(!r.ok)throw Error(d.error||"Unable to load posts");
+    posts=Array.isArray(d)?d:(d.posts||[]);
+    drafts=Array.isArray(d)?[]:(d.drafts||[]);
+    render(posts);
+    renderDrafts(drafts);
+    counts();
+  }catch(e){
+    $("posts").innerHTML='<div style="padding:14px;color:#c62828;font-size:11px">Unable to load posts.</div>';
+    $("draftPosts").innerHTML='<div style="padding:14px;color:#c62828;font-size:11px">Unable to load drafts.</div>';
+  }
+}
+
 function viewPost(url){if(url)window.open(url,"_blank");else showErr("Post URL is not available.")}
-async function editPost(id){const p=posts.find(x=>String(x.id)===String(id));if(!p)return showErr("Post details could not be loaded.");editingId=id;setPostType(p.category||"Government Jobs");$("title").value=p.title||"";$("desc").value=p.description||"";$("link").value=p.officialLink||p.url||"";$("link2").value=p.secondLink||"";$("instructions").value=p.instructions||"";$("chars").textContent=$("desc").value.length;fillFields(p.fields||{});$("add").scrollIntoView({behavior:"smooth"});$("title").focus();showMsg("✏️ Edit mode: update details and publish again.")}
-async function deletePost(id){if(!id||!confirm("Delete this Blogger post?"))return;try{let r=await fetch("/api/posts",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({id})}),d=await r.json();if(!r.ok)throw Error(d.error||"Delete failed");showMsg("🗑️ Post deleted successfully.");loadPosts()}catch(e){showErr(e.message)}}
+
+async function editPost(id){
+  try{
+    const r=await fetch("/api/posts?id="+encodeURIComponent(id),{cache:"no-store"});
+    const p=await r.json();
+    if(!r.ok)throw Error(p.error||"Post details could not be loaded.");
+    const meta=extractDraftData(p.content||"");
+    editingId=id;
+    setPostType(p.category||meta.category||"Government Jobs");
+    $("title").value=p.title||"";
+    $("desc").value=meta.description||extractDescription(p.content||"")||"";
+    $("link").value=meta.officialLink||"";
+    $("link2").value=meta.secondLink||"";
+    $("instructions").value=meta.instructions||"";
+    $("chars").textContent=$("desc").value.length;
+    fillFields(meta.fields||{});
+    $("draftCheck").checked=(p.status==="draft");
+    const publishBtn=document.querySelector('button.publish');
+    if(publishBtn)publishBtn.textContent=p.status==="draft"?"➤ Publish Draft":"➤ Update Post";
+    $("add").scrollIntoView({behavior:"smooth"});
+    $("title").focus();
+    showMsg(p.status==="draft"?"✏️ Draft opened. Edit it and publish when ready.":"✏️ Edit mode enabled.");
+  }catch(e){showErr(e.message)}
+}
+
+async function deletePost(id){
+  if(!id||!confirm("Delete this Blogger post/draft?"))return;
+  try{
+    const r=await fetch("/api/posts?id="+encodeURIComponent(id),{method:"DELETE"});
+    const d=await r.json();
+    if(!r.ok)throw Error(d.error||"Delete failed");
+    showMsg("🗑️ Post/draft deleted successfully.");
+    await loadPosts();
+  }catch(e){showErr(e.message)}
+}
 
 $("form").addEventListener("submit",async e=>{
- e.preventDefault();$("msg").style.display="none";$("err").style.display="none";
- const payload={title:$("title").value.trim(),category:$("cat").value||$("type").value,description:$("desc").value.trim(),officialLink:$("link").value.trim(),secondLink:$("link2").value.trim(),instructions:$("instructions").value.trim(),fields:collectFields(),draft:$("draftCheck").checked};
- if(!payload.title)return showErr("Post title is required.");
- try{let r=await fetch("/api/posts",{method:editingId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(editingId?{...payload,id:editingId}:payload)}),d=await r.json();if(!r.ok)throw Error(d.error||"Post could not be published");editingId=null;showMsg("✅ "+(payload.draft?"Draft saved":"Post published successfully on Blogger!"));$("form").reset();$("chars").textContent="0";setPostType("Government Jobs");loadPosts()}catch(x){showErr(x.message)}
+  e.preventDefault();
+  $("msg").style.display="none";$("err").style.display="none";
+  const isDraft=$("draftCheck").checked;
+  const payload={
+    title:$("title").value.trim(),
+    category:$("cat").value||$("type").value,
+    description:$("desc").value.trim(),
+    officialLink:$("link").value.trim(),
+    secondLink:$("link2").value.trim(),
+    secondLinkLabel:actionLabels[$("type").value]||"🔗 Main Action Link",
+    instructions:$("instructions").value.trim(),
+    fields:collectFields(),
+    draft:isDraft,
+    publish:!isDraft
+  };
+  if(!payload.title)return showErr("Post title is required.");
+  if(!payload.description)return showErr("Description is required.");
+  try{
+    const body=editingId?{...payload,id:editingId}:payload;
+    const r=await fetch("/api/posts",{method:editingId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const d=await r.json();
+    if(!r.ok)throw Error(d.error||"Post could not be saved");
+    editingId=null;
+    showMsg("✅ "+(isDraft?"Draft saved on Blogger.":"Post published successfully on Blogger!"));
+    $("form").reset();$("chars").textContent="0";$("draftCheck").checked=false;
+    const publishBtn=document.querySelector('button.publish');
+    if(publishBtn)publishBtn.textContent="➤ Publish Post";
+    setPostType("Government Jobs");
+    await loadPosts();
+  }catch(x){showErr(x.message)}
 });
-setPostType("Government Jobs");updateLinkLabels("Government Jobs");loadPosts();
+
+setPostType("Government Jobs");
+updateLinkLabels("Government Jobs");
+loadPosts();
 </script>
 <script id="admin-login-js">
 (function(){
