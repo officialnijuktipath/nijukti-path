@@ -438,11 +438,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
 <div class="form-section-title"><span class="section-dot"></span>Job / Post Details<small>Category-specific information</small></div>
 <div id="dynamicFields" class="full"></div>
-<div class="form-section-title link-section"><span class="section-dot"></span>Important Links<small>Official source + one action link</small></div>
+<div class="form-section-title link-section"><span class="section-dot"></span>Important Links<small>Official source + action link</small></div>
 <div class="full linkBox"><label id="link1Label">Official / Notification Link <span class="optional">(Optional)</span></label><input id="link" type="url" placeholder="https://"></div>
 <div class="full linkBox"><label id="link2Label">Main Action Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
 <div class="form-section-title link-section"><span class="section-dot"></span>Instructions<small>Optional notes for applicants</small></div>
-<div class="full"><label>Important Instructions <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div><div id="previewContent" style="font-size:11px;line-height:1.55;color:#344054"></div></div>
+<div class="full"><label>Important Instructions / Note <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important note, deadline reminder, eligibility warning, or applicant instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div><div id="previewContent" style="font-size:11px;line-height:1.55;color:#344054"></div></div>
 </div>
 <div class="actions">
 <label class="check"><input id="draftCheck" type="checkbox"> Save as Draft</label>
@@ -526,6 +526,8 @@ function setPostType(type){
     setTimeout(applyEducationMode,0);
   }
   if($('f_examDate')){
+    const picker=$("f_examDatePicker");
+    const manual=$("f_examDateManual");
     if(picker)picker.addEventListener("change",syncExamDateValue);
     if(manual)manual.addEventListener("input",syncExamDateValue);
     document.querySelectorAll('input[name="examDateType"]').forEach(r=>r.addEventListener("change",syncExamDateValue));
