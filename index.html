@@ -334,7 +334,7 @@ body{
 
 <section class="hero">
 <h2>Latest Odisha Government <span class="yellow">Jobs</span>, Admit Card,<br>Answer Keys, <span class="green">Results</span> &amp; More</h2>
-<p>Get all latest updates, official notifications and important details in one place.</p>
+<p>Get the latest Odisha Government Jobs, official notifications, Admit Cards, Answer Keys, Results and Education updates in one place.</p>
 <div class="line"></div>
 </section>
 
@@ -520,6 +520,33 @@ document.getElementById('app').innerHTML=`
 <div class="section-head"><h2 class="title">${esc(title)}</h2><a class="view" href="/">HOME</a></div>
 <div class="grid latest-grid">${filtered.length?filtered.slice(0,20).map(card).join(''):'<div class="empty" style="grid-column:1/-1">No posts found.</div>'}</div>`;
 }
+
+function setMeta(name, content){
+  let el=document.querySelector(`meta[name="${name}"]`);
+  if(!el){el=document.createElement('meta');el.name=name;document.head.appendChild(el);}
+  el.setAttribute('content',content);
+}
+function setProperty(property, content){
+  let el=document.querySelector(`meta[property="${property}"]`);
+  if(!el){el=document.createElement('meta');el.setAttribute('property',property);document.head.appendChild(el);}
+  el.setAttribute('content',content);
+}
+function setCanonical(url){
+  let el=document.querySelector('link[rel="canonical"]');
+  if(!el){el=document.createElement('link');el.rel='canonical';document.head.appendChild(el);}
+  el.href=url;
+}
+function setPageSEO(title, description, url){
+  const cleanTitle=String(title||'NIJUKTI PATH').trim();
+  const cleanDesc=String(description||'Latest Odisha Government Jobs, Sarkari Naukri, Admit Card, Answer Key, Results and Education updates.').replace(/\s+/g,' ').trim().slice(0,160);
+  document.title=cleanTitle+' | NIJUKTI PATH';
+  setMeta('description',cleanDesc);
+  setProperty('og:title',cleanTitle+' | NIJUKTI PATH');
+  setProperty('og:description',cleanDesc);
+  setProperty('og:url',url);
+  setCanonical(url);
+}
+
 function showPost(e){
 let body=(e.content&&e.content.$t)||'<p>No content available.</p>';
 let a=applyLink(e);
