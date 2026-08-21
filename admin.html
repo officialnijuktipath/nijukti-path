@@ -330,125 +330,26 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 </style>
 
-<style id="premium-profile-css">
-#profile{scroll-margin-top:78px}
-.profile-premium{
-  margin-top:12px;background:linear-gradient(135deg,#ffffff 0%,#f7faff 100%);
-  border:1px solid #dce6f4;border-radius:18px;box-shadow:0 8px 26px rgba(18,43,78,.08);
-  overflow:hidden;
-}
-.profile-hero{
-  position:relative;padding:24px 24px 20px;
-  background:linear-gradient(135deg,#071d4d 0%,#0b55bf 62%,#1680e8 100%);
-  color:#fff;display:flex;align-items:center;gap:18px;
-}
-.profile-hero:after{
-  content:"";position:absolute;right:-55px;top:-70px;width:190px;height:190px;border-radius:50%;
-  border:35px solid rgba(255,255,255,.08);
-}
-.profile-avatar-xl{
-  width:82px;height:82px;border-radius:22px;display:grid;place-items:center;
-  background:linear-gradient(145deg,#fff,#dceaff);color:#0a4da8;font-size:28px;font-weight:900;
-  border:3px solid rgba(255,255,255,.55);box-shadow:0 8px 22px rgba(0,0,0,.16);flex:none;
-}
-.profile-hero h2{margin:0;font-size:23px;letter-spacing:-.3px}
-.profile-hero p{margin:5px 0 8px;font-size:11px;opacity:.84}
-.profile-badges{display:flex;gap:7px;flex-wrap:wrap}
-.profile-badge{font-size:9px;font-weight:800;padding:5px 9px;border-radius:20px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2)}
-.profile-badge.active{background:#d9fbe7;color:#126f38;border-color:#b9efcf}
-.profile-edit-btn{
-  margin-left:auto;position:relative;z-index:2;border:1px solid rgba(255,255,255,.35);
-  background:rgba(255,255,255,.12);color:#fff;border-radius:9px;padding:10px 14px;font-size:11px;font-weight:800;cursor:pointer
-}
-.profile-body{padding:18px}
-.profile-overview{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px
-}
-.profile-mini{
-  background:#fff;border:1px solid #e3eaf4;border-radius:11px;padding:12px;
-}
-.profile-mini small{display:block;color:#7b8798;font-size:9px;margin-bottom:5px}
-.profile-mini b{font-size:12px;color:#17355f}
-.profile-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
-.profile-panel{
-  background:#fff;border:1px solid #e3eaf4;border-radius:12px;padding:15px
-}
-.profile-panel h3{margin:0 0 12px;font-size:13px;color:#16345f}
-.profile-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.profile-field.full{grid-column:1/-1}
-.profile-field label{font-size:10px;color:#526075}
-.profile-field input,.profile-field textarea{
-  margin-top:4px;padding:9px 10px;border-radius:8px;font-size:11px
-}
-.profile-field textarea{height:74px}
-.profile-actions{display:flex;gap:8px;margin-top:12px}
-.profile-save{background:#0b5bd7!important;color:#fff;border-color:#0b5bd7!important}
-.profile-security-item{
-  display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6
-}
-.profile-security-item:last-child{border-bottom:0}
-.profile-security-icon{
-  width:34px;height:34px;border-radius:9px;background:#eef5ff;color:#1465d8;display:grid;place-items:center
-}
-.profile-security-item b{font-size:11px}.profile-security-item small{display:block;color:#7b8798;font-size:9px;margin-top:3px}
-.profile-toggle{margin-left:auto;width:34px;height:19px;border-radius:20px;background:#16a34a;position:relative}
-.profile-toggle:after{content:"";position:absolute;width:15px;height:15px;border-radius:50%;background:#fff;right:2px;top:2px}
-.profile-note{margin-top:10px;padding:9px 10px;border-radius:8px;background:#f5f8fd;color:#68758a;font-size:9px;line-height:1.4}
-@media(max-width:900px){.profile-grid{grid-template-columns:1fr}.profile-overview{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){
-  .profile-hero{padding:18px;align-items:flex-start}.profile-avatar-xl{width:66px;height:66px;border-radius:18px;font-size:23px}
-  .profile-hero h2{font-size:19px}.profile-edit-btn{padding:8px 10px}.profile-body{padding:12px}
-  .profile-fields{grid-template-columns:1fr}.profile-field.full{grid-column:auto}
-}
-</style>
-
-
-<style id="premium-profile-v2-css">
-.profile-v2-shell{margin-top:14px}
-.profile-v2-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#071c49,#0b55bf 68%,#1680e8);color:#fff;border-radius:18px;padding:22px 24px;display:flex;align-items:center;gap:18px;box-shadow:0 10px 28px rgba(7,45,105,.18)}
-.profile-v2-hero:before{content:"";position:absolute;right:-55px;top:-75px;width:220px;height:220px;border-radius:50%;border:38px solid rgba(255,255,255,.07)}
-.profile-v2-photo{width:92px;height:92px;border-radius:25px;background:linear-gradient(145deg,#fff,#dceaff);border:3px solid rgba(255,255,255,.55);display:grid;place-items:center;color:#0b55bf;font-size:31px;font-weight:900;box-shadow:0 9px 25px rgba(0,0,0,.18);overflow:hidden;position:relative;flex:none}
-.profile-v2-photo img{width:100%;height:100%;object-fit:cover;display:none}
-.profile-v2-photo.has-img img{display:block}.profile-v2-photo.has-img span{display:none}
-.profile-v2-camera{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:10px;background:#fff;color:#0b55bf;display:grid;place-items:center;font-size:14px;border:2px solid #0b55bf;cursor:pointer}
-.profile-v2-info{position:relative;z-index:1;min-width:0}
-.profile-v2-name{font-size:24px;font-weight:900;margin:0;display:flex;align-items:center;gap:7px}
-.profile-v2-verified{width:18px;height:18px;border-radius:50%;background:#fff;color:#0b63d8;display:inline-grid;place-items:center;font-size:11px}
-.profile-v2-role{margin:5px 0 8px;font-size:11px;opacity:.9}
-.profile-v2-contact{display:flex;gap:14px;flex-wrap:wrap;font-size:10px;opacity:.94}
-.profile-v2-contact span{white-space:nowrap}
-.profile-v2-actions{margin-left:auto;position:relative;z-index:1;display:flex;gap:8px}
-.profile-v2-actions button{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:9px;padding:9px 12px;font-size:10px;font-weight:800;cursor:pointer}
-.profile-v2-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
-.profile-v2-stat{background:#fff;border:1px solid #e0e7f1;border-radius:12px;padding:12px;box-shadow:0 3px 10px rgba(18,43,78,.05)}
-.profile-v2-stat small{display:block;color:#7b8798;font-size:9px;margin-bottom:5px}.profile-v2-stat b{font-size:12px;color:#16345f}
-.profile-v2-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:12px;margin-top:12px}
-.profile-v2-card{background:#fff;border:1px solid #e0e7f1;border-radius:13px;box-shadow:0 3px 12px rgba(18,43,78,.05);overflow:hidden}
-.profile-v2-card-head{padding:12px 14px;border-bottom:1px solid #e8edf4;display:flex;align-items:center;justify-content:space-between}
-.profile-v2-card-head h3{margin:0;font-size:13px;color:#16345f}
-.profile-v2-card-body{padding:14px}
-.profile-v2-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.profile-v2-field.full{grid-column:1/-1}.profile-v2-field label{font-size:10px;color:#526075}
-.profile-v2-field input,.profile-v2-field textarea{margin-top:4px;padding:9px 10px;border-radius:8px;font-size:11px}
-.profile-v2-field textarea{height:78px}
-.profile-v2-photo-upload{margin-top:11px;border:1px dashed #a9c3eb;border-radius:10px;background:#f7faff;padding:11px;display:flex;align-items:center;gap:10px}
-.profile-v2-photo-thumb{width:46px;height:46px;border-radius:11px;background:#e9f2ff;display:grid;place-items:center;color:#1465d8;overflow:hidden;font-weight:800}
-.profile-v2-photo-thumb img{width:100%;height:100%;object-fit:cover;display:none}.profile-v2-photo-thumb.has-img img{display:block}.profile-v2-photo-thumb.has-img span{display:none}
-.profile-v2-upload-text b{display:block;font-size:10px;color:#17355f}.profile-v2-upload-text small{display:block;color:#7b8798;font-size:8.5px;margin-top:3px}
-.profile-v2-upload-actions{margin-left:auto;display:flex;gap:6px}.profile-v2-upload-actions button{border:1px solid #cbd8e9;background:#fff;color:#0755c9;border-radius:7px;padding:7px 9px;font-size:9px;font-weight:800;cursor:pointer}
-.profile-v2-upload-actions .remove{color:#c62828;border-color:#efc9c9;background:#fff7f7}
-.profile-v2-save{display:flex;align-items:center;gap:8px;margin-top:12px}.profile-v2-save .btn{font-size:10px}
-.profile-v2-security-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6}
-.profile-v2-security-row:last-child{border-bottom:0}
-.profile-v2-sec-icon{width:34px;height:34px;border-radius:9px;background:#eef5ff;color:#1465d8;display:grid;place-items:center}
-.profile-v2-security-row b{font-size:10.5px}.profile-v2-security-row small{display:block;color:#7b8798;font-size:8.5px;margin-top:3px}.profile-v2-arrow{margin-left:auto;color:#74849a;font-size:15px}
-.profile-v2-tick{margin-left:auto;color:#16a34a;font-weight:900;font-size:11px}
-.profile-v2-activity{margin-top:12px}.profile-v2-activity-item{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid #edf1f6}.profile-v2-activity-item:last-child{border-bottom:0}
-.profile-v2-dot{width:8px;height:8px;border-radius:50%;background:#1465d8;margin-top:4px;flex:none}.profile-v2-activity-item b{display:block;font-size:10px}.profile-v2-activity-item small{color:#8792a4;font-size:8.5px}
-.profile-v2-completion{margin-top:12px;background:#f6f9fe;border:1px solid #e2eaf5;border-radius:10px;padding:11px}
-.profile-v2-completion-top{display:flex;justify-content:space-between;font-size:9px;font-weight:800;color:#17355f}.profile-v2-progress{height:7px;border-radius:8px;background:#e6edf7;margin-top:7px;overflow:hidden}.profile-v2-progress i{display:block;height:100%;width:80%;background:linear-gradient(90deg,#0b5bd7,#1680e8);border-radius:8px}
-@media(max-width:900px){.profile-v2-layout{grid-template-columns:1fr}.profile-v2-overview{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.profile-v2-hero{padding:17px;align-items:flex-start}.profile-v2-photo{width:70px;height:70px;border-radius:18px}.profile-v2-name{font-size:19px}.profile-v2-contact{gap:7px;display:block}.profile-v2-contact span{display:block;margin-top:3px}.profile-v2-actions{margin-left:0}.profile-v2-actions button{padding:8px}.profile-v2-overview{grid-template-columns:1fr 1fr}.profile-v2-fields{grid-template-columns:1fr}.profile-v2-field.full{grid-column:auto}}
+<style id="premium-profile-final-css">
+#profile.profile-page{display:none;scroll-margin-top:75px}
+.profile-page{margin-top:12px}
+.profile-final-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#071c49,#0b55bf 68%,#1680e8);color:#fff;border-radius:18px;padding:22px 24px;display:flex;align-items:center;gap:18px;box-shadow:0 10px 28px rgba(7,45,105,.18)}
+.profile-final-hero:before{content:"";position:absolute;right:-55px;top:-75px;width:220px;height:220px;border-radius:50%;border:38px solid rgba(255,255,255,.07)}
+.profile-final-photo{width:92px;height:92px;border-radius:25px;background:linear-gradient(145deg,#fff,#dceaff);border:3px solid rgba(255,255,255,.55);display:grid;place-items:center;color:#0b55bf;font-size:31px;font-weight:900;box-shadow:0 9px 25px rgba(0,0,0,.18);overflow:hidden;position:relative;flex:none}
+.profile-final-photo img{width:100%;height:100%;object-fit:cover;display:none}.profile-final-photo.has-img img{display:block}.profile-final-photo.has-img span{display:none}
+.profile-final-camera{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:10px;background:#fff;color:#0b55bf;display:grid;place-items:center;font-size:14px;border:2px solid #0b55bf;cursor:pointer}
+.profile-final-info{position:relative;z-index:1}.profile-final-name{font-size:24px;font-weight:900;margin:0;display:flex;align-items:center;gap:7px}.profile-final-check{width:18px;height:18px;border-radius:50%;background:#fff;color:#0b63d8;display:inline-grid;place-items:center;font-size:11px}.profile-final-role{margin:5px 0 8px;font-size:11px;opacity:.9}.profile-final-contact{display:flex;gap:14px;flex-wrap:wrap;font-size:10px;opacity:.94}
+.profile-final-actions{margin-left:auto;position:relative;z-index:1;display:flex;gap:8px}.profile-final-actions button{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:9px;padding:9px 12px;font-size:10px;font-weight:800;cursor:pointer}
+.profile-final-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.profile-final-stat{background:#fff;border:1px solid #e0e7f1;border-radius:12px;padding:12px;box-shadow:0 3px 10px rgba(18,43,78,.05)}.profile-final-stat small{display:block;color:#7b8798;font-size:9px;margin-bottom:5px}.profile-final-stat b{font-size:12px;color:#16345f}
+.profile-final-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:12px;margin-top:12px}.profile-final-card{background:#fff;border:1px solid #e0e7f1;border-radius:13px;box-shadow:0 3px 12px rgba(18,43,78,.05);overflow:hidden}.profile-final-head{padding:12px 14px;border-bottom:1px solid #e8edf4;display:flex;align-items:center;justify-content:space-between}.profile-final-head h3{margin:0;font-size:13px;color:#16345f}.profile-final-body{padding:14px}
+.profile-final-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.profile-final-field.full{grid-column:1/-1}.profile-final-field label{font-size:10px;color:#526075}.profile-final-field input,.profile-final-field textarea{margin-top:4px;padding:9px 10px;border-radius:8px;font-size:11px}.profile-final-field textarea{height:78px}
+.profile-final-upload{margin-top:11px;border:1px dashed #a9c3eb;border-radius:10px;background:#f7faff;padding:11px;display:flex;align-items:center;gap:10px}.profile-final-thumb{width:46px;height:46px;border-radius:11px;background:#e9f2ff;display:grid;place-items:center;color:#1465d8;overflow:hidden;font-weight:800}.profile-final-thumb img{width:100%;height:100%;object-fit:cover;display:none}.profile-final-thumb.has-img img{display:block}.profile-final-thumb.has-img span{display:none}.profile-final-upload-text b{display:block;font-size:10px;color:#17355f}.profile-final-upload-text small{display:block;color:#7b8798;font-size:8.5px;margin-top:3px}.profile-final-upload-actions{margin-left:auto;display:flex;gap:6px}.profile-final-upload-actions button{border:1px solid #cbd8e9;background:#fff;color:#0755c9;border-radius:7px;padding:7px 9px;font-size:9px;font-weight:800;cursor:pointer}.profile-final-upload-actions .remove{color:#c62828;border-color:#efc9c9;background:#fff7f7}
+.profile-final-completion{margin-top:11px;background:#f6f9fe;border:1px solid #e2eaf5;border-radius:10px;padding:11px}.profile-final-completion-top{display:flex;justify-content:space-between;font-size:9px;font-weight:800;color:#17355f}.profile-final-progress{height:7px;border-radius:8px;background:#e6edf7;margin-top:7px;overflow:hidden}.profile-final-progress i{display:block;height:100%;width:80%;background:linear-gradient(90deg,#0b5bd7,#1680e8);border-radius:8px}
+.profile-final-save{display:flex;gap:8px;margin-top:12px}.profile-final-save button{font-size:10px}
+.profile-final-sec{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6}.profile-final-sec:last-child{border-bottom:0}.profile-final-sec-icon{width:34px;height:34px;border-radius:9px;background:#eef5ff;color:#1465d8;display:grid;place-items:center}.profile-final-sec b{font-size:10.5px}.profile-final-sec small{display:block;color:#7b8798;font-size:8.5px;margin-top:3px}.profile-final-ok{margin-left:auto;color:#16a34a;font-weight:900;font-size:10px}.profile-final-arrow{margin-left:auto;color:#74849a;font-size:16px}
+.profile-final-activity{margin-top:12px}.profile-final-activity-row{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid #edf1f6}.profile-final-activity-row:last-child{border-bottom:0}.profile-final-dot{width:8px;height:8px;border-radius:50%;background:#1465d8;margin-top:4px;flex:none}.profile-final-activity-row b{display:block;font-size:10px}.profile-final-activity-row small{color:#8792a4;font-size:8.5px}
+@media(max-width:900px){.profile-final-grid{grid-template-columns:1fr}.profile-final-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.profile-final-hero{padding:17px;align-items:flex-start}.profile-final-photo{width:70px;height:70px;border-radius:18px}.profile-final-name{font-size:19px}.profile-final-contact{display:block}.profile-final-contact span{display:block;margin-top:3px}.profile-final-actions{margin-left:0}.profile-final-actions button{padding:8px}.profile-final-fields{grid-template-columns:1fr}.profile-final-field.full{grid-column:auto}}
 </style>
 
 </head><body>
@@ -539,8 +440,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </button>
 <div class="profileMenu" id="profileMenu">
 <div class="profileMenuHead"><b>Admin</b><small>Super Admin</small></div>
-<button type="button" onclick="document.getElementById('profile')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('profileMenu')?.classList.remove('open')">👤 Profile</button>
-<button type="button" onclick="document.getElementById('profile')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('profileMenu')?.classList.remove('open')">⚙️ Profile Settings</button>
+<button type="button" onclick="location.hash='profile'">👤 Profile</button>
+<button type="button" onclick="location.hash='profile'">⚙️ Profile Settings</button>
 <button type="button">🔐 Change Password</button>
 <button type="button" class="logoutItem" id="logoutAdminBtn">🚪 Logout</button>
 </div></div></div></header>
@@ -577,81 +478,62 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <section><div class="card qa"><div class="head" style="margin:-14px -14px 14px"><h3>⚡ Quick Actions</h3><small>Add new updates quickly</small></div><div class="qagrid"><button onclick="quick('Government Jobs')">💼<br>Add Government Job</button><button onclick="quick('Odisha Jobs')">👥<br>Add Odisha Job</button><button onclick="quick('Admit Cards')">🪪<br>Upload Admit Card</button><button onclick="quick('Results')">📊<br>Add Result</button><button onclick="quick('Answer Keys')">🔗<br>Upload Answer Key</button><button onclick="quick('Education')">🎓<br>Education Update</button></div></div><div class="card notify" id="notifications"><div class="head"><h3>🔔 Notifications <button type="button" id="clearNotifications" style="float:right;border:0;background:transparent;font-size:10px;color:#58708f;cursor:pointer">Clear</button></h3></div><div id="notificationList"><div class="note"><span class="greenDot">●</span>Dashboard ready</div></div></div></section>
 <section class="card recent" id="drafts"><div class="head recentHead"><div><h3>▤ &nbsp; Drafts</h3><small id="draftSub">Saved on Blogger</small></div><button class="viewAll" type="button" onclick="loadPosts()">↻ Refresh</button></div><div class="posts" id="draftPosts">Loading drafts...</div></section>
 <section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" onclick="location.hash='recent'">View All</button></div><div class="posts" id="posts">Loading posts...</div></section></div>
-<section class="profile-premium" id="profile">
-  <div class="profile-hero">
-    <div class="profile-avatar-xl" id="profileAvatarLarge">A</div>
-    <div>
-      <h2 id="profileDisplayName">Admin</h2>
-      <p id="profileDisplayEmail">admin@nijuktipath.in</p>
-      <div class="profile-badges">
-        <span class="profile-badge active">● Active</span>
-        <span class="profile-badge">Super Admin</span>
-        <span class="profile-badge">NIJUKTI PATH</span>
-      </div>
+<section class="profile-page" id="profile">
+  <div class="profile-final-hero">
+    <div class="profile-final-photo" id="pfPhoto"><span id="pfInitial">A</span><img id="pfImg" alt="Profile photo"><label class="profile-final-camera" for="pfUpload">📷</label></div>
+    <div class="profile-final-info">
+      <h2 class="profile-final-name"><span id="pfName">Admin</span><span class="profile-final-check">✓</span></h2>
+      <div class="profile-final-role">Super Administrator • NIJUKTI PATH</div>
+      <div class="profile-final-contact"><span>✉ <span id="pfEmail">admin@nijuktipath.in</span></span><span>◉ <span id="pfPhone">Mobile not added</span></span></div>
     </div>
-    <button class="profile-edit-btn" type="button" onclick="focusProfileEdit()">✎ Edit Profile</button>
+    <div class="profile-final-actions"><button type="button" onclick="pfFocus()">✎ Edit Profile</button><button type="button" onclick="document.getElementById('pfUpload').click()">📷 Photo</button></div>
   </div>
 
-  <div class="profile-body">
-    <div class="profile-overview">
-      <div class="profile-mini"><small>Account Status</small><b>Active</b></div>
-      <div class="profile-mini"><small>Role</small><b>Super Administrator</b></div>
-      <div class="profile-mini"><small>Security</small><b>Protected</b></div>
-      <div class="profile-mini"><small>Portal</small><b>NIJUKTI PATH</b></div>
+  <div class="profile-final-stats">
+    <div class="profile-final-stat"><small>Account Status</small><b style="color:#16803b">● Active</b></div>
+    <div class="profile-final-stat"><small>User Role</small><b>Super Administrator</b></div>
+    <div class="profile-final-stat"><small>Security</small><b style="color:#16803b">Protected</b></div>
+    <div class="profile-final-stat"><small>Portal</small><b>NIJUKTI PATH</b></div>
+  </div>
+
+  <div class="profile-final-grid">
+    <div class="profile-final-card">
+      <div class="profile-final-head"><h3>👤 Personal Information</h3><span style="font-size:9px;color:#8792a4">Editable</span></div>
+      <div class="profile-final-body">
+        <div class="profile-final-fields">
+          <div class="profile-final-field"><label>Full Name</label><input id="pfNameInput" type="text" value="Admin"></div>
+          <div class="profile-final-field"><label>Role</label><input type="text" value="Super Admin" readonly></div>
+          <div class="profile-final-field"><label>Email Address</label><input id="pfEmailInput" type="email" value="admin@nijuktipath.in"></div>
+          <div class="profile-final-field"><label>Mobile Number</label><input id="pfPhoneInput" type="tel" placeholder="Enter mobile number"></div>
+          <div class="profile-final-field full"><label>Bio / About Admin</label><textarea id="pfBioInput" maxlength="300">Managing NIJUKTI PATH — Sarkari Naukri • Sarkari Bharosa</textarea></div>
+        </div>
+        <div class="profile-final-upload">
+          <div class="profile-final-thumb" id="pfThumb"><span>📷</span><img id="pfThumbImg" alt=""></div>
+          <div class="profile-final-upload-text"><b>Profile Photo</b><small>JPG, PNG or WEBP • Max 2 MB</small></div>
+          <div class="profile-final-upload-actions"><button type="button" onclick="document.getElementById('pfUpload').click()">Upload</button><button class="remove" type="button" onclick="pfRemovePhoto()">Remove</button></div>
+          <input id="pfUpload" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        </div>
+        <div class="profile-final-completion"><div class="profile-final-completion-top"><span>Profile Completion</span><span id="pfCompletion">80%</span></div><div class="profile-final-progress"><i id="pfProgress"></i></div></div>
+        <div class="profile-final-save"><button class="btn publish" type="button" onclick="pfSave()">✓ Save Changes</button><button class="btn" type="button" onclick="pfLoad()">↻ Reset</button></div>
+      </div>
     </div>
 
-    <div class="profile-grid">
-      <div class="profile-panel">
-        <h3>👤 Personal Information</h3>
-        <div class="profile-fields">
-          <div class="profile-field">
-            <label>Full Name</label>
-            <input id="profileNameInput" type="text" value="Admin" placeholder="Enter full name">
-          </div>
-          <div class="profile-field">
-            <label>Role</label>
-            <input type="text" value="Super Admin" readonly>
-          </div>
-          <div class="profile-field">
-            <label>Email Address</label>
-            <input id="profileEmailInput" type="email" value="admin@nijuktipath.in" placeholder="Enter email">
-          </div>
-          <div class="profile-field">
-            <label>Mobile Number</label>
-            <input id="profilePhoneInput" type="tel" placeholder="Enter mobile number">
-          </div>
-          <div class="profile-field full">
-            <label>Admin Bio</label>
-            <textarea id="profileBioInput" placeholder="Write a short admin bio...">Managing NIJUKTI PATH — Sarkari Naukri • Sarkari Bharosa</textarea>
-          </div>
+    <div>
+      <div class="profile-final-card">
+        <div class="profile-final-head"><h3>🔐 Security Center</h3><span style="font-size:9px;color:#16803b;font-weight:800">● Secure</span></div>
+        <div class="profile-final-body">
+          <div class="profile-final-sec"><div class="profile-final-sec-icon">🔒</div><div><b>Change Password</b><small>Update your admin password</small></div><span class="profile-final-arrow">›</span></div>
+          <div class="profile-final-sec"><div class="profile-final-sec-icon">🛡️</div><div><b>Two-Factor Authentication</b><small>Add extra security to your account</small></div><span class="profile-final-ok">Enabled</span></div>
+          <div class="profile-final-sec"><div class="profile-final-sec-icon">◷</div><div><b>Login Activity</b><small>Review recent admin activity</small></div><span class="profile-final-arrow">›</span></div>
+          <div class="profile-final-sec"><div class="profile-final-sec-icon">▣</div><div><b>Active Sessions</b><small>Protected by current admin session</small></div><span class="profile-final-ok">Safe</span></div>
         </div>
-        <div class="profile-actions">
-          <button class="btn profile-save" type="button" onclick="savePremiumProfile()">✓ Save Changes</button>
-          <button class="btn" type="button" onclick="loadPremiumProfile()">↻ Reset</button>
-        </div>
-        <div class="profile-note">Profile preferences are saved in this browser. Login/security credentials are not changed from this panel.</div>
       </div>
-
-      <div class="profile-panel">
-        <h3>🔐 Security & Account</h3>
-        <div class="profile-security-item">
-          <div class="profile-security-icon">🔒</div>
-          <div><b>Password</b><small>Use the secure admin login to authenticate.</small></div>
-          <button class="outline" type="button" onclick="document.getElementById('profileMenu')?.classList.remove('open');alert('Password reset is handled by the site administrator.')">Manage</button>
-        </div>
-        <div class="profile-security-item">
-          <div class="profile-security-icon">🛡️</div>
-          <div><b>Admin Access</b><small>Protected by the existing admin session.</small></div>
-          <span class="profile-toggle"></span>
-        </div>
-        <div class="profile-security-item">
-          <div class="profile-security-icon">🔔</div>
-          <div><b>Security Alerts</b><small>Keep important admin alerts visible.</small></div>
-          <span class="profile-toggle"></span>
-        </div>
-        <div class="profile-security-item">
-          <div class="profile-security-icon">🌐</div>
-          <div><b>Portal Identity</b><small>NIJUKTI PATH administrator profile.</small></div>
+      <div class="profile-final-card profile-final-activity">
+        <div class="profile-final-head"><h3>◷ Recent Activity</h3><span style="font-size:9px;color:#0755c9;font-weight:800">Latest</span></div>
+        <div class="profile-final-body">
+          <div class="profile-final-activity-row"><span class="profile-final-dot"></span><div><b>Profile settings opened</b><small>Just now</small></div></div>
+          <div class="profile-final-activity-row"><span class="profile-final-dot"></span><div><b>Admin session verified</b><small>Current session</small></div></div>
+          <div class="profile-final-activity-row"><span class="profile-final-dot"></span><div><b>NIJUKTI PATH dashboard active</b><small>Today</small></div></div>
         </div>
       </div>
     </div>
@@ -1366,119 +1248,60 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 </script>
 
-<script id="premium-profile-js">
+<script id="premium-profile-router">
 (function(){
-  const KEY="nijuktiPremiumAdminProfile";
-  window.loadPremiumProfile=function(){
-    let p={};
-    try{p=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
-    const name=p.name||"Admin", email=p.email||"admin@nijuktipath.in";
-    const phone=p.phone||"", bio=p.bio||"Managing NIJUKTI PATH — Sarkari Naukri • Sarkari Bharosa";
-    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v};
-    set("profileNameInput",name);set("profileEmailInput",email);set("profilePhoneInput",phone);set("profileBioInput",bio);
-    const dn=document.getElementById("profileDisplayName"), de=document.getElementById("profileDisplayEmail"), av=document.getElementById("profileAvatarLarge");
-    if(dn)dn.textContent=name;if(de)de.textContent=email;
-    if(av)av.textContent=(name.trim()[0]||"A").toUpperCase();
-  };
-  window.savePremiumProfile=function(){
-    const name=document.getElementById("profileNameInput")?.value.trim()||"Admin";
-    const email=document.getElementById("profileEmailInput")?.value.trim()||"admin@nijuktipath.in";
-    const phone=document.getElementById("profilePhoneInput")?.value.trim()||"";
-    const bio=document.getElementById("profileBioInput")?.value.trim()||"";
-    localStorage.setItem(KEY,JSON.stringify({name,email,phone,bio}));
-    loadPremiumProfile();
-    const topName=document.querySelector(".profileBtn .who b"), menuName=document.querySelector(".profileMenuHead b"), topAvatar=document.querySelector(".profileBtn .avatar");
-    if(topName)topName.textContent=name;if(menuName)menuName.textContent=name;if(topAvatar)topAvatar.textContent=(name[0]||"A").toUpperCase();
-    if(typeof showToast==="function")showToast("✓ Profile updated successfully");
-    else alert("Profile updated successfully");
-  };
-  window.focusProfileEdit=function(){
-    const el=document.getElementById("profileNameInput");
-    if(el){el.focus();el.scrollIntoView({behavior:"smooth",block:"center"});}
-  };
-  document.addEventListener("DOMContentLoaded",loadPremiumProfile);
-})();
-</script>
+  const content=document.querySelector(".content");
+  const profile=document.getElementById("profile");
+  if(!content||!profile)return;
 
-
-<script id="premium-profile-v2-js">
-(function(){
-  const KEY="nijuktiPremiumAdminProfileV2";
-  const PHOTO="nijuktiPremiumAdminPhotoV2";
-
-  function getProfile(){
-    try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return {}}
-  }
-  function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
-  function initials(name){return (name||"A").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()||"A"}
-
-  window.loadPremiumProfileV2=function(){
-    const p=getProfile(), name=p.name||"Admin", email=p.email||"admin@nijuktipath.in", phone=p.phone||"";
-    const bio=p.bio||"Managing NIJUKTI PATH — Sarkari Naukri • Sarkari Bharosa";
-    const values={profileNameInput:name,profileEmailInput:email,profilePhoneInput:phone,profileBioInput:bio};
-    Object.entries(values).forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.value=v});
-    setText("profileV2Name",name);setText("profileV2Email",email);setText("profileV2Phone",phone||"Mobile not added");
-    const initial=document.getElementById("profileV2Initial");if(initial)initial.textContent=initials(name);
-    const photo=localStorage.getItem(PHOTO);
-    applyPhoto(photo);
-    updateCompletion();
-  };
-
-  function updateCompletion(){
-    const name=document.getElementById("profileNameInput")?.value.trim();
-    const email=document.getElementById("profileEmailInput")?.value.trim();
-    const phone=document.getElementById("profilePhoneInput")?.value.trim();
-    const bio=document.getElementById("profileBioInput")?.value.trim();
-    const score=Math.round(((!!name)+(!!email)+(!!phone)+(!!bio))*20+20);
-    setText("profileV2Completion",score+"%");
-    const bar=document.getElementById("profileV2Progress");if(bar)bar.style.width=Math.min(score,100)+"%";
-  }
-
-  function applyPhoto(data){
-    const box=document.getElementById("profileV2Photo"), img=document.getElementById("profileV2Img");
-    const thumb=document.getElementById("profileV2Thumb"), timg=document.getElementById("profileV2ThumbImg");
-    if(data){
-      if(img){img.src=data;box?.classList.add("has-img")}
-      if(timg){timg.src=data;thumb?.classList.add("has-img")}
-    }else{
-      box?.classList.remove("has-img");thumb?.classList.remove("has-img");
-    }
-  }
-
-  window.removeProfilePhoto=function(){
-    localStorage.removeItem(PHOTO);applyPhoto("");
-    if(typeof showToast==="function")showToast("Profile photo removed");else alert("Profile photo removed");
-  };
-
-  window.savePremiumProfileV2=function(){
-    const name=document.getElementById("profileNameInput")?.value.trim()||"Admin";
-    const email=document.getElementById("profileEmailInput")?.value.trim()||"admin@nijuktipath.in";
-    const phone=document.getElementById("profilePhoneInput")?.value.trim()||"";
-    const bio=document.getElementById("profileBioInput")?.value.trim()||"";
-    localStorage.setItem(KEY,JSON.stringify({name,email,phone,bio}));
-    loadPremiumProfileV2();
-    const topName=document.querySelector(".profileBtn .who b"), menuName=document.querySelector(".profileMenuHead b"), topAvatar=document.querySelector(".profileBtn .avatar");
-    if(topName)topName.textContent=name;if(menuName)menuName.textContent=name;if(topAvatar)topAvatar.textContent=initials(name);
-    if(typeof showToast==="function")showToast("✓ Profile updated successfully");else alert("Profile updated successfully");
-  };
-
-  window.focusProfileEdit=function(){
-    const el=document.getElementById("profileNameInput");
-    if(el){el.focus();el.scrollIntoView({behavior:"smooth",block:"center"});}
-  };
-
-  document.addEventListener("DOMContentLoaded",function(){
-    loadPremiumProfileV2();
-    const upload=document.getElementById("profileV2Upload");
-    if(upload)upload.addEventListener("change",function(){
-      const file=this.files?.[0];if(!file)return;
-      if(file.size>2*1024*1024){alert("Please choose an image under 2 MB.");this.value="";return}
-      const reader=new FileReader();
-      reader.onload=e=>{localStorage.setItem(PHOTO,e.target.result);applyPhoto(e.target.result);if(typeof showToast==="function")showToast("Profile photo selected")};
-      reader.readAsDataURL(file);
+  function routeProfile(){
+    const isProfile=location.hash.replace("#","").toLowerCase()==="profile";
+    profile.style.display=isProfile?"block":"none";
+    Array.from(content.children).forEach(el=>{
+      if(el===profile)return;
+      el.style.display=isProfile?"none":"";
     });
-    ["profileNameInput","profileEmailInput","profilePhoneInput","profileBioInput"].forEach(id=>{
-      document.getElementById(id)?.addEventListener("input",updateCompletion);
+    document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#profile"&&isProfile));
+    if(isProfile)window.scrollTo({top:0,behavior:"smooth"});
+  }
+  window.addEventListener("hashchange",routeProfile);
+  document.addEventListener("DOMContentLoaded",routeProfile);
+  routeProfile();
+
+  const KEY="nijuktiProfileFinal", PHOTO="nijuktiProfileFinalPhoto";
+  function initials(n){return (n||"A").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()||"A"}
+  function set(id,v){const e=document.getElementById(id);if(e)e.value=v}
+  function text(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
+
+  window.pfLoad=function(){
+    let p={};try{p=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+    const n=p.name||"Admin", em=p.email||"admin@nijuktipath.in", ph=p.phone||"", b=p.bio||"Managing NIJUKTI PATH — Sarkari Naukri • Sarkari Bharosa";
+    set("pfNameInput",n);set("pfEmailInput",em);set("pfPhoneInput",ph);set("pfBioInput",b);
+    text("pfName",n);text("pfEmail",em);text("pfPhone",ph||"Mobile not added");text("pfInitial",initials(n));
+    const photo=localStorage.getItem(PHOTO);pfApplyPhoto(photo);pfCompletion();
+  }
+  function pfApplyPhoto(d){
+    const box=document.getElementById("pfPhoto"), img=document.getElementById("pfImg"), th=document.getElementById("pfThumb"), ti=document.getElementById("pfThumbImg");
+    if(d){img.src=d;ti.src=d;box.classList.add("has-img");th.classList.add("has-img")}else{box.classList.remove("has-img");th.classList.remove("has-img")}
+  }
+  function pfCompletion(){
+    const a=!!document.getElementById("pfNameInput")?.value.trim(),b=!!document.getElementById("pfEmailInput")?.value.trim(),c=!!document.getElementById("pfPhoneInput")?.value.trim(),d=!!document.getElementById("pfBioInput")?.value.trim();
+    const s=Math.min(100,20+(a?20:0)+(b?20:0)+(c?20:0)+(d?20:0));text("pfCompletion",s+"%");const bar=document.getElementById("pfProgress");if(bar)bar.style.width=s+"%";
+  }
+  window.pfSave=function(){
+    const n=document.getElementById("pfNameInput").value.trim()||"Admin",em=document.getElementById("pfEmailInput").value.trim()||"admin@nijuktipath.in",ph=document.getElementById("pfPhoneInput").value.trim(),b=document.getElementById("pfBioInput").value.trim();
+    localStorage.setItem(KEY,JSON.stringify({name:n,email:em,phone:ph,bio:b}));pfLoad();
+    const tn=document.querySelector(".profileBtn .who b"),mn=document.querySelector(".profileMenuHead b"),ta=document.querySelector(".profileBtn .avatar");if(tn)tn.textContent=n;if(mn)mn.textContent=n;if(ta)ta.textContent=initials(n);
+    alert("Profile updated successfully");
+  }
+  window.pfFocus=function(){document.getElementById("pfNameInput")?.focus()}
+  window.pfRemovePhoto=function(){localStorage.removeItem(PHOTO);pfApplyPhoto("");alert("Profile photo removed")}
+  document.addEventListener("DOMContentLoaded",function(){
+    pfLoad();
+    ["pfNameInput","pfEmailInput","pfPhoneInput","pfBioInput"].forEach(id=>document.getElementById(id)?.addEventListener("input",pfCompletion));
+    document.getElementById("pfUpload")?.addEventListener("change",function(){
+      const f=this.files?.[0];if(!f)return;if(f.size>2*1024*1024){alert("Please choose an image under 2 MB.");this.value="";return}
+      const r=new FileReader();r.onload=e=>{localStorage.setItem(PHOTO,e.target.result);pfApplyPhoto(e.target.result)};r.readAsDataURL(f);
     });
   });
 })();
