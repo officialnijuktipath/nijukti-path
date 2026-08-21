@@ -297,6 +297,240 @@ body{
 }
 </style>
 
+
+<style id="odisha-premium-identity">
+/* NIJUKTI PATH — subtle Odisha identity */
+.np-top{position:relative;overflow:hidden}
+.np-top:before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 88% 18%,rgba(245,158,11,.10),transparent 24%),
+    radial-gradient(circle at 8% 82%,rgba(34,197,94,.07),transparent 25%);
+}
+.np-top>.wrap{position:relative;z-index:1}
+
+.odisha-identity{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:-2px auto 18px;padding:7px 13px;width:max-content;max-width:100%;
+  border:1px solid rgba(234,179,8,.20);border-radius:999px;
+  background:rgba(255,255,255,.035);color:#cbd5e1;
+  font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;
+}
+.odisha-wheel{
+  width:25px;height:25px;border:2px solid #eab308;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:#eab308;
+  font-size:12px;
+}
+.odisha-identity strong{color:#facc15}
+
+.hero-odisha-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;margin-bottom:10px;border-radius:50%;
+  border:1px solid rgba(234,179,8,.35);
+  color:#fbbf24;background:rgba(245,158,11,.07);
+  font-size:15px;
+}
+
+.quick .q.odisha-primary{
+  border-color:rgba(234,179,8,.38);
+  background:linear-gradient(135deg,rgba(234,179,8,.12),rgba(15,28,54,.78));
+}
+.quick .q.odisha-primary .qi{
+  background:rgba(234,179,8,.14);color:#facc15;
+}
+.quick .q.odisha-primary strong{color:#fef08a}
+
+.odisha-section{
+  margin-top:38px;padding:24px;
+  background:linear-gradient(135deg,#fff,#f8fbff);
+  border:1px solid #e5eaf2;border-radius:18px;
+  box-shadow:0 5px 20px rgba(15,23,42,.055);
+  position:relative;overflow:hidden;
+}
+.odisha-section:after{
+  content:"";
+  position:absolute;right:-35px;top:-35px;width:120px;height:120px;
+  border:14px solid rgba(234,179,8,.055);border-radius:50%;
+  pointer-events:none;
+}
+.odisha-pills{display:flex;flex-wrap:wrap;gap:8px}
+.odisha-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 11px;border-radius:999px;
+  background:#f8fafc;border:1px solid #e2e8f0;
+  color:#334155;font-size:10px;font-weight:900;
+}
+.odisha-pill:hover{border-color:#eab308;color:#92400e;background:#fffbeb}
+
+@media(max-width:700px){
+  .odisha-identity{font-size:8px;letter-spacing:.45px;padding:6px 10px}
+  .hero-odisha-mark{width:30px;height:30px;font-size:13px}
+  .odisha-section{padding:18px}
+  .odisha-pill{font-size:9px;padding:7px 9px}
+}
+</style>
+
+
+
+
+
+<style id="quick-access-reference">
+.quick-access{
+  margin-top:18px!important;
+  padding:14px 18px!important;
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:#fff!important;
+  border:1px solid #e4e9f0!important;
+  border-radius:16px!important;
+  box-shadow:0 5px 18px rgba(15,23,42,.055)!important;
+  position:relative;
+  overflow:hidden;
+}
+.quick-access:after{
+  content:"";
+  position:absolute;
+  right:-26px;
+  top:-42px;
+  width:105px;
+  height:105px;
+  border:10px solid rgba(234,179,8,.055);
+  border-radius:50%;
+  pointer-events:none;
+}
+.quick-access-title{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#172033;
+  font-size:14px;
+  text-transform:none;
+  position:relative;
+  z-index:2;
+}
+.odisha-map-mark{
+  width:31px;
+  height:36px;
+  position:relative;
+  flex:0 0 31px;
+}
+.odisha-map-mark:before{
+  content:"";
+  position:absolute;
+  left:4px;
+  top:3px;
+  width:22px;
+  height:29px;
+  background:#f5b400;
+  clip-path:polygon(
+    37% 0%, 55% 5%, 72% 2%, 82% 12%, 96% 19%, 88% 31%,
+    100% 42%, 89% 51%, 92% 65%, 78% 69%, 76% 83%, 62% 78%,
+    51% 95%, 39% 87%, 27% 100%, 20% 83%, 7% 77%, 13% 62%,
+    0% 51%, 12% 41%, 6% 29%, 20% 23%, 18% 10%
+  );
+  filter:drop-shadow(0 1px 1px rgba(15,23,42,.08));
+}
+.odisha-map-mark span{
+  position:absolute;
+  left:14px;top:13px;
+  width:5px;height:5px;border-radius:50%;
+  background:#fff;
+  opacity:.8;
+}
+.quick-access .odisha-pills{
+  flex:1 1 auto;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  gap:7px!important;
+  overflow-x:auto;
+  scrollbar-width:none;
+  min-width:0;
+  position:relative;
+  z-index:2;
+}
+.quick-access .odisha-pills::-webkit-scrollbar{display:none}
+.quick-access .odisha-pill{
+  flex:0 0 auto;
+  padding:8px 10px!important;
+  border-radius:999px!important;
+  background:#f8fafc!important;
+  border:1px solid #e1e7ef!important;
+  color:#334155!important;
+  font-size:9px!important;
+  font-weight:800!important;
+  white-space:nowrap;
+}
+.quick-access .odisha-pill i{
+  font-size:9px;
+  margin-right:2px;
+  color:#334155;
+}
+.quick-access .odisha-pill:hover{
+  background:#fffbeb!important;
+  border-color:#eab308!important;
+  color:#92400e!important;
+}
+.quick-access-button{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:9px 11px;
+  border-radius:8px;
+  background:#0f172a;
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+  white-space:nowrap;
+  position:relative;
+  z-index:2;
+}
+.quick-access-button i:first-child{color:#fbbf24}
+.quick-access-button:hover{background:#172033}
+
+@media(max-width:700px){
+  .quick-access{
+    padding:13px 12px!important;
+    gap:9px;
+  }
+  .quick-access-title{
+    gap:6px;
+    font-size:11px;
+  }
+  .odisha-map-mark{
+    width:23px;height:28px;flex-basis:23px;
+  }
+  .odisha-map-mark:before{
+    left:2px;top:1px;width:19px;height:25px;
+  }
+  .odisha-map-mark span{left:10px;top:10px;width:4px;height:4px}
+  .quick-access .odisha-pills{
+    gap:5px!important;
+  }
+  .quick-access .odisha-pill{
+    padding:7px 8px!important;
+    font-size:8px!important;
+  }
+  .quick-access .odisha-pill i{font-size:8px}
+  .quick-access-button{
+    padding:8px 8px;
+    font-size:8px;
+  }
+}
+@media(max-width:520px){
+  .quick-access-title strong{display:none}
+  .quick-access-title{width:25px}
+  .quick-access-button{
+    font-size:7px;
+    padding:8px 7px;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -312,6 +546,8 @@ body{
 <input id="searchInput" type="search" aria-label="Search jobs, admit cards, results and education updates" placeholder="Search for jobs, admit card, results...">
 </form>
 </header>
+
+
 
 <nav class="nav">
 <a href="/">HOME</a>
@@ -340,11 +576,33 @@ body{
 
 <div class="quick">
 <a class="q" href="/?label=Government%20Jobs"><div class="qi jobs"><i class="fa-solid fa-briefcase"></i></div><div><strong>GOVERNMENT JOBS</strong><span>Latest Posts</span></div></a>
-<a class="q" href="/?label=Odisha%20Jobs"><div class="qi odisha"><i class="fa-solid fa-building-columns"></i></div><div><strong>ODISHA JOBS</strong><span>Latest Posts</span></div></a>
+<a class="q odisha-primary" href="/?label=Odisha%20Jobs"><div class="qi odisha"><i class="fa-solid fa-building-columns"></i></div><div><strong>ODISHA JOBS</strong><span>Latest Posts</span></div></a>
 <a class="q" href="/?label=Answer%20Key"><div class="qi answer"><i class="fa-solid fa-file-circle-check"></i></div><div><strong>ANSWER KEY</strong><span>Latest Posts</span></div></a>
 <a class="q" href="/?label=Admit%20Card"><div class="qi admit"><i class="fa-solid fa-id-card"></i></div><div><strong>ADMIT CARD</strong><span>Latest Posts</span></div></a>
 <a class="q" href="/?label=Results"><div class="qi result"><i class="fa-solid fa-trophy"></i></div><div><strong>RESULTS</strong><span>Latest Posts</span></div></a>
 </div>
+
+<section class="odisha-section quick-access">
+  <div class="quick-access-title">
+    <div class="odisha-map-mark" aria-hidden="true">
+      <span></span>
+    </div>
+    <strong>Quick Access</strong>
+  </div>
+
+  <div class="odisha-pills">
+    <a class="odisha-pill" href="/?label=Odisha%20Jobs"><i class="fa-solid fa-building-columns"></i> Odisha Govt Jobs</a>
+    <a class="odisha-pill" href="/?label=Odisha%20Jobs"><i class="fa-regular fa-calendar-check"></i> OSSC</a>
+    <a class="odisha-pill" href="/?label=Odisha%20Jobs"><i class="fa-solid fa-circle-check"></i> OSSSC</a>
+    <a class="odisha-pill" href="/?label=Odisha%20Jobs"><i class="fa-solid fa-user-tie"></i> OPSC</a>
+    <a class="odisha-pill" href="/?label=Odisha%20Jobs"><i class="fa-solid fa-user-shield"></i> Odisha Police</a>
+    <a class="odisha-pill" href="/?label=Education"><i class="fa-solid fa-school"></i> Education Updates</a>
+  </div>
+
+  <a class="quick-access-button" href="/?label=Odisha%20Jobs">
+    <i class="fa-solid fa-location-dot"></i> ODISHA JOBS <i class="fa-solid fa-arrow-right"></i>
+  </a>
+</section>
 </div>
 </div>
 
