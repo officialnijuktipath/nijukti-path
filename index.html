@@ -773,6 +773,100 @@ body{
 }
 </style>
 
+
+<style id="nijukti-job-detail-v1">
+/* Clean Job Detail Page — NIJUKTI PATH */
+.single{
+  max-width:980px;
+  margin:0 auto;
+  padding:22px!important;
+  border-radius:18px!important;
+}
+.job-detail-title{
+  color:#0f172a;
+  font-size:27px;
+  line-height:1.35;
+  font-weight:900;
+  margin:10px 0 6px;
+}
+.job-detail-sub{
+  color:#64748b;font-size:11px;font-weight:700;
+}
+.job-highlights{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:20px 0;
+}
+.job-highlight{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  padding:12px;
+}
+.job-highlight span{
+  display:block;color:#64748b;font-size:9px;font-weight:800;
+  margin-bottom:4px;text-transform:uppercase;
+}
+.job-highlight strong{
+  display:block;color:#0f172a;font-size:12px;font-weight:900;
+  line-height:1.35;
+}
+.job-info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:18px 0;
+}
+.job-info-box{
+  border:1px solid #e2e8f0;
+  border-radius:13px;
+  padding:14px;
+  background:#fff;
+}
+.job-info-box h3{
+  font-size:13px;font-weight:900;color:#0f172a;margin-bottom:9px;
+}
+.job-info-box p,.job-info-box li{
+  font-size:11px;line-height:1.65;color:#475569;
+}
+.job-actions{
+  margin:20px 0;padding:16px;
+  border:1px solid #bbf7d0;
+  background:#f0fdf4;border-radius:14px;
+}
+.job-actions-title{
+  font-size:12px;font-weight:900;color:#166534;margin-bottom:11px;
+}
+.job-action-links{
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.job-action-link{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 14px;border-radius:8px;
+  color:#fff!important;font-size:10px;font-weight:900;
+  text-decoration:none!important;
+}
+.job-action-link.apply{background:#16a34a}
+.job-action-link.notify{background:#2563eb}
+.job-action-link.secondary{background:#7c3aed}
+.job-note{
+  margin:18px 0;padding:13px 15px;
+  border-left:4px solid #f59e0b;
+  background:#fffbeb;border-radius:9px;
+  color:#92400e;font-size:10.5px;line-height:1.6;
+}
+@media(max-width:700px){
+  .single{padding:16px!important}
+  .job-detail-title{font-size:21px}
+  .job-highlights{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .job-highlight{padding:10px}
+  .job-info-grid{grid-template-columns:1fr;gap:9px}
+  .job-action-links{display:grid;grid-template-columns:1fr 1fr}
+  .job-action-link{justify-content:center;padding:9px 7px;font-size:8.5px}
+}
+</style>
+
 </head>
 <body>
 
@@ -1074,9 +1168,33 @@ const eduTags=isEdu?educationTags(e):[];
 document.getElementById('app').innerHTML=`
 <a class="back" href="javascript:history.back()"><i class="fa-solid fa-arrow-left"></i>&nbsp; BACK</a>
 <article class="single">
-${isEdu?`<div class="edu-detail-head"><div><span class="badge edu-badge ${educationKind(e)}">${educationLabel(e)}</span><h1 style="margin-top:10px">${esc(e.title.$t)}</h1></div><div class="edu-detail-icon"><i class="fa-solid ${educationIcon(e)}"></i></div></div>`:`<h1>${esc(e.title.$t)}</h1>`}
-<div class="meta"><i class="fa-regular fa-calendar"></i> ${dateOf(e)}${eduTags.length?` &nbsp; • &nbsp; ${eduTags.map(t=>esc(t)).join(' • ')}`:''}</div>
-${a?`<div class="apply-box"><strong>${getLabels(e).some(x=>/answer\s*key|admit\s*card/i.test(x))?'Download / Official Link':getLabels(e).some(x=>/results/i.test(x))?'Result / Official Link':'Application / Official Link'}</strong><br><br><a class="apply-now" href="${esc(a)}" target="_blank" rel="noopener">${getLabels(e).some(x=>/answer\s*key/i.test(x))?'CHECK ANSWER KEY':getLabels(e).some(x=>/admit\s*card/i.test(x))?'DOWNLOAD NOW':getLabels(e).some(x=>/results/i.test(x))?'CHECK NOW':'APPLY NOW'} &nbsp; <i class="fa-solid ${getLabels(e).some(x=>/answer\s*key/i.test(x))?'fa-check-circle':getLabels(e).some(x=>/admit\s*card/i.test(x))?'fa-download':getLabels(e).some(x=>/results/i.test(x))?'fa-check-circle':'fa-arrow-up-right-from-square'}"></i></a></div>`:''}
+${isEdu?`<div class="edu-detail-head"><div><span class="badge edu-badge ${educationKind(e)}">${educationLabel(e)}</span><h1 class="job-detail-title">${esc(e.title.$t)}</h1></div><div class="edu-detail-icon"><i class="fa-solid ${educationIcon(e)}"></i></div></div>`:`<div><span class="badge">${esc(getLabels(e)[0]||'LATEST UPDATE')}</span><h1 class="job-detail-title">${esc(e.title.$t)}</h1></div>`}
+<div class="job-detail-sub"><i class="fa-regular fa-calendar"></i> Published: ${dateOf(e)}</div>
+
+${!isEdu?`<div class="job-highlights">
+  <div class="job-highlight"><span>Organization</span><strong>As mentioned in notification</strong></div>
+  <div class="job-highlight"><span>Post</span><strong>See job notification</strong></div>
+  <div class="job-highlight"><span>Application</span><strong>${a?'Online Link Available':'Link not available'}</strong></div>
+  <div class="job-highlight"><span>Update</span><strong>Latest Notification</strong></div>
+</div>`:''}
+
+${a?`<div class="job-actions">
+  <div class="job-actions-title">Important Links</div>
+  <div class="job-action-links">
+    <a class="job-action-link apply" href="${esc(a)}" target="_blank" rel="noopener">${getLabels(e).some(x=>/answer\s*key/i.test(x))?'CHECK ANSWER KEY':getLabels(e).some(x=>/admit\s*card/i.test(x))?'DOWNLOAD NOW':getLabels(e).some(x=>/results/i.test(x))?'CHECK RESULT':'APPLY ONLINE'} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    <a class="job-action-link secondary" href="${esc(a)}" target="_blank" rel="noopener">OFFICIAL LINK <i class="fa-solid fa-link"></i></a>
+  </div>
+</div>`:''}
+
+${!isEdu?`<div class="job-info-grid">
+  <section class="job-info-box"><h3>Job Details</h3><p>The detailed information below is taken from the official post content.</p></section>
+  <section class="job-info-box"><h3>Important Dates</h3><p>Check the official notification for application and examination dates.</p></section>
+  <section class="job-info-box"><h3>Eligibility &amp; Qualification</h3><p>Qualification, age limit and other eligibility conditions are available in the notification content below.</p></section>
+  <section class="job-info-box"><h3>Selection Process</h3><p>Refer to the official notification for the applicable selection stages.</p></section>
+</div>`:''}
+
+${!isEdu?`<div class="job-note"><strong>Important:</strong> Always verify eligibility, dates, fee and other conditions from the official notification before applying.</div>`:''}
+
 <div class="body">${body}</div>
 </article>`;
 }
