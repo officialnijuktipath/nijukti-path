@@ -990,6 +990,17 @@ body{
 }
 </style>
 
+
+<style id="education-dropdown-working-fix">
+@media(max-width:700px){
+  .nav-dropdown{z-index:1005}
+  .nav-drop-menu{
+    z-index:9999 !important;
+    background:#fff !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -1478,7 +1489,6 @@ loadFeed();
       }
     }
 
-    main.addEventListener('pointerdown', toggleEducation, {passive:false});
     main.addEventListener('click', toggleEducation, {passive:false});
 
     menu.addEventListener('click', function(e){
