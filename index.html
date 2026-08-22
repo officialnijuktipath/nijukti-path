@@ -8,12 +8,12 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="author" content="NIJUKTI PATH">
 <meta name="theme-color" content="#061329">
-<link rel="canonical" href="https://officialnijuktipath.vercel.app/">
+<link rel="canonical" href="https://nijukti-path.vercel.app/">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="NIJUKTI PATH – Odisha Government Jobs, Sarkari Naukri & Results">
 <meta property="og:description" content="Latest Odisha Government Jobs, Admit Card, Answer Key, Results, Scholarships, Admissions and official notifications.">
-<meta property="og:url" content="https://officialnijuktipath.vercel.app/">
+<meta property="og:url" content="https://nijukti-path.vercel.app/">
 <meta property="og:site_name" content="NIJUKTI PATH">
 
 <meta name="twitter:card" content="summary">
@@ -25,16 +25,27 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "NIJUKTI PATH",
-  "url": "https://officialnijuktipath.vercel.app/",
+  "url": "https://nijukti-path.vercel.app/",
   "description": "Latest Odisha Government Jobs, Sarkari Naukri, Admit Card, Answer Key, Results and Education updates.",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://officialnijuktipath.vercel.app/?q={search_term_string}",
+    "target": "https://nijukti-path.vercel.app/?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 }
 </script>
-<title>NIJUKTI PATH – Odisha Government Jobs, Sarkari Naukri, Admit Card & Results</title>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"NIJUKTI PATH",
+  "url":"https://nijukti-path.vercel.app/",
+  "description":"Odisha Government Jobs, Admit Cards, Results, Answer Keys and Education updates."
+}
+</script>
+
+<title>NIJUKTI PATH | Odisha Government Jobs, Admit Card, Results & Education</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1078,6 +1089,10 @@ body{
 <p>Get the latest Odisha Government Jobs, official notifications, Admit Cards, Answer Keys, Results and Education updates in one place.</p>
 <div class="line"></div>
 </section>
+<section class="seo-intro" aria-label="About NIJUKTI PATH">
+  <h2>Odisha Government Jobs &amp; Latest Updates</h2>
+  <p>NIJUKTI PATH is an Odisha-focused job and education updates portal for Government Jobs, Odisha Jobs, Admit Cards, Results, Answer Keys, Scholarships and Admissions. Check important dates and use official notification and application links before applying.</p>
+</section>
 
 <div class="quick">
 <a class="q" href="/?label=Government%20Jobs"><div class="qi jobs"><i class="fa-solid fa-briefcase"></i></div><div><strong>GOVERNMENT JOBS</strong><span>Latest Posts</span></div></a>
@@ -1314,6 +1329,14 @@ function setPageSEO(title, description, url){
 
 function showPost(e){
 let body=(e.content&&e.content.$t)||'<p>No content available.</p>';
+
+// Give every individual post its own title, description and canonical URL.
+const postTitle = String(e.title?.$t || 'Odisha Government Job Update').trim();
+const postDescription = strip(e.summary?.$t || e.content?.$t || '')
+  .replace(/\s+/g,' ').trim().slice(0,160);
+const postUrl = location.origin + location.pathname + '?post=' + encodeURIComponent(postId(e));
+setPageSEO(postTitle, postDescription || 'Latest Odisha Government Jobs and official updates from NIJUKTI PATH.', postUrl);
+
 let a=applyLink(e);
 let bodyBox=document.createElement('div');
 bodyBox.innerHTML=body;
@@ -1407,7 +1430,15 @@ if(pid){
 let e=entries.find(x=>postId(x)===pid);
 if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
 }else if(label||q){
-listPage(entries,label,q);
+  if(label){
+    const labelTitle = label + ' | Odisha Jobs, Admit Card, Results & Education';
+    const labelDesc = 'Latest ' + label + ' updates from NIJUKTI PATH, including official notifications, important dates and official links.';
+    setPageSEO(labelTitle, labelDesc, location.origin + location.pathname + '?label=' + encodeURIComponent(label));
+  }else{
+    document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');
+    document.title = 'Search | NIJUKTI PATH';
+  }
+  listPage(entries,label,q);
 }else{
 const latest=entries.slice(0,6);
 const importantPosts=entries.slice(0,4);
@@ -1514,12 +1545,10 @@ loadFeed();
     }
 
     main.addEventListener('click',function(e){
-      if(window.innerWidth<=700){
-        e.preventDefault();
-        e.stopPropagation();
-        dropdown.classList.toggle('open');
-        positionMenu();
-      }
+      e.preventDefault();
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+      positionMenu();
     });
 
     menu.addEventListener('click',function(e){
@@ -1528,7 +1557,7 @@ loadFeed();
     });
 
     document.addEventListener('click',function(e){
-      if(window.innerWidth<=700 && dropdown.classList.contains('open') && !dropdown.contains(e.target)){
+      if(dropdown.classList.contains('open') && !dropdown.contains(e.target)){
         dropdown.classList.remove('open');
       }
     });
