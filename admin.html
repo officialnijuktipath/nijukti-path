@@ -353,14 +353,16 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:600px){.profile-final-hero{padding:17px;align-items:flex-start}.profile-final-photo{width:70px;height:70px;border-radius:18px}.profile-final-name{font-size:19px}.profile-final-contact{display:block}.profile-final-contact span{display:block;margin-top:3px}.profile-final-actions{margin-left:0}.profile-final-actions button{padding:8px}.profile-final-fields{grid-template-columns:1fr}.profile-final-field.full{grid-column:auto}}
 </style>
 
+
 <style id="homepage-display-controls-style">
-.homepage-display-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:4px}
-.display-control-card{border:1px solid #dfe7f2;background:#f8fbff;border-radius:10px;padding:12px}
-.display-control-title{font-size:11px;font-weight:900;color:#17355f;margin-bottom:9px}
+.homepage-display-card{margin-top:14px}
+.homepage-display-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px}
+.display-control-card{border:1px solid #dfe7f2;background:#f8fbff;border-radius:12px;padding:14px}
+.display-control-title{font-size:12px;font-weight:900;color:#17355f;margin-bottom:10px}
 .switch-row{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:700;color:#344054}
 .switch-row input,.display-mode input{accent-color:#0755c9}
-.display-mode{display:flex;gap:12px;margin-top:9px;font-size:9px;font-weight:700;color:#667085}
-#manualDaysLeft{width:100%;margin-top:8px;padding:7px;border:1px solid #d6deea;border-radius:7px;font-size:10px}
+.display-mode{display:flex;gap:14px;margin-top:10px;font-size:9px;font-weight:700;color:#667085}
+#manualDaysLeft{width:100%;margin-top:9px;padding:8px;border:1px solid #d6deea;border-radius:7px;font-size:10px}
 @media(max-width:700px){.homepage-display-controls{grid-template-columns:1fr}}
 </style>
 </head><body>
@@ -477,29 +479,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="full linkBox"><label id="link2Label">Main Action Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
 <div class="form-section-title link-section"><span class="section-dot"></span>Instructions<small>Optional notes for applicants</small></div>
 <div class="full"><label>Important Instructions / Note <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important note, deadline reminder, eligibility warning, or applicant instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div>
-<div class="form-section-title link-section">
-  <span class="section-dot"></span>Homepage Display
-  <small>Control Closing Soon & Today Updates</small>
-</div>
-<div class="homepage-display-controls full">
-  <div class="display-control-card">
-    <div class="display-control-title">⏰ Closing Soon</div>
-    <label class="switch-row"><span>Show in Closing Soon</span><input id="showClosingSoon" type="checkbox"></label>
-    <div class="display-mode">
-      <label><input type="radio" name="closingMode" value="auto" checked> Auto</label>
-      <label><input type="radio" name="closingMode" value="manual"> Manual</label>
-    </div>
-    <input id="manualDaysLeft" type="number" min="0" max="999" placeholder="Manual days left" style="display:none">
-  </div>
-  <div class="display-control-card">
-    <div class="display-control-title">🔥 Today Updates</div>
-    <label class="switch-row"><span>Show in Today Updates</span><input id="showTodayUpdate" type="checkbox"></label>
-    <div class="display-mode">
-      <label><input type="radio" name="todayMode" value="auto" checked> Auto</label>
-      <label><input type="radio" name="todayMode" value="manual"> Manual</label>
-    </div>
-  </div>
-</div>
+
 
 <div class="form-section-title link-section">
   <span class="section-dot"></span>Homepage Display
@@ -518,7 +498,33 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </form></div></section>
 <section><div class="card qa"><div class="head" style="margin:-14px -14px 14px"><h3>⚡ Quick Actions</h3><small>Add new updates quickly</small></div><div class="qagrid"><button onclick="quick('Government Jobs')">💼<br>Add Government Job</button><button onclick="quick('Odisha Jobs')">👥<br>Add Odisha Job</button><button onclick="quick('Admit Cards')">🪪<br>Upload Admit Card</button><button onclick="quick('Results')">📊<br>Add Result</button><button onclick="quick('Answer Keys')">🔗<br>Upload Answer Key</button><button onclick="quick('Education')">🎓<br>Education Update</button></div></div><div class="card notify" id="notifications"><div class="head"><h3>🔔 Notifications <button type="button" id="clearNotifications" style="float:right;border:0;background:transparent;font-size:10px;color:#58708f;cursor:pointer">Clear</button></h3></div><div id="notificationList"><div class="note"><span class="greenDot">●</span>Dashboard ready</div></div></div></section>
 <section class="card recent" id="drafts"><div class="head recentHead"><div><h3>▤ &nbsp; Drafts</h3><small id="draftSub">Saved on Blogger</small></div><button class="viewAll" type="button" onclick="loadPosts()">↻ Refresh</button></div><div class="posts" id="draftPosts">Loading drafts...</div></section>
-<section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" onclick="location.hash='recent'">View All</button></div><div class="posts" id="posts">Loading posts...</div></section></div>
+<section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" onclick="location.hash='recent'">View All</button></div><div class="posts" id="posts">Loading posts...</div></section>
+<section class="card homepage-display-card">
+  <div class="head">
+    <h3>⚙️ Homepage Display Controls</h3>
+    <small>Closing Soon & Today Updates</small>
+  </div>
+  <div class="homepage-display-controls">
+    <div class="display-control-card">
+      <div class="display-control-title">⏰ Closing Soon</div>
+      <label class="switch-row"><span>Show in Closing Soon</span><input id="showClosingSoon" type="checkbox"></label>
+      <div class="display-mode">
+        <label><input type="radio" name="closingMode" value="auto" checked> Auto</label>
+        <label><input type="radio" name="closingMode" value="manual"> Manual</label>
+      </div>
+      <input id="manualDaysLeft" type="number" min="0" max="999" placeholder="Manual days left" style="display:none">
+    </div>
+    <div class="display-control-card">
+      <div class="display-control-title">🔥 Today Updates</div>
+      <label class="switch-row"><span>Show in Today Updates</span><input id="showTodayUpdate" type="checkbox"></label>
+      <div class="display-mode">
+        <label><input type="radio" name="todayMode" value="auto" checked> Auto</label>
+        <label><input type="radio" name="todayMode" value="manual"> Manual</label>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
 <section class="profile-page" id="profile">
   <div class="profile-final-hero">
     <div class="profile-final-photo" id="pfPhoto"><span id="pfInitial">A</span><img id="pfImg" alt="Profile photo"><label class="profile-final-camera" for="pfUpload">📷</label></div>
@@ -581,7 +587,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   </div>
 </section>
 
-<div class="footer">© 2026 Nijukti Path. All rights reserved.</div></section></main></div>
+<div class="footer">© 2026 Nijukti Path. All rights reserved.</div></section></main>
 <script>
 const $=x=>document.getElementById(x);
 let posts=[],editingId=null;
@@ -1348,6 +1354,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 })();
 </script>
+
 
 <script id="homepage-display-controls-js">
 function syncHomepageDisplayControls(){
