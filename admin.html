@@ -639,7 +639,7 @@ const schemas={
 "Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
 "Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
 "Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
-"Education":[["updateType","Update Type","select","+2 Admission|+3 Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
+"Education":[["updateType","Update Type","select","Admission|Scholarship|Education Exam|Education Result|Education Notification"],["admissionType","Admission Type","select","UG Admission|PG Admission|B.Ed / M.Ed Admission|+2 / +3 / Degree Admission|Other Admission"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["lastTime","Last Time (Optional)"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
 };
 
 // Per-post homepage controls. These are saved inside the same Blogger post fields,
@@ -1323,10 +1323,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     const common=new Set([
       "f_updateType","f_organization","f_admissionSession","f_collegeInstitution",
       "f_courseClass","f_streamHonours","f_eligibility","f_seatVacancy",
-      "f_applicationStart","f_lastDate","f_applicationFee",
+      "f_applicationStart","f_lastDate","f_lastTime","f_applicationFee",
       "f_selectionProcess","f_educationDescription","f_showClosingSoon","f_closingMode","f_manualDaysLeft","f_showTodayUpdate"
     ]);
     const allowed=new Set(common);
+    if(mode==="Admission"){
+      allowed.add("f_admissionType");
+    }
     if(mode==="Scholarship"){
       ["f_incomeLimit","f_scholarshipBenefits","f_renewalLastDate","f_requiredDocuments"]
         .forEach(id=>allowed.add(id));
