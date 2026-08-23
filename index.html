@@ -45,7 +45,7 @@
 }
 </script>
 
-<title>NIJUKTI PATH | Odisha Government Jobs, Admit Card, Results & Education</title>
+<title>Nijukti Path | Odisha Government Jobs, Admit Card, Results & Education</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -90,6 +90,7 @@ main{padding:38px 0 60px}.section-head{display:flex;justify-content:space-betwee
 .days.red{color:#dc2626;background:#fee2e2}.days.orange{color:#ea580c;background:#ffedd5}.days.yellow{color:#a16207;background:#fef9c3}.days.green{color:#15803d;background:#dcfce7}
 .today-item span{width:25px;text-align:center;font-size:16px}
 @media(max-width:700px){.closing-today-grid{grid-template-columns:1fr;gap:12px;margin-top:24px}.closing-panel{padding:16px}.panel-head h3{font-size:15px}}
+.panel-empty{padding:12px;text-align:center;color:#94a3b8;font-size:9px;font-weight:700}
 </style>
 
 <style id="education-premium-style">
@@ -1071,7 +1072,7 @@ body{
 <header class="header">
 <a class="logo" href="/">
 <div class="logo-b">N<span>P</span></div>
-<div><h1>NIJUKTI <span>PATH</span></h1><p>SARKARI NAUKRI, SARKARI BHAROSA</p></div>
+<div><h1>Nijukti <span>Path</span></h1><p>SARKARI NAUKRI, SARKARI BHAROSA</p></div>
 </a>
 <form class="search" onsubmit="doSearch(event)">
 <i class="fa-solid fa-magnifying-glass"></i>
@@ -1146,7 +1147,7 @@ body{
 </div>
 </main>
 
-<footer class="footer">NIJUKTI PATH — Sarkari Naukri, Sarkari Bharosa<br><br>© 2026 NIJUKTI PATH. All Rights Reserved.</footer>
+<footer class="footer">Nijukti Path — Sarkari Naukri, Sarkari Bharosa<br><br>© 2026 Nijukti Path. All Rights Reserved.</footer>
 
 <script>
 const FEED='https://officialnijuktipath.blogspot.com/feeds/posts/default';
@@ -1634,7 +1635,7 @@ loadFeed();
 (function(){
   const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
   const posts=()=>Array.isArray(window.NIJUKTI_PATH_POSTS)?window.NIJUKTI_PATH_POSTS:(Array.isArray(window.posts)?window.posts:[]);
-  const val=(p,keys)=>{for(const k of keys){const v=p?.[k]??p?.fields?.[k];if(v)return v}return""};
+  const val=(p,keys)=>{for(const k of keys){const v=p?.[k]??p?.fields?.[k];if(v!==undefined&&v!==null&&String(v)!=="")return v}return""};
   const title=p=>p?.title||p?.postTitle||p?.name||"";
   const url=p=>p?.url||p?.permalink||p?.postUrl||p?.link||"#";
   const daysLeft=d=>{
@@ -1642,44 +1643,54 @@ loadFeed();
     const n=new Date();n.setHours(0,0,0,0);x.setHours(0,0,0,0);
     return Math.ceil((x-n)/86400000);
   };
+  const triState=(v)=>{
+    const s=String(v??"").trim().toLowerCase();
+    if(s==="yes"||s==="true")return true;
+    if(s==="no"||s==="false")return false;
+    return null;
+  };
   function render(){
     const c=document.getElementById("closingSoonList"),t=document.getElementById("todayUpdatesList");
     if(!c||!t)return;
     const data=posts();
 
     const closing=data.map(p=>{
-      const hp=p.homepage||{};
-      if((p.showClosingSoon??hp.showClosingSoon)===false)return null;
-      const mode=p.closingMode||hp.closingMode||"auto";
-      const manual=Number(p.manualDaysLeft??hp.manualDaysLeft);
-      const days=mode==="manual"&&Number.isFinite(manual)?manual:daysLeft(val(p,["lastDate","last_date"]));
+      const show=triState(val(p,["showClosingSoon"]));
+      if(show===false)return null;
+      const mode=String(val(p,["closingMode"])).toLowerCase()==="manual"?"manual":"auto";
+      const manualRaw=val(p,["manualDaysLeft"]);
+      const manual=Number(manualRaw);
+      const days=mode==="manual"&&Number.isFinite(manual)
+        ? manual
+        : daysLeft(val(p,["lastDate","last_date"]));
       return days!=null&&days>=0?{p,days}:null;
     }).filter(Boolean).sort((a,b)=>a.days-b.days).slice(0,4);
 
-    c.innerHTML=closing.map(({p,days})=>{
+    c.innerHTML=closing.length?closing.map(({p,days})=>{
       const cls=days<=2?"red":days<=4?"orange":days<=6?"yellow":"green";
       return `<a class="closing-item" href="${esc(url(p))}"><span class="days ${cls}">${days} DAY${days===1?"":"S"} LEFT</span><strong>${esc(title(p))}</strong></a>`;
-    }).join("");
+    }).join(""):'<div class="panel-empty">No closing deadlines right now.</div>';
 
     const n=new Date();n.setHours(0,0,0,0);
     const today=data.filter(p=>{
-      const hp=p.homepage||{};
-      if((p.showTodayUpdate??hp.showTodayUpdate)===false)return false;
-      if((p.showTodayUpdate??hp.showTodayUpdate)===true)return true;
+      const show=triState(val(p,["showTodayUpdate"]));
+      if(show===false)return false;
+      if(show===true)return true;
       const d=new Date(val(p,["publishedDate","publishDate","date","published"]));
       if(Number.isNaN(d.getTime()))return false;
       d.setHours(0,0,0,0);return d.getTime()===n.getTime();
     }).slice(0,4);
 
     const icons={"government jobs":"🆕","odisha jobs":"🆕","admit cards":"🎫","results":"📋","education":"🎓","answer keys":"📋"};
-    t.innerHTML=today.map(p=>{
+    t.innerHTML=today.length?today.map(p=>{
       const icon=icons[String(p.type||p.category||"").toLowerCase()]||"🆕";
       return `<a class="today-item" href="${esc(url(p))}"><span>${icon}</span><strong>${esc(title(p))}</strong></a>`;
-    }).join("");
+    }).join(""):'<div class="panel-empty">No new updates today.</div>';
   }
   document.addEventListener("DOMContentLoaded",render);
   window.renderNijuktiHomepagePanels=render;
 })();
 </script>
+
 </body>
 </html>
