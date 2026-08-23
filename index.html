@@ -1641,11 +1641,18 @@ loadFeed();
   const labelText=p=>labelsOf(p).join(" ");
   const title=p=>p?.title?.$t||p?.title||p?.postTitle||p?.name||"";
   const url=p=>{
-    if(p?.url)return p.url;
-    if(p?.permalink)return p.permalink;
-    if(p?.postUrl)return p.postUrl;
+    // Keep homepage panel clicks on Nijukti Path instead of sending users to Blogger.
+    const id=p?.id?.$t||p?.id||p?.postId;
+    if(id) return '/?post='+encodeURIComponent(id);
     const a=(p?.link||[]).find?.(x=>x.rel==="alternate")||p?.link?.[0];
-    return a?.href||"#";
+    if(a?.href && /officialnijuktipath\.blogspot\.com/i.test(a.href)){
+      const m=a.href.match(/[?&]post(?:Id)?=([^&]+)/i);
+      if(m) return '/?post='+encodeURIComponent(m[1]);
+    }
+    if(p?.url && !/officialnijuktipath\.blogspot\.com/i.test(p.url))return p.url;
+    if(p?.permalink && !/officialnijuktipath\.blogspot\.com/i.test(p.permalink))return p.permalink;
+    if(p?.postUrl && !/officialnijuktipath\.blogspot\.com/i.test(p.postUrl))return p.postUrl;
+    return "#";
   };
   const published=p=>p?.published?.$t||p?.publishedDate||p?.publishDate||p?.date||p?.published||"";
   const strip=s=>String(s||"").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
