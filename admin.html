@@ -1,3 +1,4 @@
+
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NIJUKTI PATH - Admin Panel</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#12203b;font:14px Arial,sans-serif}.app{display:flex;min-height:100vh}.side{position:fixed;inset:0 auto 0 0;width:225px;background:linear-gradient(#061a45,#092e70);color:white;padding-bottom:20px}.brand{height:66px;display:flex;align-items:center;gap:9px;padding:10px 15px;border-bottom:1px solid #ffffff18}.logo{width:40px;height:40px;border:2px solid #f2bf19;border-radius:9px;display:grid;place-items:center;color:#f2bf19;font-weight:900}.brand b{font-size:15px}.brand small{display:block;font-size:8px;opacity:.8;margin-top:3px}.mt{font-size:10px;opacity:.65;text-transform:uppercase;font-weight:bold;padding:17px 20px 7px}.nav a{display:flex;gap:11px;align-items:center;color:white;text-decoration:none;padding:10px 15px;margin:2px 14px;border-radius:7px;font-size:12px}.nav a.active,.nav a:hover{background:#075bdd}.ico{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.sidebox{margin:20px 14px;padding:18px 8px;text-align:center;border-radius:12px;background:#0b2860;border:1px solid #ffffff1c}.sidebox .crown{font-size:28px;color:#f1c026}.sidebox b{display:block;font-size:20px;margin:5px}.sidebox span{font-size:10px;opacity:.8}.main{margin-left:225px;width:calc(100% - 225px)}.top{height:66px;background:linear-gradient(90deg,#071c49,#0b63d8);color:white;display:flex;align-items:center;gap:18px;padding:0 20px}.hamb{display:none;background:none;border:0;color:white}.search{height:40px;max-width:500px;flex:1;display:flex;align-items:center;gap:8px;background:#ffffff20;border:1px solid #ffffff20;border-radius:8px;padding:0 12px}.search input{width:100%;border:0;background:none;outline:0;color:white}.search input::placeholder{color:#e8efff}.topright{margin-left:auto;display:flex;align-items:center;gap:15px}.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#0a55ba;font-weight:bold}.topright small{display:block;opacity:.75;font-size:10px;margin-top:2px}.content{padding:16px 18px}.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.heading h1{font-size:26px;margin:0}.heading p{font-size:11px;color:#6b778c;margin:4px 0}.date{background:white;border:1px solid #e1e7ef;padding:11px 13px;border-radius:9px;font-size:11px;font-weight:bold}.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.stat,.card{background:white;border:1px solid #e0e6ef;border-radius:11px;box-shadow:0 2px 8px #10264a08}.stat{padding:13px;display:flex;gap:9px}.si{width:42px;height:42px;border-radius:9px;color:white;display:grid;place-items:center}.blue{background:#1459dc}.green{background:#18a64b}.orange{background:#f18a08}.purple{background:#6923c9}.teal{background:#12a5a5}.pink{background:#d9186b}.num{font-size:24px;font-weight:800;margin:4px 0}.stat h4{font-size:11px;margin:0}.view{font-size:10px;color:#0755c9;font-weight:bold}.row2{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}.connection{padding:15px;display:flex;align-items:center;gap:13px}.linkcircle{width:55px;height:55px;border-radius:50%;background:#edf4ff;color:#0755c9;display:grid;place-items:center}.connection h3{margin:0 0 5px;font-size:15px}.ok{display:inline-block;background:#dcfce7;color:#16803b;border-radius:15px;padding:4px 8px;font-size:10px;font-weight:bold}.connection p{font-size:10px;color:#68758a;margin:6px 0 0}.outline{margin-left:auto;border:1px solid #7b9fe0;background:white;color:#0755c9;padding:9px 13px;border-radius:7px;font-size:11px;font-weight:bold}.quickstats{padding:14px}.ctitle{display:flex;justify-content:space-between;align-items:center}.ctitle h3{font-size:14px;margin:0}.qrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:13px}.qitem{display:flex;gap:8px}.qitem b{display:block;font-size:16px}.qitem span{font-size:9px;color:#718096}.bottom{display:grid;grid-template-columns:1.65fr .8fr .78fr;gap:12px;margin-top:12px}.head{background:linear-gradient(90deg,#0b4fc1,#075bd9);color:white;padding:12px 15px;border-radius:11px 11px 0 0}.head h3{margin:0;font-size:15px}.head small{display:block;font-size:10px;margin:4px 0 0 27px;opacity:.9}.body{padding:14px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{display:block;font-size:11px;font-weight:bold;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #ccd5e2;border-radius:7px;padding:10px;font-size:12px;outline:0;background:white}textarea{height:100px;resize:vertical}.counter{text-align:right;color:#8993a4;font-size:9px;margin-top:3px}.actions{display:flex;align-items:center;gap:9px;margin-top:12px}.btn{padding:11px 16px;border-radius:7px;border:1px solid #ccd5e2;background:white;font-weight:bold;font-size:11px;cursor:pointer}.publish{background:#0b5bd7;color:white;border-color:#0b5bd7}.reset{color:#df4a4a}.check{margin-right:auto;display:flex;align-items:center;gap:5px}.check input{width:auto}.message{display:none;margin-top:10px;padding:9px;border-radius:6px;font-size:11px}.success{background:#e8f8ef;color:#16803b}.error{background:#fdecec;color:#c62828}.qa{padding:14px}.qagrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.qa button{min-height:64px;border:1px solid #d2dbe8;border-radius:9px;background:#f8fbff;font-size:10px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}.qa button:nth-child(1){color:#0755c9;background:#eef5ff}.qa button:nth-child(2){color:#148743;background:#effbf4}.qa button:nth-child(3){color:#6725c9;background:#f7efff}.qa button:nth-child(4){color:#079b9b;background:#effcfc}.qa button:nth-child(5){color:#e58400;background:#fff8ea}.qa button:nth-child(6){color:#d41769;background:#fff0f7}.notify{margin-top:12px}.note{padding:10px 13px;border-top:1px solid #e5e9ef;font-size:10px}.note:first-child{border-top:0}.greenDot{color:#16a34a;margin-right:6px}.recent{overflow:hidden}.posts{padding:8px}.post{border:1px solid #e1e6ee;border-radius:8px;padding:9px;margin-bottom:7px}.tag{display:inline-block;font-size:9px;color:#0755c9;background:#eaf2ff;border-radius:12px;padding:4px 7px;font-weight:bold}.post h4{font-size:11px;margin:6px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:9px;color:#7b8798}.footer{text-align:center;font-size:10px;color:#7a8698;margin:14px}.hide{display:none}
@@ -352,6 +353,16 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:600px){.profile-final-hero{padding:17px;align-items:flex-start}.profile-final-photo{width:70px;height:70px;border-radius:18px}.profile-final-name{font-size:19px}.profile-final-contact{display:block}.profile-final-contact span{display:block;margin-top:3px}.profile-final-actions{margin-left:0}.profile-final-actions button{padding:8px}.profile-final-fields{grid-template-columns:1fr}.profile-final-field.full{grid-column:auto}}
 </style>
 
+<style id="homepage-display-controls-style">
+.homepage-display-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:4px}
+.display-control-card{border:1px solid #dfe7f2;background:#f8fbff;border-radius:10px;padding:12px}
+.display-control-title{font-size:11px;font-weight:900;color:#17355f;margin-bottom:9px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:700;color:#344054}
+.switch-row input,.display-mode input{accent-color:#0755c9}
+.display-mode{display:flex;gap:12px;margin-top:9px;font-size:9px;font-weight:700;color:#667085}
+#manualDaysLeft{width:100%;margin-top:8px;padding:7px;border:1px solid #d6deea;border-radius:7px;font-size:10px}
+@media(max-width:700px){.homepage-display-controls{grid-template-columns:1fr}}
+</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -465,7 +476,37 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="full linkBox"><label id="link1Label">Official / Notification Link <span class="optional">(Optional)</span></label><input id="link" type="url" placeholder="https://"></div>
 <div class="full linkBox"><label id="link2Label">Main Action Link <span class="optional">(Optional)</span></label><input id="link2" type="url" placeholder="https://"></div>
 <div class="form-section-title link-section"><span class="section-dot"></span>Instructions<small>Optional notes for applicants</small></div>
-<div class="full"><label>Important Instructions / Note <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important note, deadline reminder, eligibility warning, or applicant instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div><div id="previewContent" style="font-size:11px;line-height:1.55;color:#344054"></div></div>
+<div class="full"><label>Important Instructions / Note <span class="optional">(Optional)</span></label><textarea id="instructions" placeholder="Enter important note, deadline reminder, eligibility warning, or applicant instructions..."></textarea></div><div class="full" id="postPreview" style="display:none;border:1px solid #d8e3f2;border-radius:9px;background:#f8fbff;padding:12px"><div style="font-size:11px;font-weight:800;color:#0755c9;margin-bottom:7px">👁️ Post Preview</div>
+<div class="form-section-title link-section">
+  <span class="section-dot"></span>Homepage Display
+  <small>Control Closing Soon & Today Updates</small>
+</div>
+<div class="homepage-display-controls full">
+  <div class="display-control-card">
+    <div class="display-control-title">⏰ Closing Soon</div>
+    <label class="switch-row"><span>Show in Closing Soon</span><input id="showClosingSoon" type="checkbox"></label>
+    <div class="display-mode">
+      <label><input type="radio" name="closingMode" value="auto" checked> Auto</label>
+      <label><input type="radio" name="closingMode" value="manual"> Manual</label>
+    </div>
+    <input id="manualDaysLeft" type="number" min="0" max="999" placeholder="Manual days left" style="display:none">
+  </div>
+  <div class="display-control-card">
+    <div class="display-control-title">🔥 Today Updates</div>
+    <label class="switch-row"><span>Show in Today Updates</span><input id="showTodayUpdate" type="checkbox"></label>
+    <div class="display-mode">
+      <label><input type="radio" name="todayMode" value="auto" checked> Auto</label>
+      <label><input type="radio" name="todayMode" value="manual"> Manual</label>
+    </div>
+  </div>
+</div>
+
+<div class="form-section-title link-section">
+  <span class="section-dot"></span>Homepage Display
+  <small>Control Closing Soon & Today Updates</small>
+</div>
+</div>
+<div id="previewContent" style="font-size:11px;line-height:1.55;color:#344054"></div></div>
 </div>
 <div class="actions">
 <label class="check"><input id="draftCheck" type="checkbox"> Save as Draft</label>
@@ -668,6 +709,7 @@ function fillFields(data){
     }else if(e)e.value=value;
   });
 }
+
 function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
 function clearFieldErrors(){
   document.querySelectorAll(".fieldError").forEach(e=>e.classList.remove("fieldError"));
@@ -1307,4 +1349,15 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 </script>
 
+<script id="homepage-display-controls-js">
+function syncHomepageDisplayControls(){
+  const manual=document.querySelector('input[name="closingMode"]:checked')?.value==="manual";
+  const el=document.getElementById("manualDaysLeft");
+  if(el) el.style.display=manual?"block":"none";
+}
+document.addEventListener("change",e=>{
+  if(e.target?.name==="closingMode") syncHomepageDisplayControls();
+});
+document.addEventListener("DOMContentLoaded",syncHomepageDisplayControls);
+</script>
 </body></html>
