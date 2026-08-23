@@ -1437,6 +1437,7 @@ if(q) location.href='/?q='+encodeURIComponent(q);
 function handleFeed(data){
 let entries=(data && data.feed && data.feed.entry)||[];
 POSTS=entries;
+try{window.NIJUKTI_PATH_POSTS=entries;window.dispatchEvent(new Event('nijukti-feed-ready'));}catch(e){}
 let p=new URLSearchParams(location.search);
 let pid=p.get('post'), label=p.get('label'), q=p.get('q');
 if(pid){
@@ -1634,35 +1635,79 @@ loadFeed();
 <script id="homepage-display-renderer">
 (function(){
   const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-  const posts=()=>Array.isArray(window.NIJUKTI_PATH_POSTS)?window.NIJUKTI_PATH_POSTS:(Array.isArray(window.posts)?window.posts:[]);
-  const val=(p,keys)=>{for(const k of keys){const v=p?.[k]??p?.fields?.[k];if(v!==undefined&&v!==null&&String(v)!=="")return v}return""};
-  const title=p=>p?.title||p?.postTitle||p?.name||"";
-  const url=p=>p?.url||p?.permalink||p?.postUrl||p?.link||"#";
-  const daysLeft=d=>{
-    const x=new Date(d);if(Number.isNaN(x.getTime()))return null;
-    const n=new Date();n.setHours(0,0,0,0);x.setHours(0,0,0,0);
-    return Math.ceil((x-n)/86400000);
+  const rawPosts=()=>Array.isArray(window.NIJUKTI_PATH_POSTS)?window.NIJUKTI_PATH_POSTS:(Array.isArray(window.POSTS)?window.POSTS:[]);
+  const textOf=p=>String(p?.content?.$t||p?.summary?.$t||"");
+  const labelsOf=p=>(p?.category||[]).map(x=>String(x?.term||x||""));
+  const labelText=p=>labelsOf(p).join(" ");
+  const title=p=>p?.title?.$t||p?.title||p?.postTitle||p?.name||"";
+  const url=p=>{
+    if(p?.url)return p.url;
+    if(p?.permalink)return p.permalink;
+    if(p?.postUrl)return p.postUrl;
+    const a=(p?.link||[]).find?.(x=>x.rel==="alternate")||p?.link?.[0];
+    return a?.href||"#";
   };
-  const triState=(v)=>{
+  const published=p=>p?.published?.$t||p?.publishedDate||p?.publishDate||p?.date||p?.published||"";
+  const strip=s=>String(s||"").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
+
+  function metaOf(p){
+    const fields=p?.fields||p?.homepage||{};
+    const src=textOf(p);
+    const marker=src.match(/NP_META\s*[:=]\s*(\{[\s\S]*?\})\s*(?:-->|<\/span>|$)/i);
+    if(marker){try{return {...fields,...JSON.parse(marker[1])}}catch(e){}}
+    return fields;
+  }
+  function parseDate(s){
+    if(!s)return null;
+    const d=new Date(s);
+    if(!Number.isNaN(d.getTime()))return d;
+    const t=strip(s);
+    const m=t.match(/\b(\d{1,2})[\/.-](\d{1,2})[\/.-](20\d{2})\b/);
+    if(m)return new Date(`${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`);
+    const m2=t.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
+    if(m2)return new Date(`${m2[2]} ${m2[1]}, ${m2[3]}`);
+    const m3=t.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:st|nd|rd|th)?[,\s]+(20\d{2})\b/i);
+    if(m3)return new Date(`${m3[1]} ${m3[2]}, ${m3[3]}`);
+    return null;
+  }
+  function findDeadline(p){
+    const meta=metaOf(p);
+    const direct=meta.lastDate||meta.last_date||meta.closingDate||meta.applicationLastDate;
+    if(direct)return parseDate(direct);
+    const t=strip(textOf(p));
+    const hit=t.match(/(?:last\s*date|closing\s*date|application\s*last\s*date|apply\s*(?:online\s*)?till)[^.\n]{0,90}?(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+20\d{2}|\d{1,2}[\/.-]\d{1,2}[\/.-]20\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}[,\s]+20\d{2})/i);
+    return hit?parseDate(hit[1]):null;
+  }
+  function daysLeft(d){
+    if(!d)return null;
+    const x=new Date(d),n=new Date();
+    x.setHours(0,0,0,0);n.setHours(0,0,0,0);
+    return Math.ceil((x-n)/86400000);
+  }
+  function tri(v){
     const s=String(v??"").trim().toLowerCase();
     if(s==="yes"||s==="true")return true;
     if(s==="no"||s==="false")return false;
     return null;
-  };
+  }
+  function typeOf(p){
+    const all=(labelText(p)+" "+title(p)).toLowerCase();
+    if(/admit\s*card/.test(all))return "admit cards";
+    if(/\bresult(s)?\b/.test(all))return "results";
+    if(/answer\s*key/.test(all))return "answer keys";
+    if(/education|admission|scholarship/.test(all))return "education";
+    return "government jobs";
+  }
   function render(){
     const c=document.getElementById("closingSoonList"),t=document.getElementById("todayUpdatesList");
     if(!c||!t)return;
-    const data=posts();
-
+    const data=rawPosts();
     const closing=data.map(p=>{
-      const show=triState(val(p,["showClosingSoon"]));
+      const meta=metaOf(p), show=tri(meta.showClosingSoon);
       if(show===false)return null;
-      const mode=String(val(p,["closingMode"])).toLowerCase()==="manual"?"manual":"auto";
-      const manualRaw=val(p,["manualDaysLeft"]);
-      const manual=Number(manualRaw);
-      const days=mode==="manual"&&Number.isFinite(manual)
-        ? manual
-        : daysLeft(val(p,["lastDate","last_date"]));
+      const mode=String(meta.closingMode||"auto").toLowerCase();
+      const manual=Number(meta.manualDaysLeft);
+      const days=mode==="manual"&&Number.isFinite(manual)?manual:daysLeft(findDeadline(p));
       return days!=null&&days>=0?{p,days}:null;
     }).filter(Boolean).sort((a,b)=>a.days-b.days).slice(0,4);
 
@@ -1671,24 +1716,33 @@ loadFeed();
       return `<a class="closing-item" href="${esc(url(p))}"><span class="days ${cls}">${days} DAY${days===1?"":"S"} LEFT</span><strong>${esc(title(p))}</strong></a>`;
     }).join(""):'<div class="panel-empty">No closing deadlines right now.</div>';
 
-    const n=new Date();n.setHours(0,0,0,0);
+    const today0=new Date();today0.setHours(0,0,0,0);
     const today=data.filter(p=>{
-      const show=triState(val(p,["showTodayUpdate"]));
+      const meta=metaOf(p), show=tri(meta.showTodayUpdate);
       if(show===false)return false;
       if(show===true)return true;
-      const d=new Date(val(p,["publishedDate","publishDate","date","published"]));
-      if(Number.isNaN(d.getTime()))return false;
-      d.setHours(0,0,0,0);return d.getTime()===n.getTime();
+      const d=parseDate(published(p));
+      if(!d)return false;
+      d.setHours(0,0,0,0);
+      return d.getTime()===today0.getTime();
     }).slice(0,4);
 
     const icons={"government jobs":"🆕","odisha jobs":"🆕","admit cards":"🎫","results":"📋","education":"🎓","answer keys":"📋"};
     t.innerHTML=today.length?today.map(p=>{
-      const icon=icons[String(p.type||p.category||"").toLowerCase()]||"🆕";
+      const icon=icons[typeOf(p)]||"🆕";
       return `<a class="today-item" href="${esc(url(p))}"><span>${icon}</span><strong>${esc(title(p))}</strong></a>`;
     }).join(""):'<div class="panel-empty">No new updates today.</div>';
   }
-  document.addEventListener("DOMContentLoaded",render);
-  window.renderNijuktiHomepagePanels=render;
+
+  // The Blogger feed stores entries in POSTS; keep the renderer synchronized with it.
+  function sync(){
+    if(Array.isArray(window.POSTS))window.NIJUKTI_PATH_POSTS=window.POSTS;
+    render();
+  }
+  document.addEventListener("DOMContentLoaded",sync);
+  window.addEventListener("load",sync);
+  window.renderNijuktiHomepagePanels=sync;
+  window.addEventListener("nijukti-feed-ready",sync);
 })();
 </script>
 
