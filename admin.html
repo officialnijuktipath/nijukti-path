@@ -505,7 +505,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <section class="card admin-control-panel" id="closingSoonAdmin">
     <div class="head">
       <h3>⏰ &nbsp; Closing Soon</h3>
-      <small>Automatic countdown + manual override</small>
+      <small>Post-level rules + quick preview</small>
     </div>
     <div class="body">
       <div class="control-row">
@@ -530,14 +530,14 @@ button:disabled{opacity:.55;cursor:not-allowed}
         <label style="margin-top:9px">Manual Label</label>
         <input id="manualClosingLabel" placeholder="Example: 2 DAYS LEFT">
       </div>
-      <button class="btn publish" type="button" onclick="saveClosingSettings()">✓ Save Closing Settings</button>
+      <button class="btn publish" type="button" onclick="saveClosingSettings()">✓ Save Preview Defaults</button>
     </div>
   </section>
 
   <section class="card admin-control-panel" id="todayUpdatesAdmin">
     <div class="head">
       <h3>🔥 &nbsp; Today Updates</h3>
-      <small>Automatic today posts + manual highlight</small>
+      <small>Post-level rules + quick preview</small>
     </div>
     <div class="body">
       <div class="today-toggle">
@@ -561,7 +561,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
           <option>Education</option>
         </select>
       </div>
-      <button class="btn publish" type="button" onclick="saveTodaySettings()">✓ Save Today Settings</button>
+      <button class="btn publish" type="button" onclick="saveTodaySettings()">✓ Save Preview Defaults</button>
     </div>
   </section>
 </div>
@@ -641,6 +641,17 @@ const schemas={
 "Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
 "Education":[["updateType","Update Type","select","+2 Admission|+3 Admission|Scholarship|Exam|Result|Notification|Board|University"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
 };
+
+// Per-post homepage controls. These are saved inside the same Blogger post fields,
+// so each notification can independently control Closing Soon / Today Updates.
+Object.keys(schemas).forEach(type=>{
+  schemas[type].push(
+    ["showClosingSoon","Show in Closing Soon","select","Auto|Yes|No"],
+    ["closingMode","Closing Countdown Mode","select","Auto|Manual"],
+    ["manualDaysLeft","Manual Days Left","number"],
+    ["showTodayUpdate","Show in Today Updates","select","Auto|Yes|No"]
+  );
+});
 
 const actionLabels={
   "Government Jobs":"Apply Online Link",
@@ -1313,7 +1324,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       "f_updateType","f_organization","f_admissionSession","f_collegeInstitution",
       "f_courseClass","f_streamHonours","f_eligibility","f_seatVacancy",
       "f_applicationStart","f_lastDate","f_applicationFee",
-      "f_selectionProcess","f_educationDescription"
+      "f_selectionProcess","f_educationDescription","f_showClosingSoon","f_closingMode","f_manualDaysLeft","f_showTodayUpdate"
     ]);
     const allowed=new Set(common);
     if(mode==="Scholarship"){
@@ -1413,7 +1424,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       label:document.getElementById('manualClosingLabel')?.value||''
     };
     localStorage.setItem('nijuktiClosingSettings',JSON.stringify(data));
-    if(typeof showToast==='function') showToast('Closing Soon settings saved.');
+    if(typeof showToast==='function') showToast('Closing Soon preview defaults saved.');
     else alert('Closing Soon settings saved.');
   };
 
@@ -1425,7 +1436,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       type:document.getElementById('manualTodayType')?.value||''
     };
     localStorage.setItem('nijuktiTodaySettings',JSON.stringify(data));
-    if(typeof showToast==='function') showToast('Today Updates settings saved.');
+    if(typeof showToast==='function') showToast('Today Updates preview defaults saved.');
     else alert('Today Updates settings saved.');
   };
 
