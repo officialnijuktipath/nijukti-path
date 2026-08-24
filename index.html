@@ -41,7 +41,7 @@
   "@type":"Organization",
   "name":"NIJUKTI PATH",
   "url":"https://nijukti-path.vercel.app/",
-  "description":"Odisha Government Jobs, Admit Cards, Results, Answer Keys and Education updates."
+  "description":"Odisha Government Jobs, Admit Card, Results, Answer Keys and Education updates."
 }
 </script>
 
@@ -1135,6 +1135,155 @@ body{
 @media(max-width:1050px){.premium-layout{grid-template-columns:190px minmax(0,1fr)}.premium-right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr}.premium-stats{min-width:390px}.premium-hero-copy h1{font-size:25px}}
 @media(max-width:760px){.premium-latest-hero{display:block;padding:17px}.premium-hero-copy{align-items:flex-start}.premium-bell{width:52px;height:52px;font-size:21px}.premium-hero-copy h1{font-size:22px}.premium-hero-copy p{font-size:10px}.premium-stats{min-width:0;margin-top:14px;grid-template-columns:repeat(2,1fr)}.premium-layout{grid-template-columns:1fr}.premium-sidebar{display:none}.premium-right{grid-column:auto;display:flex}.pn-category,.pn-time{display:none}.pn-title{font-size:11px}.premium-notification-bar{padding:10px}.premium-feed-head>span{display:none}}
 </style>
+
+<style id="nijukti-unique-latest-cards">
+/* Slimmer hero */
+.hero{
+  padding:26px 0 18px !important;
+}
+.hero h2{
+  margin:0 !important;
+}
+.hero p{
+  margin-top:7px !important;
+}
+.hero .line{
+  margin:10px auto !important;
+}
+
+/* Unique Latest Updates card treatment */
+#latestGrid .card{
+  position:relative !important;
+  overflow:hidden !important;
+  border:1px solid #e5ebf3 !important;
+  border-radius:15px !important;
+  background:linear-gradient(135deg,#ffffff 0%,#fbfdff 100%) !important;
+  box-shadow:0 5px 18px rgba(15,23,42,.055) !important;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease !important;
+}
+#latestGrid .card::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  width:4px !important;
+  background:linear-gradient(180deg,#1677ff,#60a5fa) !important;
+  border-radius:15px 0 0 15px !important;
+}
+#latestGrid .card:hover{
+  transform:translateY(-3px) !important;
+  border-color:#cfe0ff !important;
+  box-shadow:0 12px 28px rgba(15,23,42,.10) !important;
+}
+#latestGrid .card .top{
+  padding-left:4px !important;
+  align-items:center !important;
+}
+#latestGrid .card .badge{
+  border-radius:999px !important;
+  letter-spacing:.25px !important;
+  background:#eef5ff !important;
+  color:#1769d2 !important;
+}
+#latestGrid .card .mid{
+  padding-left:4px !important;
+}
+#latestGrid .card h3{
+  font-size:14px !important;
+  line-height:1.35 !important;
+  letter-spacing:-.1px !important;
+}
+#latestGrid .card h3 a{
+  color:#10233f !important;
+}
+#latestGrid .card .icon{
+  border-radius:11px !important;
+  background:#edf5ff !important;
+  box-shadow:inset 0 0 0 1px #dceaff !important;
+}
+#latestGrid .card .org,
+#latestGrid .card .desc{
+  padding-left:4px !important;
+}
+#latestGrid .card .org{
+  color:#667085 !important;
+}
+#latestGrid .card .desc{
+  color:#475467 !important;
+  font-size:9.5px !important;
+  line-height:1.45 !important;
+}
+#latestGrid .card .btn{
+  border-radius:999px !important;
+  box-shadow:none !important;
+  transition:transform .15s ease,filter .15s ease !important;
+}
+#latestGrid .card .btn:hover{
+  transform:translateX(2px) !important;
+  filter:brightness(.98) !important;
+}
+#latestGrid .card .btn:first-of-type{
+  background:#102f57 !important;
+  color:#fff !important;
+}
+
+/* Education cards get a distinct academic accent */
+#latestGrid .edu-card::before{
+  background:linear-gradient(180deg,#1677ff,#7c3aed) !important;
+}
+#latestGrid .edu-card .edu-badge{
+  background:#eef4ff !important;
+  color:#315fb8 !important;
+}
+#latestGrid .edu-card .edu-icon{
+  background:#f0f3ff !important;
+  color:#4f46e5 !important;
+}
+
+/* Keep mobile readable and compact */
+@media(max-width:700px){
+  #latestGrid .card{
+    border-radius:13px !important;
+  }
+  #latestGrid .card h3{
+    font-size:10.5px !important;
+  }
+  #latestGrid .card .desc{
+    font-size:7.6px !important;
+    line-height:1.3 !important;
+  }
+}
+</style>
+
+
+<style id="hide-top-quick-cards">
+/* Remove the large 5-card Quick Access block under the hero */
+.quick:not(.quick-access),
+div.quick:not(.quick-access){
+  display:none !important;
+}
+
+/* Keep the white Quick Access strip and give it a pill shape */
+.quick-access{
+  border-radius:999px !important;
+  overflow:hidden !important;
+  box-shadow:0 5px 18px rgba(15,23,42,.10) !important;
+  margin-top:14px !important;
+  margin-bottom:18px !important;
+}
+.quick-access .quick-access-title{
+  border-radius:999px !important;
+}
+</style>
+
+
+<style id="hero-background-settings">
+.hero{position:relative;overflow:hidden;border-radius:0 0 24px 24px;transition:background .25s ease,background-image .25s ease;}
+.hero.has-custom-bg{background-size:cover;background-position:center;background-repeat:no-repeat;}
+.hero.has-custom-bg::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,13,34,.18),rgba(3,13,34,.58));pointer-events:none;}
+.hero > *{position:relative;z-index:1;}
+</style>
 </head>
 <body>
 
@@ -1180,7 +1329,7 @@ body{
 
 <section class="hero">
 <h2>Latest Odisha Government <span class="yellow">Jobs</span>, Admit Card,<br>Answer Keys, <span class="green">Results</span> &amp; More</h2>
-<p>Get the latest Odisha Government Jobs, official notifications, Admit Cards, Answer Keys, Results and Education updates in one place.</p>
+<p>Get the latest Odisha Government Jobs, official notifications, Admit Card, Answer Keys, Results and Education updates in one place.</p>
 <div class="line"></div>
 </section>
 
@@ -1419,7 +1568,7 @@ if(allLatest){
   const side=(arr,empty)=>arr.length?arr.map(e=>`<a class="premium-side-item" href="${getUrl(e)}"><span>${esc(e.title.$t)}</span><i class="fa-solid fa-chevron-right"></i></a>`).join(''):empty;
   document.getElementById('app').innerHTML=`
   <section class="premium-latest-hero">
-    <div class="premium-hero-copy"><div class="premium-bell"><i class="fa-solid fa-bell"></i></div><div><h1>All <span>Latest</span> Notifications</h1><p>Government Jobs, Admit Cards, Results, Answer Keys, Education Updates & more — all in one place.</p></div></div>
+    <div class="premium-hero-copy"><div class="premium-bell"><i class="fa-solid fa-bell"></i></div><div><h1>All <span>Latest</span> Notifications</h1><p>Government Jobs, Admit Card, Results, Answer Keys, Education Updates & more — all in one place.</p></div></div>
     <div class="premium-stats"><div><b>${total}</b><span>Total Updates</span></div><div><b>${today.length}</b><span>Today Updates</span></div><div><b>${Math.min(4,total)}</b><span>Closing Soon</span></div><div><b>${Math.min(7,total)}</b><span>New This Hour</span></div></div>
   </section>
   <section class="premium-layout">
@@ -1554,8 +1703,43 @@ ev.preventDefault();
 let q=document.getElementById('searchInput').value.trim();
 if(q) location.href='/?q='+encodeURIComponent(q);
 }
+function decodeSiteData(content){
+  const m=String(content||'').match(/NIJUKTI_PATH_DATA:([\s\S]*?)\s*-->/);
+  if(!m)return {};
+  try{
+    const decoded=m[1].replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+    return JSON.parse(decoded);
+  }catch(e){return {}}
+}
+function applyHeroBackground(entries){
+  const hero=document.querySelector('.hero');
+  if(!hero)return;
+  const settingEntry=entries.find(e=>hasLabel(e,'Site Settings'));
+  const data=settingEntry?decodeSiteData(settingEntry.content?.$t||''):{};
+  const fields=data.fields||{};
+  const preset=fields.heroBackground||'default';
+  const url=String(fields.heroImageUrl||'').trim();
+  const presets={
+    default:'',
+    royal:'linear-gradient(135deg,#061329 0%,#0b3b82 55%,#075985 100%)',
+    purple:'linear-gradient(135deg,#17113b 0%,#4c1d95 52%,#7e22ce 100%)',
+    green:'linear-gradient(135deg,#052e2b 0%,#065f46 55%,#15803d 100%)',
+    sunset:'linear-gradient(135deg,#172554 0%,#9a3412 55%,#f59e0b 100%)'
+  };
+  hero.classList.remove('has-custom-bg');
+  hero.style.backgroundImage='';
+  hero.style.backgroundColor='';
+  if(preset==='image' && url){
+    hero.classList.add('has-custom-bg');
+    hero.style.backgroundImage=`url("${url.replace(/"/g,'\\"')}")`;
+  }else if(presets[preset]){
+    hero.style.backgroundImage=presets[preset];
+  }
+}
 function handleFeed(data){
-let entries=(data && data.feed && data.feed.entry)||[];
+let rawEntries=(data && data.feed && data.feed.entry)||[];
+applyHeroBackground(rawEntries);
+let entries=rawEntries.filter(e=>!hasLabel(e,'Site Settings'));
 POSTS=entries;
 try{window.NIJUKTI_PATH_POSTS=entries;window.dispatchEvent(new Event('nijukti-feed-ready'));}catch(e){}
 let p=new URLSearchParams(location.search);
