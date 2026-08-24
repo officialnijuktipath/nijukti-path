@@ -1366,8 +1366,8 @@ function card(e){
     ${a?`<a class="btn ${action[2]}" href="${esc(a)}" target="_blank" rel="noopener">${action[0]} <i class="fa-solid ${action[1]}"></i></a>`:''}
   </article>`;
 }
-function listPage(entries,label,query,edu){
-let title=edu?edu:(label?label:'Latest Updates');
+function listPage(entries,label,query,edu,allLatest){
+let title=allLatest?'All Latest Notifications':(edu?edu:(label?label:'Latest Updates'));
 let wanted=edu?decodeURIComponent(edu).replace(/\+/g,' ').toLowerCase():'';
 let filtered=entries.filter(e=>{
  if(label && !hasLabel(e,label)) return false;
@@ -1564,7 +1564,7 @@ ${importantPosts.length?`<div class="notice-strip notice-scroll-final">
 </div>
 
 <section class="categories-box">
-  <div class="section-head" style="margin-bottom:18px"><h2 class="title">Top Categories</h2><a class="view" href="/?label=Government%20Jobs">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
+  <div class="section-head" style="margin-bottom:18px"><h2 class="title">Top Categories</h2><a class="view" href="/?all=latest">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
   <div class="cat-grid">
     <a class="cat" href="/?label=Government%20Jobs"><div class="cat-icon"><i class="fa-solid fa-briefcase"></i></div><div><strong>Government Jobs</strong><span>View Posts</span></div></a>
     <a class="cat" href="/?label=Odisha%20Jobs"><div class="cat-icon"><i class="fa-solid fa-building-columns"></i></div><div><strong>Odisha Jobs</strong><span>View Posts</span></div></a>
