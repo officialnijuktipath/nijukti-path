@@ -375,28 +375,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:900px){.admin-control-grid{grid-template-columns:1fr}}
 </style>
 
-
-<style id="hero-settings-admin-css">
-.site-settings-card{margin-top:12px;}
-.setting-help{display:block;color:#8792a4;font-size:9px;margin-top:4px;margin-bottom:12px;}
-.hero-bg-options{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
-.hero-bg-option{position:relative;border:1px solid #dfe7f2;border-radius:10px;padding:7px;background:#fff;cursor:pointer;text-align:center;font-size:9px;color:#17355f;}
-.hero-bg-option input{position:absolute;opacity:0;}
-.hero-bg-option:has(input:checked){border-color:#1465d8;box-shadow:0 0 0 2px rgba(20,101,216,.10);}
-.hero-bg-preview{height:34px;border-radius:7px;display:block;margin-bottom:6px;background:#071c49;}
-.hero-bg-preview.royal{background:linear-gradient(135deg,#061329,#0b3b82,#075985)}
-.hero-bg-preview.purple{background:linear-gradient(135deg,#17113b,#4c1d95,#7e22ce)}
-.hero-bg-preview.green{background:linear-gradient(135deg,#052e2b,#065f46,#15803d)}
-.hero-bg-preview.sunset{background:linear-gradient(135deg,#172554,#9a3412,#f59e0b)}
-.hero-bg-preview.image{background:linear-gradient(135deg,#0f172a,#64748b);position:relative;}
-.hero-bg-preview.image:after{content:'IMAGE';position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:8px;font-weight:900;}
-.custom-hero-url{margin-top:12px;}
-.custom-hero-url label{display:block;font-size:9px;font-weight:800;color:#17355f;margin-bottom:5px;}
-.custom-hero-url input{width:100%;box-sizing:border-box;padding:9px 10px;border:1px solid #d8e2ef;border-radius:8px;font-size:10px;outline:none;}
-.hero-setting-actions{display:flex;gap:8px;margin-top:10px;}
-.setting-msg{font-size:9px;margin-top:8px;color:#16803b;min-height:12px;}
-@media(max-width:800px){.hero-bg-options{grid-template-columns:repeat(3,1fr);}}
-</style>
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -419,7 +397,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
         <div class="login-features">
           <div class="login-feature"><div class="login-feature-icon">💼</div><div><b>Government Jobs</b><small>Central &amp; State Jobs</small></div></div>
-          <div class="login-feature"><div class="login-feature-icon">🪪</div><div><b>Admit Card</b><small>All Latest Updates</small></div></div>
+          <div class="login-feature"><div class="login-feature-icon">🪪</div><div><b>Admit Cards</b><small>All Latest Updates</small></div></div>
           <div class="login-feature"><div class="login-feature-icon">📊</div><div><b>Results</b><small>Fast &amp; Accurate</small></div></div>
           <div class="login-feature"><div class="login-feature-icon">🔗</div><div><b>Answer Keys</b><small>Official &amp; Response Sheets</small></div></div>
           <div class="login-feature"><div class="login-feature-icon">🎓</div><div><b>Education</b><small>Admission • Scholarship • Exam</small></div></div>
@@ -475,7 +453,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 <div class="app"><aside class="side" id="side"><div class="brand"><div class="logo">NP</div><div><b>NIJUKTI PATH</b><small>SARKARI NAUKRI • SARKARI BHAROSA</small></div></div><div class="mt">Main</div><nav class="nav">
-<a class="active" href="#dashboard">⌂ Dashboard</a><a href="#add">✎ Add New Post</a><a href="#recent">☷ All Posts</a><a href="#categories">▱ Categories</a><a href="#add">▣ Admit Card</a><a href="#add">▥ Results</a><a href="#add">🔗 Answer Keys</a><a href="#add">🎓 Education</a><a href="#notifications">♧ Recent Notifications</a></nav><div class="mt">Tools</div><nav class="nav"><a href="#connection">🔗 Blogger Connection</a><a href="#backup">▣ Backup & Restore</a></nav><div class="mt">Settings</div><nav class="nav"><a href="#settings">⚙ Site Settings</a><a href="#profile">● Profile Settings</a></nav><div class="sidebox"><div class="crown">♛</div><b>Nijukti Path</b><span>Empowering Aspirants</span></div></aside>
+<a class="active" href="#dashboard">⌂ Dashboard</a><a href="#add">✎ Add New Post</a><a href="#recent">☷ All Posts</a><a href="#categories">▱ Categories</a><a href="#add">▣ Admit Cards</a><a href="#add">▥ Results</a><a href="#add">🔗 Answer Keys</a><a href="#add">🎓 Education</a><a href="#notifications">♧ Recent Notifications</a></nav><div class="mt">Tools</div><nav class="nav"><a href="#connection">🔗 Blogger Connection</a><a href="#backup">▣ Backup & Restore</a></nav><div class="mt">Settings</div><nav class="nav"><a href="#settings">⚙ Site Settings</a><a href="#profile">● Profile Settings</a></nav><div class="sidebox"><div class="crown">♛</div><b>Nijukti Path</b><span>Empowering Aspirants</span></div></aside>
 <main class="main"><header class="top"><button class="hamb" onclick="side.classList.toggle('open')">☰</button><div class="search">⌕ <input id="search" placeholder="Search posts, categories, admit cards..." oninput="filterPosts()"></div><div class="topright">
 <span>♧</span>
 <div class="profileWrap">
@@ -491,16 +469,16 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <button type="button" class="logoutItem" id="logoutAdminBtn">🚪 Logout</button>
 </div></div></div></header>
 <section class="content" id="dashboard"><div class="heading"><div><h1>Dashboard</h1><p>Welcome back, Admin! Here's what's happening on your website today.</p></div><div class="date">▣ &nbsp; 20 August 2026, Thursday</div></div>
-<div class="stats"><div class="stat"><div class="si blue">▣</div><div><h4>Government Jobs</h4><div class="num" id="gov">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si green">♧</div><div><h4>Odisha Jobs</h4><div class="num" id="odisha">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si orange">🔗</div><div><h4>Answer Keys</h4><div class="num" id="answer">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si purple">▣</div><div><h4>Admit Card</h4><div class="num" id="admit">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si teal">▥</div><div><h4>Results</h4><div class="num" id="result">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si pink">🎓</div><div><h4>Education</h4><div class="num" id="education">0</div><div class="view">View all →</div></div></div></div>
+<div class="stats"><div class="stat"><div class="si blue">▣</div><div><h4>Government Jobs</h4><div class="num" id="gov">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si green">♧</div><div><h4>Odisha Jobs</h4><div class="num" id="odisha">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si orange">🔗</div><div><h4>Answer Keys</h4><div class="num" id="answer">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si purple">▣</div><div><h4>Admit Cards</h4><div class="num" id="admit">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si teal">▥</div><div><h4>Results</h4><div class="num" id="result">0</div><div class="view">View all →</div></div></div><div class="stat"><div class="si pink">🎓</div><div><h4>Education</h4><div class="num" id="education">0</div><div class="view">View all →</div></div></div></div>
 <div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b id="draftCount">0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
 <div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form"><input id="editingPostId" type="hidden" value="">
 <div class="formgrid">
 <div class="form-section-title"><span class="section-dot"></span>Basic Information<small>Post identity & category</small></div>
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
-<option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Card</option><option>Results</option><option>Answer Keys</option><option>Education</option>
+<option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
 <div><label>Category</label><select id="cat" onchange="setPostType(this.value)">
-<option value="">Select Category</option><option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Card</option><option>Results</option><option>Answer Keys</option><option>Education</option>
+<option value="">Select Category</option><option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
@@ -520,29 +498,9 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 <div id="msg" class="message success"></div><div id="err" class="message error"></div>
 </form></div></section>
-<section><div class="card qa"><div class="head" style="margin:-14px -14px 14px"><h3>⚡ Quick Actions</h3><small>Add new updates quickly</small></div><div class="qagrid"><button onclick="quick('Government Jobs')">💼<br>Add Government Job</button><button onclick="quick('Odisha Jobs')">👥<br>Add Odisha Job</button><button onclick="quick('Admit Card')">🪪<br>Upload Admit Card</button><button onclick="quick('Results')">📊<br>Add Result</button><button onclick="quick('Answer Keys')">🔗<br>Upload Answer Key</button><button onclick="quick('Education')">🎓<br>Education Update</button></div></div><div class="card notify" id="notifications"><div class="head"><h3>🔔 Notifications <button type="button" id="clearNotifications" style="float:right;border:0;background:transparent;font-size:10px;color:#58708f;cursor:pointer">Clear</button></h3></div><div id="notificationList"><div class="note"><span class="greenDot">●</span>Dashboard ready</div></div></div></section>
+<section><div class="card qa"><div class="head" style="margin:-14px -14px 14px"><h3>⚡ Quick Actions</h3><small>Add new updates quickly</small></div><div class="qagrid"><button onclick="quick('Government Jobs')">💼<br>Add Government Job</button><button onclick="quick('Odisha Jobs')">👥<br>Add Odisha Job</button><button onclick="quick('Admit Cards')">🪪<br>Upload Admit Card</button><button onclick="quick('Results')">📊<br>Add Result</button><button onclick="quick('Answer Keys')">🔗<br>Upload Answer Key</button><button onclick="quick('Education')">🎓<br>Education Update</button></div></div><div class="card notify" id="notifications"><div class="head"><h3>🔔 Notifications <button type="button" id="clearNotifications" style="float:right;border:0;background:transparent;font-size:10px;color:#58708f;cursor:pointer">Clear</button></h3></div><div id="notificationList"><div class="note"><span class="greenDot">●</span>Dashboard ready</div></div></div></section>
 <section class="card recent" id="drafts"><div class="head recentHead"><div><h3>▤ &nbsp; Drafts</h3><small id="draftSub">Saved on Blogger</small></div><button class="viewAll" type="button" onclick="loadPosts()">↻ Refresh</button></div><div class="posts" id="draftPosts">Loading drafts...</div></section>
 <section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" onclick="location.hash='recent'">View All</button></div><div class="posts" id="posts">Loading posts...</div></section>
-<section class="card site-settings-card" id="settings">
-  <div class="head"><h3>🎨 &nbsp; Site Settings</h3><small>Control the public website appearance</small></div>
-  <div class="body">
-    <div class="site-setting-block">
-      <label>Hero Background</label>
-      <small class="setting-help">Choose a background for the main Hero section.</small>
-      <div class="hero-bg-options" id="heroBgOptions">
-        <label class="hero-bg-option"><input type="radio" name="heroBg" value="default" checked><span class="hero-bg-preview default"></span><b>Default</b></label>
-        <label class="hero-bg-option"><input type="radio" name="heroBg" value="royal"><span class="hero-bg-preview royal"></span><b>Royal Blue</b></label>
-        <label class="hero-bg-option"><input type="radio" name="heroBg" value="purple"><span class="hero-bg-preview purple"></span><b>Purple</b></label>
-        <label class="hero-bg-option"><input type="radio" name="heroBg" value="green"><span class="hero-bg-preview green"></span><b>Green</b></label>
-        <label class="hero-bg-option"><input type="radio" name="heroBg" value="sunset"><span class="hero-bg-preview sunset"></span><b>Sunset</b></label>
-        <label class="hero-bg-option"><input type="radio" name="heroBg" value="image"><span class="hero-bg-preview image"></span><b>Custom Image</b></label>
-      </div>
-      <div class="custom-hero-url"><label>Custom Image URL <span class="optional">(Only for Custom Image)</span></label><input id="heroImageUrl" type="url" placeholder="https://example.com/hero.jpg"></div>
-      <div class="hero-setting-actions"><button class="btn publish" type="button" id="saveHeroBackground">✓ Save Hero Background</button><button class="btn reset" type="button" id="previewHeroBackground">👁 Preview</button></div>
-      <div id="heroSettingMsg" class="setting-msg"></div>
-    </div>
-  </div>
-</section>
 <div class="admin-control-grid">
   <section class="card admin-control-panel" id="closingSoonAdmin">
     <div class="head">
@@ -598,7 +556,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
         <label style="margin-top:9px">Update Type</label>
         <select id="manualTodayType">
           <option>Government Jobs</option>
-          <option>Admit Card</option>
+          <option>Admit Cards</option>
           <option>Results</option>
           <option>Education</option>
         </select>
@@ -678,7 +636,7 @@ let posts=[],editingId=null;
 const schemas={
 "Government Jobs":[["department","Department / Organization"],["postName","Post Name"],["totalVacancies","Total Vacancies"],["postWiseVacancy","Post-wise Vacancy"],["qualification","Qualification"],["ageLimit","Age Limit"],["ageRelaxation","Age Relaxation"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary / Pay Scale"],["jobLocation","Job Location"],["importantDates","Important Dates"],["detailedDescription","Detailed Description","textarea"]],
 "Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["importantInformation","Important Information","textarea"]],
-"Admit Card":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
+"Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
 "Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
 "Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
 "Education":[["updateType","Update Type","select","Admission|Scholarship|Education Exam|Education Result|Education Notification"],["admissionType","Admission Type","select","UG Admission|PG Admission|B.Ed / M.Ed Admission|+2 / +3 / Degree Admission|Other Admission"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["lastTime","Last Time (Optional)"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
@@ -698,7 +656,7 @@ Object.keys(schemas).forEach(type=>{
 const actionLabels={
   "Government Jobs":"Apply Online Link",
   "Odisha Jobs":"Apply Online Link",
-  "Admit Card":"Download Admit Card Link",
+  "Admit Cards":"Download Admit Card Link",
   "Results":"Check Result Link",
   "Answer Keys":"Answer Key / Response Sheet Link",
   "Education":"Apply Online Link"
@@ -717,7 +675,7 @@ function setPostType(type){
   $("dynamicFields").innerHTML='<div class="dynamicGrid">'+schema.map(f=>{
     const id=f[0],label=f[1],kind=f[2]||"text";
     let c;
-    if(id==="examDate" && (type==="Admit Card" || type==="Results" || type==="Answer Keys")){
+    if(id==="examDate" && (type==="Admit Cards" || type==="Results" || type==="Answer Keys")){
       c='<div class="exam-date-mode">'+
         '<div class="exam-date-mode-title">Exam date format</div>'+
         '<div class="exam-date-options">'+
@@ -797,7 +755,7 @@ function fillFields(data){
   (schemas[$("type").value]||[]).forEach(f=>{
     const value=(data||{})[f[0]]||"";
     const e=$("f_"+f[0]);
-    if(f[0]==="examDate" && ($("type").value==="Admit Card" || $("type").value==="Results" || $("type").value==="Answer Keys")){
+    if(f[0]==="examDate" && ($("type").value==="Admit Cards" || $("type").value==="Results" || $("type").value==="Answer Keys")){
       if(e)e.value=value;
       const picker=$("f_examDatePicker"), manualInput=$("f_examDateManual");
       const isDate=/^\d{4}-\d{2}-\d{2}$/.test(value);
@@ -971,7 +929,7 @@ function renderDrafts(a){
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
 
 function counts(){
-  const m={"Government Jobs":"gov","Odisha Jobs":"odisha","Answer Keys":"answer","Admit Card":"admit","Results":"result","Education":"education"};
+  const m={"Government Jobs":"gov","Odisha Jobs":"odisha","Answer Keys":"answer","Admit Cards":"admit","Results":"result","Education":"education"};
   Object.keys(m).forEach(k=>$(m[k]).textContent=posts.filter(p=>(p.category||"")===k).length);
   $("total").textContent=posts.length;
   $("published").textContent=posts.length;
@@ -1293,7 +1251,7 @@ loadPosts();
   function replaceByText(){
     const map=[
       ['Dashboard','dashboard'],['Add New Post','add'],['All Posts','posts'],['Categories','category'],
-      ['Admit Card','admit'],['Results','result'],['Answer Keys','answer'],['Education','education'],
+      ['Admit Cards','admit'],['Results','result'],['Answer Keys','answer'],['Education','education'],
       ['Recent Notifications','bell'],['Blogger Connection','link'],['Backup & Restore','settings'],
       ['Site Settings','settings'],['Profile Settings','settings']
     ];
@@ -1505,58 +1463,71 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 </script>
 
-<script id="hero-background-settings-js">
+
+<style id="nijukti-logo-upload-style">
+.logo-upload-box{margin-top:14px;padding:16px;border:1px solid #e5eaf2;border-radius:14px;background:#fff}
+.logo-upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo-upload-preview{width:76px;height:76px;border:1px dashed #cbd5e1;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f8fafc}
+.logo-upload-preview img{max-width:100%;max-height:100%;object-fit:contain}
+.logo-upload-actions{display:flex;gap:8px;flex-wrap:wrap}
+.logo-upload-actions button{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer}
+.logo-upload-save{background:#0f172a;color:#fff}.logo-upload-remove{background:#fee2e2;color:#b91c1c}
+</style>
+
+<script id="nijukti-logo-upload">
 (function(){
-  const TITLE='Nijukti Path — Site Settings';
-  const CATEGORY='Site Settings';
-  const $=id=>document.getElementById(id);
-  function msg(t,ok=true){const el=$('heroSettingMsg');if(el){el.textContent=t;el.style.color=ok?'#16803b':'#b42318';}}
-  function selected(){return document.querySelector('input[name="heroBg"]:checked')?.value||'default';}
-  function decode(content){
-    const m=String(content||'').match(/NIJUKTI_PATH_DATA:([\s\S]*?)\s*-->/);
-    if(!m)return {};
-    try{const d=m[1].replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');return JSON.parse(d)}catch(e){return {}}
+  const KEY='nijuktiPathLogoData';
+  function init(){
+    if(document.getElementById('nijuktiLogoUploadBlock')) return;
+    const settings = Array.from(document.querySelectorAll('input,textarea,select')).find(el=>{
+      const t=((el.id||'')+' '+(el.name||'')+' '+(el.placeholder||'')).toLowerCase();
+      return t.includes('logo');
+    });
+    const host = settings ? (settings.closest('.form-group,.field,.setting,.card,.panel,.section') || settings.parentElement) : document.querySelector('main') || document.body;
+    const box=document.createElement('div');
+    box.id='nijuktiLogoUploadBlock';
+    box.className='logo-upload-box';
+    box.innerHTML='<b>🖼️ Upload Logo</b><div class="logo-upload-row"><div class="logo-upload-preview" id="nijuktiLogoPreview"><span>Logo</span></div><div><div class="logo-upload-actions"><label style="background:#e2e8f0;color:#0f172a;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer">Choose Image<input id="nijuktiLogoFile" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="logo-upload-save" id="nijuktiLogoSave">Save Logo</button><button type="button" class="logo-upload-remove" id="nijuktiLogoRemove">Remove / Reset</button></div><small style="display:block;margin-top:7px;color:#64748b">PNG, JPG or WEBP • direct upload only</small></div></div>';
+    host.appendChild(box);
+
+    const preview=document.getElementById('nijuktiLogoPreview'), file=document.getElementById('nijuktiLogoFile');
+    function render(data){
+      preview.innerHTML=data?'<img src="'+data+'" alt="Logo preview">':'<span>Logo</span>';
+    }
+    let pending=localStorage.getItem(KEY)||'';
+    render(pending);
+    file.addEventListener('change',()=>{
+      const f=file.files&&file.files[0]; if(!f)return;
+      const r=new FileReader(); r.onload=()=>{pending=r.result;render(pending)}; r.readAsDataURL(f);
+    });
+    document.getElementById('nijuktiLogoSave').onclick=()=>{
+      if(pending){localStorage.setItem(KEY,pending); render(pending); alert('Logo saved.');}
+      else alert('Please choose a logo image first.');
+    };
+    document.getElementById('nijuktiLogoRemove').onclick=()=>{
+      localStorage.removeItem(KEY); pending=''; render(''); alert('Logo reset.');
+    };
   }
-  async function findSetting(){
-    const r=await fetch('/api/posts?status=all',{cache:'no-store'});
-    if(!r.ok)throw Error('Could not load site settings');
-    const d=await r.json();
-    const list=Array.isArray(d)?d:(d.posts||d.items||[]);
-    return list.find(p=>String(p.category||'').toLowerCase()===CATEGORY.toLowerCase() && String(p.title||'')===TITLE)||null;
-  }
-  async function load(){
-    try{
-      const p=await findSetting();
-      if(!p)return;
-      const data=decode(p.content||''); const f=data.fields||{};
-      const radio=document.querySelector(`input[name="heroBg"][value="${f.heroBackground||'default'}"]`); if(radio)radio.checked=true;
-      if($('heroImageUrl'))$('heroImageUrl').value=f.heroImageUrl||'';
-    }catch(e){}
-  }
-  async function save(){
-    const btn=$('saveHeroBackground'); if(btn)btn.disabled=true;
-    try{
-      const p=await findSetting();
-      const payload={title:TITLE,category:CATEGORY,description:'Public website hero background setting.',officialLink:'',secondLink:'',secondLinkLabel:'',instructions:'',fields:{heroBackground:selected(),heroImageUrl:$('heroImageUrl')?.value.trim()||''},draft:false,publish:true};
-      const body=p?{...payload,id:p.id}:payload;
-      const r=await fetch('/api/posts',{method:p?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-      const d=await r.json(); if(!r.ok)throw Error(d.error||'Could not save hero background');
-      msg('✓ Hero background saved. Refresh the public site to see it.');
-    }catch(e){msg('✕ '+e.message,false)}finally{if(btn)btn.disabled=false;}
-  }
-  function preview(){
-    const val=selected(), url=$('heroImageUrl')?.value.trim()||'';
-    document.documentElement.style.setProperty('--admin-hero-preview','none');
-    const map={default:'linear-gradient(135deg,#061329 0%,#0b234a 90%)',royal:'linear-gradient(135deg,#061329 0%,#0b3b82 55%,#075985 100%)',purple:'linear-gradient(135deg,#17113b 0%,#4c1d95 52%,#7e22ce 100%)',green:'linear-gradient(135deg,#052e2b 0%,#065f46 55%,#15803d 100%)',sunset:'linear-gradient(135deg,#172554 0%,#9a3412 55%,#f59e0b 100%)'};
-    const style=val==='image'&&url?`url("${url.replace(/"/g,'\\"')}") center/cover no-repeat`:map[val]||map.default;
-    let hero=document.querySelector('.hero'); if(hero){hero.style.backgroundImage=style;hero.style.borderRadius='18px';hero.style.margin='8px 0';hero.style.paddingLeft='12px';hero.style.paddingRight='12px';}
-    msg('Preview applied on this admin screen. Click Save to publish it.');
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    $('saveHeroBackground')?.addEventListener('click',save);
-    $('previewHeroBackground')?.addEventListener('click',preview);
-    load();
-  });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
+
 </body></html>
+
+<script id="engineering-admission-option-fallback">
+(function(){
+  function addEngineering(){
+    document.querySelectorAll('select').forEach(function(s){
+      var key=((s.id||'')+' '+(s.name||'')+' '+(s.previousElementSibling?.textContent||'')).toLowerCase();
+      if(key.includes('admission') && !Array.from(s.options).some(o=>/engineering admission/i.test(o.text))){
+        var o=document.createElement('option');
+        o.value='Engineering Admission';
+        o.textContent='Engineering Admission';
+        s.insertBefore(o,s.options[0]||null);
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',addEngineering);
+  else addEngineering();
+})();
+</script>
