@@ -1102,6 +1102,26 @@ body{
 }
 </style>
 
+
+<style id="closing-today-larger">
+.closing-today-grid{gap:20px}
+.closing-panel{padding:22px;border-radius:18px}
+.panel-head{margin-bottom:16px}
+.panel-head h3{font-size:19px}
+.panel-head span{font-size:10px;padding:6px 9px}
+.closing-list,.today-list{gap:10px}
+.closing-item,.today-item{min-height:50px;padding:11px 13px;border-radius:12px;gap:12px}
+.closing-item strong,.today-item strong{font-size:12px;line-height:1.35}
+.days{font-size:9px;padding:6px 8px}
+.today-item span{width:28px;font-size:18px}
+@media(max-width:700px){
+  .closing-panel{padding:18px}
+  .panel-head h3{font-size:17px}
+  .closing-item,.today-item{min-height:47px;padding:10px 11px}
+  .closing-item strong,.today-item strong{font-size:11px}
+}
+</style>
+
 </head>
 <body>
 
@@ -1367,7 +1387,7 @@ let filtered=entries.filter(e=>{
 });
 document.getElementById('app').innerHTML=`
 <div class="section-head"><h2 class="title">${esc(title)}</h2><a class="view" href="/">HOME</a></div>
-<div class="grid latest-grid">${filtered.length?filtered.slice(0,20).map(card).join(''):'<div class="empty" style="grid-column:1/-1">No posts found.</div>'}</div>`;
+<div class="grid latest-grid">${filtered.length?(allLatest?filtered:filtered.slice(0,20)).map(card).join(''):'<div class="empty" style="grid-column:1/-1">No posts found.</div>'}</div>`;
 }
 
 function setMeta(name, content){
@@ -1495,11 +1515,11 @@ let entries=(data && data.feed && data.feed.entry)||[];
 POSTS=entries;
 try{window.NIJUKTI_PATH_POSTS=entries;window.dispatchEvent(new Event('nijukti-feed-ready'));}catch(e){}
 let p=new URLSearchParams(location.search);
-let pid=p.get('post'), label=p.get('label'), q=p.get('q'), edu=p.get('edu');
+let pid=p.get('post'), label=p.get('label'), q=p.get('q'), edu=p.get('edu'), allLatest=p.get('all')==='latest';
 if(pid){
 let e=entries.find(x=>postId(x)===pid);
 if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
-}else if(label||q||edu){
+}else if(allLatest||label||q||edu){
   if(label){
     const labelTitle = label + ' | Odisha Jobs, Admit Card, Results & Education';
     const labelDesc = 'Latest ' + label + ' updates from NIJUKTI PATH, including official notifications, important dates and official links.';
@@ -1508,7 +1528,7 @@ if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="em
     document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');
     document.title = 'Search | NIJUKTI PATH';
   }
-  listPage(entries,label,q,edu);
+  listPage(entries,label,q,edu,allLatest);
 }else{
 const latest=entries.slice(0,6);
 const importantPosts=entries.slice(0,4);
