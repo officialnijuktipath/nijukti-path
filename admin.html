@@ -473,6 +473,50 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b id="draftCount">0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
 <div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form"><input id="editingPostId" type="hidden" value="">
 <div class="formgrid">
+<div class="form-group" id="live-logo-upload-control">
+  <label>🖼️ Site Logo</label>
+  <input id="siteLogoFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+  <div id="siteLogoPreview" style="margin-top:8px;"></div>
+  <button type="button" id="saveSiteLogo" class="btn btn-primary">SAVE LOGO</button>
+</div>
+<script id="live-logo-admin-script">
+(function(){
+  const file = document.getElementById('siteLogoFile');
+  const preview = document.getElementById('siteLogoPreview');
+  const save = document.getElementById('saveSiteLogo');
+  if(!file || !save) return;
+
+  let pending = localStorage.getItem('nijuktiPathLogo') || '';
+
+  function show(src){
+    preview.innerHTML = src
+      ? '<img src="'+src.replace(/"/g,'&quot;')+'" alt="Logo preview" style="width:72px;height:72px;object-fit:contain;border-radius:12px;border:1px solid #ddd;">'
+      : '';
+  }
+  show(pending);
+
+  file.addEventListener('change', function(){
+    const f = file.files && file.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+      pending = e.target.result;
+      show(pending);
+    };
+    reader.readAsDataURL(f);
+  });
+
+  save.addEventListener('click', function(){
+    if(!pending){
+      alert('Please upload a logo first.');
+      return;
+    }
+    localStorage.setItem('nijuktiPathLogo', pending);
+    alert('Logo saved. Refresh the Index to see the new logo.');
+  });
+})();
+</script>
+
 <div class="form-section-title"><span class="section-dot"></span>Basic Information<small>Post identity & category</small></div>
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
 <option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
