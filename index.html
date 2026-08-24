@@ -326,6 +326,13 @@ body{
 .edu-card .desc{-webkit-line-clamp:2;min-height:31px}
 </style>
 
+<style id="latest-text-size-controls">
+.latest-font-tools{display:inline-flex;align-items:center;gap:4px;margin-left:8px;font-size:9px;color:#667085;font-weight:700}
+.latest-font-tools button{border:1px solid #d7e0ec;background:#fff;border-radius:6px;padding:3px 6px;font-size:10px;font-weight:800;color:#173b68;cursor:pointer}
+.latest-font-tools button:hover{background:#f1f6fd}
+.edu-submenu-label{padding:7px 12px 4px;font-size:9px;font-weight:900;color:#0755c9;text-transform:uppercase;border-bottom:1px solid #edf1f6}
+@media(max-width:700px){.latest-font-tools span{display:none}.latest-font-tools{margin-left:4px}}
+</style>
 <style id="compact-latest-cards">
 /* Compact Latest Updates cards — designed to fit 6 cards comfortably */
 .latest-grid .card{
@@ -1065,52 +1072,33 @@ body{
 </style>
 
 
-<style id="nijukti-readable-text-upgrade">
-/* Slightly larger interface text for easier reading */
-.q strong{font-size:12px!important}
-.q span{font-size:11px!important}
-.view{font-size:12px!important}
-.badge{font-size:11px!important}
-.date{font-size:12px!important}
-.mid h3{font-size:17px!important}
-.org{font-size:12px!important}
-.desc{font-size:13px!important;line-height:1.45}
-.btn{font-size:11px!important}
-.cat strong{font-size:14px!important}
-.cat span{font-size:12px!important}
-.notice-label{font-size:11px!important}
-.notice-text{font-size:12px!important}
-.update-tab{font-size:11px!important}
-.home-count{font-size:11px!important}
-.panel-head h3{font-size:18px!important}
-.panel-head span{font-size:10px!important}
-.closing-item strong,.today-item strong{font-size:12px!important}
-.days{font-size:9px!important}
-.panel-empty{font-size:10px!important}
-.latest-font-tools{font-size:10px!important}
-.latest-font-tools button{font-size:11px!important}
-.popular-item{font-size:14px!important}
-.edu-tag{font-size:10px!important}
-.edu-meta-item{font-size:10px!important}
-.edu-meta-item strong{font-size:10px!important}
-.edu-info-title{font-size:13px!important}
-.edu-info-row{font-size:12px!important}
-.footer{font-size:12px!important}
-
-@media(max-width:768px){
-  .q strong{font-size:10px!important}
-  .q span{font-size:10px!important}
-  .view{font-size:11px!important}
-  .mid h3{font-size:16px!important}
-  .org{font-size:11px!important}
-  .desc{font-size:12px!important}
-  .btn{font-size:10px!important}
-  .cat strong{font-size:13px!important}
-  .cat span{font-size:11px!important}
-  .notice-label{font-size:10px!important}
-  .notice-text{font-size:11px!important}
-  .update-tab{font-size:10px!important}
-  .closing-item strong,.today-item strong{font-size:11px!important}
+<style id="latest-card-readable-v2">
+/* Readability polish: content only, buttons/layout unchanged */
+.latest-grid .card .title,
+#latestGrid .card .title,
+.latest-grid .card h3,
+#latestGrid .card h3{
+  font-size:16px !important;
+  line-height:1.35 !important;
+}
+.latest-grid .card .desc,
+#latestGrid .card .desc,
+.latest-grid .card p,
+#latestGrid .card p{
+  font-size:13.5px !important;
+  line-height:1.5 !important;
+}
+.latest-grid .card .meta,
+#latestGrid .card .meta,
+.latest-grid .card .date,
+#latestGrid .card .date{
+  font-size:12px !important;
+}
+.latest-grid .card .badge,
+#latestGrid .card .badge,
+.latest-grid .card .tag,
+#latestGrid .card .tag{
+  font-size:11.5px !important;
 }
 </style>
 
@@ -1142,11 +1130,17 @@ body{
 <div class="nav-dropdown">
   <a href="/?label=Education" class="nav-drop-main">EDUCATION <i class="fa-solid fa-chevron-down"></i></a>
   <div class="nav-drop-menu">
+    <div class="edu-submenu-label">🏫 Admission</div>
+    <a href="/?label=Education&edu=UG%20Admission">🎓 UG Admission</a>
+    <a href="/?label=Education&edu=PG%20Admission">🎓 PG Admission</a>
+    <a href="/?label=Education&edu=B.Ed%20%2F%20M.Ed%20Admission">📚 B.Ed / M.Ed Admission</a>
+    <a href="/?label=Education&edu=%2B2%20%2F%20%2B3%20%2F%20Degree%20Admission">🏫 +2 / +3 / Degree Admission</a>
+    <a href="/?label=Education&edu=Other%20Admission">📌 Other Admission</a>
     <a href="/?label=Education&edu=Scholarship">🎓 Scholarship</a>
-    <a href="/?label=Education&edu=%2B2%20Admission">🏫 +2 Admission</a>
-    <a href="/?label=Education&edu=%2B3%20Admission">🎓 +3 Admission</a>
-    <a href="/?label=Education&edu=School%20%2F%20College%20Updates">📚 School / College Updates</a>
-    <a href="/?label=Education&edu=Education%20Notifications">📝 Education Notifications</a>
+    <a href="/?label=Education&edu=Scholarship">🎓 Scholarship</a>
+    <a href="/?label=Education&edu=Education%20Exam">📝 Education Exam</a>
+    <a href="/?label=Education&edu=Education%20Result">📋 Education Results</a>
+    <a href="/?label=Education&edu=Education%20Notifications">📢 Education Notifications</a>
   </div>
 </div>
 </nav>
@@ -1352,12 +1346,24 @@ function card(e){
     ${a?`<a class="btn ${action[2]}" href="${esc(a)}" target="_blank" rel="noopener">${action[0]} <i class="fa-solid ${action[1]}"></i></a>`:''}
   </article>`;
 }
-function listPage(entries,label,query){
-let title=label?label:'Latest Updates';
+function listPage(entries,label,query,edu){
+let title=edu?edu:(label?label:'Latest Updates');
+let wanted=edu?decodeURIComponent(edu).replace(/\+/g,' ').toLowerCase():'';
 let filtered=entries.filter(e=>{
-if(label) return hasLabel(e,label);
-if(query) return e.title.$t.toLowerCase().includes(query.toLowerCase());
-return true;
+ if(label && !hasLabel(e,label)) return false;
+ if(query && !e.title.$t.toLowerCase().includes(query.toLowerCase())) return false;
+ if(edu){
+   const text=(textOf(e)+' '+labelsOf(e).join(' ')).toLowerCase();
+   const aliases={
+    'ug admission':['ug','undergraduate'], 'pg admission':['pg','postgraduate'],
+    'b.ed / m.ed admission':['b.ed','m.ed','bed','med'],
+    '+2 / +3 / degree admission':['+2','+3','degree'], 'other admission':['admission'],
+    'education exam':['exam'], 'education result':['result'], 'education notifications':['notification']
+   };
+   const a=aliases[wanted]||[wanted];
+   if(!a.some(x=>text.includes(x))) return false;
+ }
+ return true;
 });
 document.getElementById('app').innerHTML=`
 <div class="section-head"><h2 class="title">${esc(title)}</h2><a class="view" href="/">HOME</a></div>
@@ -1489,11 +1495,11 @@ let entries=(data && data.feed && data.feed.entry)||[];
 POSTS=entries;
 try{window.NIJUKTI_PATH_POSTS=entries;window.dispatchEvent(new Event('nijukti-feed-ready'));}catch(e){}
 let p=new URLSearchParams(location.search);
-let pid=p.get('post'), label=p.get('label'), q=p.get('q');
+let pid=p.get('post'), label=p.get('label'), q=p.get('q'), edu=p.get('edu');
 if(pid){
 let e=entries.find(x=>postId(x)===pid);
 if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
-}else if(label||q){
+}else if(label||q||edu){
   if(label){
     const labelTitle = label + ' | Odisha Jobs, Admit Card, Results & Education';
     const labelDesc = 'Latest ' + label + ' updates from NIJUKTI PATH, including official notifications, important dates and official links.';
@@ -1502,7 +1508,7 @@ if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="em
     document.querySelector('meta[name="robots"]')?.setAttribute('content','noindex,follow');
     document.title = 'Search | NIJUKTI PATH';
   }
-  listPage(entries,label,q);
+  listPage(entries,label,q,edu);
 }else{
 const latest=entries.slice(0,6);
 const importantPosts=entries.slice(0,4);
@@ -1516,14 +1522,14 @@ ${importantPosts.length?`<div class="notice-strip notice-scroll-final">
   </div>
   <a class="view" style="padding:6px 10px;flex-shrink:0" href="${getUrl(importantPosts[0])}">OPEN</a>
 </div>`:''}
-<div class="section-head"><h2 class="title">Latest Updates</h2><a class="view" href="/?label=Government%20Jobs">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
+<div class="section-head"><h2 class="title">Latest Updates</h2><a class="view" href="/?all=latest">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
 <div class="home-tools"><div class="update-tabs" id="homeTabs">
 <button class="update-tab active" data-filter="all">All</button>
 <button class="update-tab" data-filter="Government Jobs">Jobs</button>
 <button class="update-tab" data-filter="Admit Card">Admit Card</button>
 <button class="update-tab" data-filter="Results">Results</button>
 <button class="update-tab" data-filter="Education">Education</button>
-</div><span class="home-count">${entries.length} updates available</span></div>
+</div><span class="home-count">${entries.length} updates available</span><div class="latest-font-tools" aria-label="Latest Updates text size"><span>Text Size</span><button type="button" data-font="down">A−</button><button type="button" data-font="reset">A</button><button type="button" data-font="up">A+</button></div></div>
 <div class="grid" id="latestGrid">${latest.map(card).join('')}</div>
 
 <div class="closing-today-grid">
@@ -1642,6 +1648,36 @@ loadFeed();
 })();
 </script>
 
+
+<script id="latest-text-size-js">
+(function(){
+  const KEY="nijuktiLatestFontScale";
+  function apply(scale){
+    document.documentElement.style.setProperty("--latest-font-scale",String(scale));
+    document.querySelectorAll("#latestGrid .card").forEach(card=>{
+      card.style.setProperty("font-size",scale+"em");
+    });
+    try{localStorage.setItem(KEY,String(scale))}catch(e){}
+  }
+  function bind(){
+    const tools=document.querySelector(".latest-font-tools"); if(!tools||tools.dataset.bound)return;
+    tools.dataset.bound="1";
+    let scale=parseFloat(localStorage.getItem(KEY)||"1");
+    if(!Number.isFinite(scale))scale=1;
+    const refresh=()=>apply(scale);
+    tools.addEventListener("click",e=>{
+      const b=e.target.closest("button"); if(!b)return;
+      if(b.dataset.font==="up")scale=Math.min(1.25,scale+0.1);
+      if(b.dataset.font==="down")scale=Math.max(0.85,scale-0.1);
+      if(b.dataset.font==="reset")scale=1;
+      refresh();
+    });
+    refresh();
+  }
+  document.addEventListener("DOMContentLoaded",bind);
+  window.addEventListener("nijukti-feed-ready",()=>setTimeout(bind,0));
+})();
+</script>
 <script id="active-menu-script">
 (function(){
   function markActiveMenu(){
