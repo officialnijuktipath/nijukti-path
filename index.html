@@ -1299,6 +1299,48 @@ div.quick:not(.quick-access){
   }
 }
 </style>
+
+<style id="remove-old-np-logo">
+.logo{gap:0 !important;}
+</style>
+
+
+<style id="admin-logo-live-style">
+.site-logo-img{
+  width:42px;height:42px;object-fit:contain;display:block;
+  border-radius:10px;
+}
+.logo-placeholder{
+  width:42px;height:42px;border:1px solid rgba(255,255,255,.35);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:18px;
+}
+</style>
+<script id="admin-logo-live-index">
+(function(){
+  function applyAdminLogo(){
+    try{
+      const src = localStorage.getItem('nijuktiPathLogo');
+      if(!src) return;
+      const logo = document.querySelector('.logo');
+      if(!logo) return;
+      let img = logo.querySelector('.site-logo-img');
+      if(!img){
+        img = document.createElement('img');
+        img.className = 'site-logo-img';
+        img.alt = 'Nijukti Path';
+        logo.insertBefore(img, logo.firstChild);
+      }
+      img.src = src;
+      const old = logo.querySelector('.logo-placeholder');
+      if(old) old.remove();
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded', applyAdminLogo);
+  window.addEventListener('storage', applyAdminLogo);
+})();
+</script>
+
 </head>
 <body>
 
@@ -1306,7 +1348,7 @@ div.quick:not(.quick-access){
 <div class="wrap">
 <header class="header">
 <a class="logo" href="/">
-<div class="logo-b">N<span>P</span></div>
+
 <div><h1>Nijukti <span>Path</span></h1><p>SARKARI NAUKRI, SARKARI BHAROSA</p></div>
 </a>
 <form class="search" onsubmit="doSearch(event)">
