@@ -1122,6 +1122,19 @@ body{
 }
 </style>
 
+
+<style id="premium-all-latest-bars">
+.premium-latest-hero{margin:28px 0 16px;background:linear-gradient(135deg,#fff,#f7fbff);border:1px solid #e7edf5;border-radius:22px;padding:24px;display:flex;align-items:center;justify-content:space-between;gap:22px;box-shadow:0 10px 35px rgba(15,23,42,.06)}
+.premium-hero-copy{display:flex;align-items:center;gap:18px}.premium-bell{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;border:1px solid #e8edf4;background:#fff;font-size:30px;box-shadow:0 5px 18px rgba(15,23,42,.05)}
+.premium-hero-copy h1{margin:0;font-size:30px;letter-spacing:-.8px;color:#101827}.premium-hero-copy h1 span{color:#1677ff}.premium-hero-copy p{margin:8px 0 0;color:#667085;font-size:13px;line-height:1.55;max-width:600px}
+.premium-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-width:470px}.premium-stats div{background:#fff;border:1px solid #edf1f6;border-radius:13px;padding:12px 14px}.premium-stats b{display:block;font-size:22px;color:#111827}.premium-stats span{font-size:10px;color:#667085}
+.premium-layout{display:grid;grid-template-columns:220px minmax(0,1fr) 285px;gap:14px;align-items:start}.premium-sidebar,.premium-feed,.premium-side-panel{background:#fff;border:1px solid #e7edf5;border-radius:14px;box-shadow:0 6px 24px rgba(15,23,42,.04)}.premium-sidebar{padding:14px}.premium-sidebar h3{font-size:13px;margin:8px 8px 12px}.premium-cat{display:flex;align-items:center;justify-content:space-between;padding:10px;border:1px solid transparent;border-radius:9px;margin:4px 0;color:#172033;font-size:11px}.premium-cat span{display:flex;gap:9px;align-items:center}.premium-cat i{width:24px;height:24px;display:grid;place-items:center;background:#f1f6ff;border-radius:7px;color:#1677ff}.premium-cat b{color:#64748b}.premium-cat.active{background:#f2f7ff;border-color:#dbe8ff;color:#1267d6}.premium-clear{display:block;text-align:center;border:1px solid #e7edf5;border-radius:9px;padding:9px;margin-top:12px;color:#475467;font-size:10px}
+.premium-feed{padding:12px}.premium-feed-head{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 12px;border-bottom:1px solid #edf1f5}.premium-feed-head h2{font-size:14px;margin:0;color:#344054}.premium-feed-head h2 span{color:#1677ff}.premium-feed-head>span{font-size:10px;color:#667085}.premium-feed-head b{color:#111827;border:1px solid #e4e9f0;padding:7px 10px;border-radius:8px;background:#fff}.premium-bars{display:flex;flex-direction:column;gap:7px;padding-top:9px}
+.premium-notification-bar{display:flex;align-items:center;gap:12px;padding:13px 12px;border:1px solid #e9eef5;border-radius:11px;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.025);transition:.18s ease;color:inherit}.premium-notification-bar:hover{transform:translateY(-1px);border-color:#cfe0ff;box-shadow:0 7px 18px rgba(15,23,42,.07)}.pn-icon{width:40px;height:40px;min-width:40px;border-radius:10px;display:grid;place-items:center;background:#eff7f2;color:#16a05d;font-size:17px}.pn-main{min-width:0;flex:1}.pn-top{display:flex;align-items:center;gap:8px}.pn-new{font-size:8px;color:#159447;background:#eaf8ef;padding:4px 6px;border-radius:6px}.pn-title{font-size:12px;color:#172033;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pn-org{display:block;font-size:9px;color:#7b8798;margin-top:4px}.pn-category{font-size:9px;color:#2674cf;background:#f0f6ff;border-radius:6px;padding:5px 7px;white-space:nowrap}.pn-time{font-size:9px;color:#7b8798;white-space:nowrap}.pn-arrow{font-size:11px;color:#344054}
+.premium-right{display:flex;flex-direction:column;gap:12px}.premium-side-panel{padding:12px}.ps-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.ps-head h3{margin:0;font-size:12px;color:#172033}.ps-head a{font-size:9px;color:#1168cf}.premium-side-item{display:flex;justify-content:space-between;gap:8px;padding:9px 4px;border-top:1px solid #eef2f6;font-size:9.5px;color:#273142}.premium-side-item i{color:#94a3b8}.ps-empty{font-size:9px;color:#98a2b3}.premium-quick{display:flex;justify-content:space-between;padding:9px 3px;border-top:1px solid #eef2f6;font-size:9.5px;color:#176cc8}
+@media(max-width:1050px){.premium-layout{grid-template-columns:190px minmax(0,1fr)}.premium-right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr}.premium-stats{min-width:390px}.premium-hero-copy h1{font-size:25px}}
+@media(max-width:760px){.premium-latest-hero{display:block;padding:17px}.premium-hero-copy{align-items:flex-start}.premium-bell{width:52px;height:52px;font-size:21px}.premium-hero-copy h1{font-size:22px}.premium-hero-copy p{font-size:10px}.premium-stats{min-width:0;margin-top:14px;grid-template-columns:repeat(2,1fr)}.premium-layout{grid-template-columns:1fr}.premium-sidebar{display:none}.premium-right{grid-column:auto;display:flex}.pn-category,.pn-time{display:none}.pn-title{font-size:11px}.premium-notification-bar{padding:10px}.premium-feed-head>span{display:none}}
+</style>
 </head>
 <body>
 
@@ -1385,9 +1398,40 @@ let filtered=entries.filter(e=>{
  }
  return true;
 });
+if(allLatest){
+  const total=filtered.length;
+  const counts={};
+  filtered.forEach(e=>{getLabels(e).forEach(l=>{counts[l]=(counts[l]||0)+1;});});
+  const cats=[['All Updates',total,'all'],['Government Jobs',counts['Government Jobs']||0,'Government%20Jobs'],['Admit Card',counts['Admit Card']||0,'Admit%20Card'],['Results',counts['Results']||0,'Results'],['Answer Key',counts['Answer Key']||0,'Answer%20Key'],['Education',counts['Education']||0,'Education']];
+  const todayKey=new Date().toDateString();
+  const today=filtered.filter(e=>new Date(e.published.$t).toDateString()===todayKey).slice(0,5);
+  const closing=filtered.slice(0,4);
+  const premiumRows=filtered.map(e=>{
+    const labels=getLabels(e), lab=labels[0]||'Latest Update';
+    const age=Math.max(0,Math.round((Date.now()-new Date(e.published.$t).getTime())/3600000));
+    const timeText=age<1?'Just now':age<24?age+' hours ago':dateOf(e);
+    return `<a class="premium-notification-bar" href="${getUrl(e)}">
+      <span class="pn-icon"><i class="fa-solid ${iconFor(e)}"></i></span>
+      <span class="pn-main"><span class="pn-top"><b class="pn-new">${age<24?'NEW':'UPDATE'}</b><b class="pn-title">${esc(e.title.$t)}</b></span><span class="pn-org">NIJUKTI PATH</span></span>
+      <span class="pn-category">${esc(lab)}</span><span class="pn-time"><i class="fa-regular fa-clock"></i> ${timeText}</span><i class="fa-solid fa-chevron-right pn-arrow"></i>
+    </a>`;
+  }).join('');
+  const side=(arr,empty)=>arr.length?arr.map(e=>`<a class="premium-side-item" href="${getUrl(e)}"><span>${esc(e.title.$t)}</span><i class="fa-solid fa-chevron-right"></i></a>`).join(''):empty;
+  document.getElementById('app').innerHTML=`
+  <section class="premium-latest-hero">
+    <div class="premium-hero-copy"><div class="premium-bell"><i class="fa-solid fa-bell"></i></div><div><h1>All <span>Latest</span> Notifications</h1><p>Government Jobs, Admit Cards, Results, Answer Keys, Education Updates & more — all in one place.</p></div></div>
+    <div class="premium-stats"><div><b>${total}</b><span>Total Updates</span></div><div><b>${today.length}</b><span>Today Updates</span></div><div><b>${Math.min(4,total)}</b><span>Closing Soon</span></div><div><b>${Math.min(7,total)}</b><span>New This Hour</span></div></div>
+  </section>
+  <section class="premium-layout">
+    <aside class="premium-sidebar"><h3>Browse by Category</h3>${cats.map((c,i)=>`<a class="premium-cat ${i===0?'active':''}" href="${i===0?'/?all=latest':'/?label='+c[2]}"><span><i class="fa-solid fa-${i===0?'table-cells':'briefcase'}"></i>${esc(c[0])}</span><b>${c[1]}</b></a>`).join('')}<a class="premium-clear" href="/?all=latest"><i class="fa-solid fa-rotate-left"></i> Clear Filters</a></aside>
+    <main class="premium-feed"><div class="premium-feed-head"><h2>Total <span>${total}</span> Notifications</h2><span>Sort by : <b>Latest First⌄</b></span></div><div class="premium-bars">${premiumRows||'<div class="empty">No posts found.</div>'}</div></main>
+    <aside class="premium-right"><div class="premium-side-panel"><div class="ps-head"><h3>⏰ Closing Soon</h3><a href="/?label=Government%20Jobs">View All</a></div>${side(closing,'<p class="ps-empty">No closing notifications.</p>')}</div><div class="premium-side-panel"><div class="ps-head"><h3>🔥 Today Updates</h3><a href="/?all=latest">View All</a></div>${side(today,'<p class="ps-empty">No updates today.</p>')}</div><div class="premium-side-panel"><div class="ps-head"><h3>⚡ Quick Links</h3></div><a class="premium-quick" href="/?label=Government%20Jobs">Official Websites <i class="fa-solid fa-chevron-right"></i></a><a class="premium-quick" href="/?label=Results">Results Portal <i class="fa-solid fa-chevron-right"></i></a><a class="premium-quick" href="/?label=Admit%20Card">Admit Card Portal <i class="fa-solid fa-chevron-right"></i></a></div></aside>
+  </section>`;
+  return;
+}
 document.getElementById('app').innerHTML=`
 <div class="section-head"><h2 class="title">${esc(title)}</h2><a class="view" href="/">HOME</a></div>
-<div class="grid latest-grid">${filtered.length?(allLatest?filtered:filtered.slice(0,20)).map(card).join(''):'<div class="empty" style="grid-column:1/-1">No posts found.</div>'}</div>`;
+<div class="grid latest-grid">${filtered.length?filtered.slice(0,20).map(card).join(''):'<div class="empty" style="grid-column:1/-1">No posts found.</div>'}</div>`;
 }
 
 function setMeta(name, content){
