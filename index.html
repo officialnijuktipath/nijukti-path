@@ -1718,7 +1718,7 @@ function applyHeroBackground(entries){
   const data=settingEntry?decodeSiteData(settingEntry.content?.$t||''):{};
   const fields=data.fields||{};
   const preset=fields.heroBackground||'default';
-  const url=String(fields.heroImageUrl||'').trim();
+  const url=String(fields.heroImageData||'').trim();
   const presets={
     default:'',
     royal:'linear-gradient(135deg,#061329 0%,#0b3b82 55%,#075985 100%)',
@@ -1948,7 +1948,7 @@ loadFeed();
       } else if (/answer key/i.test(text)) {
         active = /[?&]label=answer%20key|answer[-_ ]key/i.test(path);
       } else if (/admit card/i.test(text)) {
-        active = /[?&]label=admit%20card|admit[-_ ]card/i.test(path);
+        active = /[?&]label=admit%20cards?|admit[-_ ]cards?/i.test(path);
       } else if (/results/i.test(text)) {
         active = /[?&]label=results\b|result/i.test(path);
       } else if (/education/i.test(text)) {
@@ -2084,6 +2084,26 @@ loadFeed();
   window.addEventListener("load",sync);
   window.renderNijuktiHomepagePanels=sync;
   window.addEventListener("nijukti-feed-ready",sync);
+})();
+</script>
+
+
+<style id="admit-card-label-compatibility">
+/* Accept both old Blogger label "Admit Cards" and new label "Admit Card". */
+</style>
+<script id="admit-card-label-compatibility-js">
+(function(){
+  const _hasLabelOriginal = window.hasLabel;
+  if (typeof _hasLabelOriginal === 'function' && !window.__admitCardCompat){
+    window.__admitCardCompat = true;
+    window.hasLabel = function(e,label){
+      if (/^admit cards?$/i.test(String(label||''))){
+        const labels = (typeof getLabels === 'function' ? getLabels(e) : ((e.category||[]).map(x=>x.term)));
+        return labels.some(x => /^admit cards?$/i.test(String(x||'')));
+      }
+      return _hasLabelOriginal(e,label);
+    };
+  }
 })();
 </script>
 
