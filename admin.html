@@ -1352,14 +1352,34 @@ loadPosts();
 
   function parseStructured(text){
     const map={};
-    linesOf(text).forEach(line=>{
+    const lines=linesOf(text);
+
+    // Accept BOTH formats:
+    //   Post Type: Odisha Jobs
+    // and the copy/paste-friendly format:
+    //   Post Type:
+    //   Odisha Jobs
+    for(let i=0;i<lines.length;i++){
+      const line=lines[i];
       const m=line.match(/^\s*([^:]{1,100})\s*:\s*(.*)$/);
-      if(!m)return;
+      if(!m) continue;
+
       const key=keyNorm(m[1]);
-      const value=norm(m[2]);
-      if(!key || !value)return;
+      let value=norm(m[2]);
+
+      // If the value is on the next line, consume exactly that next line.
+      if(!value && i+1<lines.length){
+        const next=norm(lines[i+1]);
+        // Do not consume another labelled field as a value.
+        if(next && !/^\s*[^:]{1,100}\s*:\s*/.test(next)){
+          value=next;
+          i++;
+        }
+      }
+
+      if(!key || !value) continue;
       if(!(key in map)) map[key]=value;
-    });
+    }
     return map;
   }
 
