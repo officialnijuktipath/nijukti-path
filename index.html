@@ -1403,6 +1403,26 @@ div.quick:not(.quick-access){
 }
 </style>
 
+
+<style id="district-page-premium-style">
+.premium-district-page{max-width:1180px;margin:0 auto;padding:28px 18px 70px;background:#f5f7fb;color:#10233f}
+.district-breadcrumb{font-size:11px;color:#718096;margin:0 0 14px}
+.district-hero-premium{display:grid;grid-template-columns:1.65fr .65fr;gap:18px;background:linear-gradient(135deg,#071b3b,#164579);border-radius:26px;padding:28px;color:#fff;overflow:hidden;position:relative}
+.district-hero-premium:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-100px;top:-100px;background:rgba(255,255,255,.07)}
+.district-hero-copy{position:relative;z-index:1}.district-kicker{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#f6b642}.district-hero-premium h1{font-size:42px;line-height:1.05;margin:8px 0}.district-tagline{font-size:17px;font-weight:700;margin:0 0 9px;color:#fff}.district-lead{font-size:13px;line-height:1.7;color:#d8e4f1;max-width:760px}
+.district-hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.district-hero-actions a{padding:10px 14px;border-radius:999px;background:#f4a928;color:#10233f;text-decoration:none;font-size:11px;font-weight:800}.district-hero-actions a.outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+.district-map-card{position:relative;z-index:1;align-self:stretch;min-height:180px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.district-map-icon{font-size:55px;margin-bottom:8px}.district-map-card strong{font-size:21px}.district-map-card span{font-size:11px;color:#cbd8e8;margin-top:4px}
+.district-stat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin:14px 0}.district-stat-grid>div{background:#fff;border:1px solid #e5eaf1;border-radius:15px;padding:14px;box-shadow:0 3px 12px rgba(15,23,42,.04)}.district-stat-grid span{display:block;font-size:10px;color:#718096}.district-stat-grid strong{display:block;font-size:14px;margin-top:5px}
+.district-tabs-premium{display:flex;gap:22px;overflow:auto;background:#fff;border:1px solid #e5eaf1;border-radius:15px;padding:4px;margin:16px 0}.district-tabs-premium a{padding:11px 14px;text-decoration:none;color:#64748b;font-size:11px;font-weight:700;white-space:nowrap;border-radius:11px}.district-tabs-premium a.active,.district-tabs-premium a:hover{background:#eef5ff;color:#1260b3}
+.district-content-grid{display:grid;grid-template-columns:1.7fr .8fr;gap:14px}.district-main-card,.district-side-card{background:#fff;border:1px solid #e5eaf1;border-radius:20px;padding:22px;box-shadow:0 4px 15px rgba(15,23,42,.04)}.district-main-card h2,.district-side-card h3,.district-section-block h2{margin:5px 0 10px}.district-main-card p{font-size:13px;line-height:1.75;color:#526277}.section-eyebrow{font-size:9px;letter-spacing:1.1px;font-weight:900;color:#e28a00}.district-note{margin-top:17px;padding:12px;border-radius:12px;background:#eaf8ef;color:#17653b;font-size:11px}
+.quick-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #edf1f5;font-size:11px}.quick-row:last-child{border-bottom:0}.quick-row span{color:#64748b}.quick-row b{text-align:right}
+.district-section-block{margin-top:22px}.section-title-row{margin-bottom:12px}.highlight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.highlight-card{background:#fff;border:1px solid #e5eaf1;border-radius:18px;padding:17px}.highlight-icon{font-size:25px}.highlight-card h3{font-size:14px;margin:8px 0 5px}.highlight-card p{font-size:11px;line-height:1.55;color:#64748b;margin:0}
+.district-pill-list,.block-list{display:flex;flex-wrap:wrap;gap:8px}.district-pill-list span,.block-list span{padding:8px 12px;border-radius:999px;background:#f4f7fb;border:1px solid #e1e8f0;font-size:10px;font-weight:700;color:#34455c}.block-list span{background:#fff}
+.official-links{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.official-links a{padding:12px;border-radius:12px;background:#f6f9fd;border:1px solid #e3eaf3;text-decoration:none;color:#174e83;font-size:11px;font-weight:700}
+@media(max-width:900px){.district-stat-grid{grid-template-columns:repeat(3,1fr)}.highlight-grid{grid-template-columns:repeat(2,1fr)}.official-links{grid-template-columns:1fr}.district-hero-premium{grid-template-columns:1fr}}
+@media(max-width:600px){.premium-district-page{padding:18px 12px 50px}.district-hero-premium{padding:20px;border-radius:20px}.district-hero-premium h1{font-size:30px}.district-tagline{font-size:14px}.district-lead{font-size:11px}.district-map-card{min-height:120px}.district-stat-grid{grid-template-columns:repeat(2,1fr)}.district-stat-grid>div{padding:11px}.district-content-grid{grid-template-columns:1fr}.highlight-grid{grid-template-columns:1fr}.district-tabs-premium{gap:2px}}
+</style>
+
 </head>
 <body>
 
@@ -2222,5 +2242,131 @@ loadFeed();
 })();
 </script>
 
-<script id="district-page-router">(function(){const districts=["Angul", "Balasore", "Bargarh", "Bhadrak", "Bolangir", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Keonjhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"];const p=new URLSearchParams(location.search);const slug=p.get('district');if(!slug)return;const name=slug.split('-').map(x=>x.charAt(0).toUpperCase()+x.slice(1)).join(' ');if(!districts.includes(name))return;document.addEventListener('DOMContentLoaded',function(){const main=document.querySelector('main')||document.body;main.innerHTML=`<section class="district-page"><div class="district-hero"><div class="district-breadcrumb">Home › Districts › <b>${name}</b></div><h1>📍 ${name} District</h1><p>District information, education, scholarship, results and important notifications.</p></div><div class="district-tabs"><span class="active">About District</span><span>Education</span><span>Scholarship</span><span>Results</span><span>Important Links</span></div><div class="district-info-grid"><article><h2>About ${name} District</h2><p>This is the dedicated information page for ${name} district of Odisha. Verified district information, local education updates, scholarships, results and important notifications will be shown here.</p><div class="info-note">ℹ️ This is an information page. Government jobs are not listed here.</div></article><aside><h3>Quick Information</h3><p>📍 District: ${name}</p><p>🇮🇳 State: Odisha</p></aside></div></section>`;window.scrollTo(0,0)})})();</script><style id="district-page-style">.district-page{background:#f4f7fb;padding:24px 5%;min-height:70vh;color:#10233f}.district-hero{border-radius:24px;background:linear-gradient(135deg,#071a39,#183d6d);color:#fff;padding:28px}.district-breadcrumb{font-size:12px;color:#cbd8e8;margin-bottom:18px}.district-hero h1{font-size:34px;margin:0 0 8px}.district-hero p{color:#d8e3f1}.district-tabs{display:flex;gap:24px;overflow:auto;background:#fff;border-bottom:1px solid #e5eaf1;padding:15px 8px;margin-top:18px}.district-tabs span{white-space:nowrap;font-size:13px}.district-tabs .active{color:#e88700;font-weight:800}.district-info-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px}.district-info-grid article,.district-info-grid aside{background:#fff;border-radius:18px;padding:22px;box-shadow:0 5px 18px rgba(15,23,42,.06)}.info-note{margin-top:20px;background:#e9f8ef;color:#17653b;padding:12px;border-radius:12px;font-size:12px}@media(max-width:640px){.district-page{padding:14px}.district-info-grid{grid-template-columns:1fr}.district-hero h1{font-size:24px}}</style></body>
+<script id="district-page-router">
+(function(){
+  const districtData = {
+    "khordha": {
+      name:"Khordha",
+      tagline:"A major urban, education and cultural centre of Odisha",
+      description:"Khordha district came into existence on 1 April 1993 after the former undivided Puri district was divided into Khordha, Puri and Nayagarh. The district includes the state capital Bhubaneswar and has a strong presence in administration, education, IT, culture and tourism.",
+      area:"2,813 sq km",
+      population:"22,51,673",
+      subdivisions:"2",
+      blocks:"10",
+      tahasils:"10",
+      gramPanchayats:"190",
+      highlights:[
+        ["🏛️","Bhubaneswar","State capital and a major centre for education, administration and IT."],
+        ["🪨","Udayagiri & Khandagiri","Historic rock-cut caves near Bhubaneswar."],
+        ["☮️","Dhauli","Known for the Shanti Stupa and Buddhist heritage."],
+        ["🎓","Education Hub","Home to major higher-education institutions and universities."]
+      ],
+      blocks:["Bhubaneswar","Balianta","Balipatana","Jatani","Khordha","Begunia","Bolagada","Banapur","Tangi","Chilika"],
+      official:"https://khordha.odisha.gov.in/en"
+    }
+  };
+
+  const params=new URLSearchParams(location.search);
+  const slug=params.get('district');
+  if(!slug || !districtData[slug]) return;
+  const d=districtData[slug];
+
+  document.addEventListener('DOMContentLoaded',function(){
+    const main=document.querySelector('main')||document.body;
+    const page=document.createElement('section');
+    page.className='district-page premium-district-page';
+    page.innerHTML=`
+      <div class="district-breadcrumb">Home › Districts › <b>${d.name}</b></div>
+
+      <div class="district-hero-premium">
+        <div class="district-hero-copy">
+          <span class="district-kicker">📍 ODISHA DISTRICT</span>
+          <h1>${d.name} District</h1>
+          <p class="district-tagline">${d.tagline}</p>
+          <p class="district-lead">${d.description}</p>
+          <div class="district-hero-actions">
+            <a href="#about-district">Explore District ↓</a>
+            <a class="outline" href="${d.official}" target="_blank" rel="noopener">Official District Portal ↗</a>
+          </div>
+        </div>
+        <div class="district-map-card">
+          <div class="district-map-icon">📍</div>
+          <strong>${d.name}</strong>
+          <span>Odisha, India</span>
+        </div>
+      </div>
+
+      <div class="district-stat-grid">
+        <div><span>Area</span><strong>${d.area}</strong></div>
+        <div><span>Population</span><strong>${d.population}</strong></div>
+        <div><span>Sub-divisions</span><strong>${d.subdivisions}</strong></div>
+        <div><span>Blocks</span><strong>${d.blocks}</strong></div>
+        <div><span>Tahasils</span><strong>${d.tahasils}</strong></div>
+        <div><span>Gram Panchayats</span><strong>${d.gramPanchayats}</strong></div>
+      </div>
+
+      <nav class="district-tabs-premium">
+        <a class="active" href="#about-district">About</a>
+        <a href="#highlights">Highlights</a>
+        <a href="#education">Education</a>
+        <a href="#links">Important Links</a>
+      </nav>
+
+      <div class="district-content-grid">
+        <article class="district-main-card" id="about-district">
+          <span class="section-eyebrow">ABOUT THE DISTRICT</span>
+          <h2>About ${d.name} District</h2>
+          <p>${d.description}</p>
+          <div class="district-note">ℹ️ This is an information page. Government Jobs are intentionally not listed here.</div>
+        </article>
+
+        <aside class="district-side-card">
+          <h3>Quick Information</h3>
+          <div class="quick-row"><span>📍 District</span><b>${d.name}</b></div>
+          <div class="quick-row"><span>🇮🇳 State</span><b>Odisha</b></div>
+          <div class="quick-row"><span>🏢 Headquarters</span><b>Khordha</b></div>
+          <div class="quick-row"><span>🗓️ Established</span><b>1 April 1993</b></div>
+        </aside>
+      </div>
+
+      <section class="district-section-block" id="highlights">
+        <div class="section-title-row"><div><span class="section-eyebrow">DISCOVER</span><h2>District Highlights</h2></div></div>
+        <div class="highlight-grid">
+          ${d.highlights.map(x=>`<div class="highlight-card"><div class="highlight-icon">${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p></div>`).join('')}
+        </div>
+      </section>
+
+      <section class="district-section-block" id="education">
+        <div class="section-title-row"><div><span class="section-eyebrow">EDUCATION</span><h2>Education & Institutions</h2></div></div>
+        <div class="district-main-card">
+          <p>Khordha is a major education centre. The official district portal highlights institutions and educational development as an important part of the district's economy and growth.</p>
+          <div class="district-pill-list">
+            <span>🎓 Higher Education</span><span>🏫 Schools & Colleges</span><span>💻 IT & Professional Education</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="district-section-block">
+        <div class="section-title-row"><div><span class="section-eyebrow">ADMINISTRATION</span><h2>Blocks</h2></div></div>
+        <div class="block-list">${d.blocks.map(b=>`<span>${b}</span>`).join('')}</div>
+      </section>
+
+      <section class="district-section-block" id="links">
+        <div class="district-main-card">
+          <span class="section-eyebrow">IMPORTANT LINKS</span>
+          <h2>Official District Resources</h2>
+          <div class="official-links">
+            <a href="${d.official}" target="_blank" rel="noopener">🏛️ Khordha District Official Portal ↗</a>
+            <a href="${d.official}/en/about-district/administrative-setup/subdivision-blocks" target="_blank" rel="noopener">🗂️ Subdivision & Blocks ↗</a>
+            <a href="${d.official}/en/about-district/demogrpahy" target="_blank" rel="noopener">📊 Demography ↗</a>
+          </div>
+        </div>
+      </section>
+    `;
+    main.innerHTML='';
+    main.appendChild(page);
+    window.scrollTo(0,0);
+  });
+})();
+</script></body>
 </html>
