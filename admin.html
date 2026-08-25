@@ -832,7 +832,31 @@ const $=x=>document.getElementById(x);
 let posts=[],editingId=null;
 
 const schemas={
-"Government Jobs":[["department","Department / Organization"],["postName","Post Name"],["totalVacancies","Total Vacancies"],["postWiseVacancy","Post-wise Vacancy"],["qualification","Qualification"],["ageLimit","Age Limit"],["ageRelaxation","Age Relaxation"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary / Pay Scale"],["jobLocation","Job Location"],["importantDates","Important Dates"],["detailedDescription","Detailed Description","textarea"]],
+"Government Jobs":[
+["department","Department / Organization"],
+["postName","Post Name"],
+["totalVacancies","Total Vacancies"],
+["postWiseVacancy","Post-wise Vacancy","textarea"],
+["seatVacancy","Seat / Vacancy","textarea"],
+["qualification","Qualification","textarea"],
+["eligibility","Eligibility","textarea"],
+["odishaEligibility","Odisha Eligibility / Domicile","textarea"],
+["ageLimit","Age Limit"],
+["ageRelaxation","Age Relaxation"],
+["applicationStart","Application Start Date","date"],
+["lastDate","Last Date","date"],
+["lastTime","Last Time"],
+["applicationFee","Application Fee"],
+["salary","Salary / Pay Scale"],
+["jobLocation","Job Location"],
+["selectionProcess","Selection Process","textarea"],
+["meritSelection","Merit / Selection Process","textarea"],
+["importantDates","Important Dates","textarea"],
+["importantInfo","Important Information","textarea"],
+["requiredDocuments","Required Documents","textarea"],
+["description","Description / Important Instructions","textarea"],
+["importantNote","Important Instructions / Note","textarea"]
+],
 "Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["importantInformation","Important Information","textarea"]],
 "Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
 "Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
@@ -1515,19 +1539,26 @@ loadPosts();
     d.postName=nearbyValue(text,["Post Name","Name of Post","Post"]);
     d.totalVacancies=nearbyValue(text,["Total Vacancies","Total Vacancy","No. of Vacancies","Number of Vacancies","Vacancies"]);
     d.postWiseVacancy=nearbyValue(text,["Post-wise Vacancy","Post Wise Vacancy"]);
+    d.seatVacancy=nearbyValue(text,["Seat / Vacancy","Seat Vacancy","Seats"]);
     d.vacancy=d.totalVacancies||nearbyValue(text,["Vacancy","Vacancies"]);
     d.qualification=nearbyValue(text,["Educational Qualification","Qualification","Eligibility Criteria"]);
     d.eligibility=nearbyValue(text,["Eligibility","Eligibility Criteria"]);
-    d.odishaEligibility=nearbyValue(text,["Odisha Eligibility","Domicile","Odisha Domicile"]);
+    d.odishaEligibility=nearbyValue(text,["Odisha Eligibility / Domicile","Odisha Eligibility","Domicile","Odisha Domicile"]);
     d.ageLimit=nearbyValue(text,["Age Limit","Age Criteria"]);
     d.ageRelaxation=nearbyValue(text,["Age Relaxation","Upper Age Relaxation"]);
     d.applicationStart=dateValue(text,["Application Start Date","Application Start","Start Date","Opening Date","Apply Online From"]);
     d.lastDate=dateValue(text,["Last Date","Closing Date","Application Last Date","Deadline","Last Date to Apply"]);
+    d.lastTime=nearbyValue(text,["Last Time","Closing Time","Application Last Time"]);
     d.applicationFee=nearbyValue(text,["Application Fee","Exam Fee","Application Fees"]);
-    d.selectionProcess=nearbyValue(text,["Selection Process","Selection Procedure"]);
     d.salary=nearbyValue(text,["Salary","Pay Scale","Salary / Pay Scale","Remuneration"]);
     d.jobLocation=nearbyValue(text,["Job Location","Place of Posting","Posting Location"]);
+    d.selectionProcess=nearbyValue(text,["Selection Process","Selection Procedure"]);
+    d.meritSelection=nearbyValue(text,["Merit / Selection Process","Merit Selection Process","Final Selection"]);
     d.importantDates=nearbyValue(text,["Important Dates","Important Date"]);
+    d.importantInfo=nearbyValue(text,["Important Information"]);
+    d.requiredDocuments=nearbyValue(text,["Required Documents","Documents Required"]);
+    d.description=nearbyValue(text,["Description / Important Instructions","Description","Important Instructions"]);
+    d.importantNote=nearbyValue(text,["Important Instructions / Note","Important Note","Instructions / Note"]);
     d.examDate=nearbyValue(text,["Exam Date","Date of Examination","Examination Date"]);
     d.examName=nearbyValue(text,["Exam Name","Name of Examination","Examination"]);
     d.organization=d.department||nearbyValue(text,["Organization","Conducting Authority"]);
