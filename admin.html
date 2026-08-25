@@ -473,49 +473,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="row2"><div class="card connection" id="connection"><div class="linkcircle" id="bloggerLinkIcon">🔗</div><div><h3>Blogger Connection</h3><span class="ok" id="bloggerStatusBadge">● Checking...</span><p id="bloggerStatusText">Checking your Blogger connection...</p><small id="bloggerChecked" style="display:block;color:#8993a4;font-size:9px;margin-top:4px"></small></div><button class="outline" id="bloggerReconnectBtn" type="button">↻ Reconnect</button></div><div class="card quickstats"><div class="ctitle"><h3>Quick Stats <small style="color:#8792a4">(This Month)</small></h3><button class="outline">View Full Report →</button></div><div class="qrow"><div class="qitem">▣<div><b id="total">0</b><span>Total Posts</span></div></div><div class="qitem">✓<div><b id="published">0</b><span>Published</span></div></div><div class="qitem">▤<div><b id="draftCount">0</b><span>Drafts</span></div></div><div class="qitem">◉<div><b>—</b><span>Total Views</span></div></div></div></div></div>
 <div class="bottom"><section class="card" id="add"><div class="head"><h3>✎ &nbsp; Add New Post</h3><small>Create and publish job/education updates</small></div><div class="body"><form id="form"><input id="editingPostId" type="hidden" value="">
 <div class="formgrid">
-<div class="form-group" id="live-logo-upload-control">
-  <label>🖼️ Site Logo</label>
-  <input id="siteLogoFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
-  <div id="siteLogoPreview" style="margin-top:8px;"></div>
-  <button type="button" id="saveSiteLogo" class="btn btn-primary">SAVE LOGO</button>
-</div>
-<script id="live-logo-admin-script">
-(function(){
-  const file = document.getElementById('siteLogoFile');
-  const preview = document.getElementById('siteLogoPreview');
-  const save = document.getElementById('saveSiteLogo');
-  if(!file || !save) return;
 
-  let pending = localStorage.getItem('nijuktiPathLogo') || '';
-
-  function show(src){
-    preview.innerHTML = src
-      ? '<img src="'+src.replace(/"/g,'&quot;')+'" alt="Logo preview" style="width:72px;height:72px;object-fit:contain;border-radius:12px;border:1px solid #ddd;">'
-      : '';
-  }
-  show(pending);
-
-  file.addEventListener('change', function(){
-    const f = file.files && file.files[0];
-    if(!f) return;
-    const reader = new FileReader();
-    reader.onload = function(e){
-      pending = e.target.result;
-      show(pending);
-    };
-    reader.readAsDataURL(f);
-  });
-
-  save.addEventListener('click', function(){
-    if(!pending){
-      alert('Please upload a logo first.');
-      return;
-    }
-    localStorage.setItem('nijuktiPathLogo', pending);
-    alert('Logo saved. Refresh the Index to see the new logo.');
-  });
-})();
-</script>
 
 <div class="form-section-title"><span class="section-dot"></span>Basic Information<small>Post identity & category</small></div>
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
@@ -610,6 +568,73 @@ button:disabled{opacity:.55;cursor:not-allowed}
   </section>
 </div>
 </div>
+
+<section class="card" id="settings" style="display:none">
+  <div class="head">
+    <h3>⚙️ &nbsp; Site Settings</h3>
+    <small>Manage your website logo and basic branding</small>
+  </div>
+  <div class="body">
+    <div class="form-group" style="max-width:520px">
+      <label>🖼️ Site Logo</label>
+      <div style="font-size:10px;color:#64748b;margin:5px 0 10px">
+        Upload the logo that should appear in the Nijukti Path website header.
+      </div>
+      <input id="siteLogoFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+      <div id="siteLogoPreview" style="margin-top:10px"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button type="button" id="saveSiteLogo" class="btn btn-primary">SAVE LOGO</button>
+        <button type="button" id="removeSiteLogo" class="btn reset">REMOVE / RESET</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script id="site-logo-settings-script">
+(function(){
+  const KEY='nijuktiPathLogo';
+  function initLogoSettings(){
+    const file=document.getElementById('siteLogoFile');
+    const preview=document.getElementById('siteLogoPreview');
+    const save=document.getElementById('saveSiteLogo');
+    const remove=document.getElementById('removeSiteLogo');
+    if(!file||!preview||!save||!remove)return;
+
+    function render(src){
+      preview.innerHTML=src
+        ? '<img src="'+src.replace(/"/g,'&quot;')+'" alt="Site Logo" style="width:90px;height:90px;object-fit:contain;border-radius:12px;border:1px solid #dbe3ef;background:#fff;padding:6px">'
+        : '<div style="width:90px;height:90px;border:1px dashed #cbd5e1;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:10px">No logo</div>';
+    }
+
+    let pending=localStorage.getItem(KEY)||'';
+    render(pending);
+
+    file.addEventListener('change',function(){
+      const f=file.files&&file.files[0];
+      if(!f)return;
+      const reader=new FileReader();
+      reader.onload=function(e){ pending=e.target.result; render(pending); };
+      reader.readAsDataURL(f);
+    });
+
+    save.addEventListener('click',function(){
+      if(!pending){ alert('Please choose a logo image first.'); return; }
+      localStorage.setItem(KEY,pending);
+      alert('Logo saved. Refresh the Index to see the new logo.');
+    });
+
+    remove.addEventListener('click',function(){
+      localStorage.removeItem(KEY);
+      pending='';
+      file.value='';
+      render('');
+      alert('Logo removed / reset.');
+    });
+  }
+  document.addEventListener('DOMContentLoaded',initLogoSettings);
+})();
+</script>
+
 <section class="profile-page" id="profile">
   <div class="profile-final-hero">
     <div class="profile-final-photo" id="pfPhoto"><span id="pfInitial">A</span><img id="pfImg" alt="Profile photo"><label class="profile-final-camera" for="pfUpload">📷</label></div>
@@ -1508,51 +1533,38 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 
-<style id="nijukti-logo-upload-style">
-.logo-upload-box{margin-top:14px;padding:16px;border:1px solid #e5eaf2;border-radius:14px;background:#fff}
-.logo-upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.logo-upload-preview{width:76px;height:76px;border:1px dashed #cbd5e1;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f8fafc}
-.logo-upload-preview img{max-width:100%;max-height:100%;object-fit:contain}
-.logo-upload-actions{display:flex;gap:8px;flex-wrap:wrap}
-.logo-upload-actions button{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer}
-.logo-upload-save{background:#0f172a;color:#fff}.logo-upload-remove{background:#fee2e2;color:#b91c1c}
-</style>
 
-<script id="nijukti-logo-upload">
+
+
+<script id="site-settings-router">
 (function(){
-  const KEY='nijuktiPathLogoData';
-  function init(){
-    if(document.getElementById('nijuktiLogoUploadBlock')) return;
-    const settings = Array.from(document.querySelectorAll('input,textarea,select')).find(el=>{
-      const t=((el.id||'')+' '+(el.name||'')+' '+(el.placeholder||'')).toLowerCase();
-      return t.includes('logo');
-    });
-    const host = settings ? (settings.closest('.form-group,.field,.setting,.card,.panel,.section') || settings.parentElement) : document.querySelector('main') || document.body;
-    const box=document.createElement('div');
-    box.id='nijuktiLogoUploadBlock';
-    box.className='logo-upload-box';
-    box.innerHTML='<b>🖼️ Upload Logo</b><div class="logo-upload-row"><div class="logo-upload-preview" id="nijuktiLogoPreview"><span>Logo</span></div><div><div class="logo-upload-actions"><label style="background:#e2e8f0;color:#0f172a;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer">Choose Image<input id="nijuktiLogoFile" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="logo-upload-save" id="nijuktiLogoSave">Save Logo</button><button type="button" class="logo-upload-remove" id="nijuktiLogoRemove">Remove / Reset</button></div><small style="display:block;margin-top:7px;color:#64748b">PNG, JPG or WEBP • direct upload only</small></div></div>';
-    host.appendChild(box);
+  function routeSettings(){
+    const hash=location.hash.replace('#','').toLowerCase();
+    const settings=document.getElementById('settings');
+    const profile=document.getElementById('profile');
+    if(!settings)return;
 
-    const preview=document.getElementById('nijuktiLogoPreview'), file=document.getElementById('nijuktiLogoFile');
-    function render(data){
-      preview.innerHTML=data?'<img src="'+data+'" alt="Logo preview">':'<span>Logo</span>';
+    const isSettings=hash==='settings';
+    settings.style.display=isSettings?'block':'none';
+
+    if(isSettings && profile) profile.style.display='none';
+
+    const content=document.querySelector('.content');
+    if(content){
+      Array.from(content.children).forEach(function(el){
+        if(el===settings || el===profile)return;
+        el.style.display=isSettings?'none':'';
+      });
     }
-    let pending=localStorage.getItem(KEY)||'';
-    render(pending);
-    file.addEventListener('change',()=>{
-      const f=file.files&&file.files[0]; if(!f)return;
-      const r=new FileReader(); r.onload=()=>{pending=r.result;render(pending)}; r.readAsDataURL(f);
+
+    document.querySelectorAll('.nav a').forEach(function(a){
+      a.classList.toggle('active',a.getAttribute('href')==='#settings'&&isSettings);
     });
-    document.getElementById('nijuktiLogoSave').onclick=()=>{
-      if(pending){localStorage.setItem(KEY,pending); render(pending); alert('Logo saved.');}
-      else alert('Please choose a logo image first.');
-    };
-    document.getElementById('nijuktiLogoRemove').onclick=()=>{
-      localStorage.removeItem(KEY); pending=''; render(''); alert('Logo reset.');
-    };
+    if(isSettings)window.scrollTo({top:0,behavior:'smooth'});
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('hashchange',routeSettings);
+  document.addEventListener('DOMContentLoaded',routeSettings);
+  routeSettings();
 })();
 </script>
 
