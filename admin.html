@@ -523,7 +523,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <button type="button" class="smart-fill-btn primary" id="smartAutoFillBtn">✨ Auto Fill Form</button>
     <button type="button" class="smart-fill-btn" id="smartDetectBtn">🔎 Detect Type</button>
     <button type="button" class="smart-fill-btn clear" id="smartClearBtn">✕ Clear</button>
-    <span class="smart-fill-status" id="smartFillStatus">Ready</span>
+    \1<div style="font-size:9px;color:#64748b;margin-top:5px">Exact field mapping: <b>Field:</b> value. Missing fields stay blank; headings are ignored.</div>
   </div>
   <div class="smart-fill-note">Paste only the notification/monitoring fields. Headings such as “MONITORING REQUEST”, “QUESTION TITLE”, “REQUEST” etc. are ignored and will never be copied into Post Title.</div>
 </div>
@@ -1288,7 +1288,7 @@ loadPosts();
     const raw=(document.getElementById("smartPasteText")?.value || "").replace(/\r/g,"");
     // Monitoring/request headings are instructions, not notification data.
     // Strip them before any field/title detection so they can never become the Post Title.
-    return raw.split("\n").filter(line=>{
+    return raw.split("\n").map(line=>line.replace(/^\s*```(?:text|txt)?\s*$/i,"")).filter(line=>{
       const x=norm(line);
       return x && !/^(MONITORING REQUEST|MONITORING NOTIFICATION|NOTIFICATION REQUEST|QUESTION|QUESTION TITLE|REQUEST|PROMPT)\s*:?$/i.test(x);
     }).join("\n").trim();
@@ -1307,20 +1307,58 @@ loadPosts();
   }
   function escReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
 
+  // Structured-field parser:
+  // Read ONLY the value belonging to an exact field label on the same line.
+  // This prevents aliases such as "Organization" from accidentally matching
+  // inside "Organization / Board / University", and prevents values shifting
+  // into neighbouring fields.
+  function keyNorm(s){
+    return norm(s)
+      .toLowerCase()
+      .replace(/[–—-]/g,"-")
+      .replace(/\s+/g," ")
+      .trim();
+  }
+
+  function parseStructured(text){
+    const map={};
+    linesOf(text).forEach(line=>{
+      const m=line.match(/^\s*([^:]{1,100})\s*:\s*(.*)$/);
+      if(!m)return;
+      const key=keyNorm(m[1]);
+      const value=norm(m[2]);
+      if(!key || !value)return;
+      if(!(key in map)) map[key]=value;
+    });
+    return map;
+  }
+
+  function labelMatches(key, label){
+    return keyNorm(key)===keyNorm(label);
+  }
+
   function afterLabel(text, labels){
-    const ls=labels.map(escReg).join("|");
-    const re=new RegExp("(?:^|\\n)\\s*(?:"+ls+")\\s*[:\\-–—]?\\s*(.+?)(?=\\n|$)","i");
-    const m=text.match(re);
-    return m ? norm(m[1]) : "";
+    const map=parseStructured(text);
+    for(const label of labels){
+      const k=keyNorm(label);
+      if(Object.prototype.hasOwnProperty.call(map,k)) return map[k];
+    }
+    return "";
   }
 
   function nearbyValue(text, labels){
-    let v=afterLabel(text,labels);
-    if(v)return v;
-    const compact=text.replace(/\n+/g,"\n");
-    const re=new RegExp("(?:\\b(?:"+labels.map(escReg).join("|")+"))\\b\\s*[:\\-–—]?\\s*([^\\n]{2,180})","i");
-    const m=compact.match(re);
-    return m ? norm(m[1]) : "";
+    // First choice: exact structured "Label: Value" mapping.
+    const exact=afterLabel(text,labels);
+    if(exact)return exact;
+
+    // Fallback for natural-language notifications only.
+    // Use a word boundary and longest labels first so shorter aliases cannot
+    // match inside a longer field label.
+    const sorted=[...labels].sort((a,b)=>b.length-a.length);
+    const ls=sorted.map(escReg).join("|");
+    const re=new RegExp("(^|\\n)\\s*(?:"+ls+")\\s*[:\\-–—]\\s*([^\\n]*)","i");
+    const m=text.match(re);
+    return m ? norm(m[2]) : "";
   }
 
   function firstUrl(text, exclude){
@@ -1378,8 +1416,12 @@ loadPosts();
   function bestTitle(text,type){
     // For the user's structured monitoring format, Post Title is the ONLY source
     // for the title. Never use the monitoring/request/question heading as fallback.
-    let v=nearbyValue(text,["Post Title"]);
+    let v=afterLabel(text,["Post Title"]);
     if(v && v.length<=220 && !/^(MONITORING REQUEST|MONITORING NOTIFICATION|QUESTION|REQUEST|PROMPT)$/i.test(v))return v;
+    // For structured monitoring data, never use another field as Post Title.
+    if(parseStructured(text)["post type"] || parseStructured(text)["category"]){
+      return "";
+    }
     v=nearbyValue(text,["Title","Name of Post","Post Name","Exam Name","Recruitment Name","Advertisement Title"]);
     if(v && v.length<=220 && !/^(MONITORING REQUEST|MONITORING NOTIFICATION|QUESTION|REQUEST|PROMPT)$/i.test(v))return v;
     const ls=linesOf(text);
@@ -1490,14 +1532,15 @@ loadPosts();
     else if(type==="Results") action=urls.find(u=>/result|score|merit/i.test(u))||urls[1]||"";
     else if(type==="Answer Keys") action=urls.find(u=>/answer|response|key/i.test(u))||urls[1]||"";
     else action=urls.find(u=>/apply|registration|online/i.test(u))||urls[1]||"";
-    document.getElementById("title").value=title;
+    const titleEl=document.getElementById("title");
+    if(titleEl) titleEl.value=title || "";
     document.getElementById("desc").value=desc;
     const chars=document.getElementById("chars"); if(chars)chars.textContent=String(desc.length);
     document.getElementById("link").value=urls[0]||"";
     document.getElementById("link2").value=action||"";
     if(typeof fillFields==="function")fillFields(data);
     if(type==="Education")smartEducationMode();
-    setStatus("✓ Form filled — review before publishing");
+    setStatus(title ? "✓ Form filled correctly — review before publishing" : "⚠️ Post Title not found. Add Post Title manually before publishing.", !title);
   }
 
   function justDetect(){
