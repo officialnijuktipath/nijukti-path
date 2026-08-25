@@ -1589,13 +1589,30 @@ loadPosts();
     const explicitDistrict=afterLabel(text,["District Target"]);
 
     const type=normalizeTypeValue(explicitType) || detectType(text);
-    if(typeof setPostType==="function")setPostType(type);
 
-    // setPostType intentionally syncs category with type; now override it
-    // only when the pasted Category is an explicit valid category.
-    const category=normalizeCategoryValue(explicitCategory) || type;
+    // Set the native selects directly first, then rebuild dynamic fields.
+    // This avoids onchange/setPostType ordering issues in the Smart Auto Fill flow.
+    const typeEl=document.getElementById("type");
     const catEl=document.getElementById("cat");
-    if(catEl)catEl.value=category;
+
+    if(typeEl){
+      const typeValue=[...typeEl.options].find(o=>norm(o.value).toLowerCase()===norm(type).toLowerCase());
+      if(typeValue) typeEl.value=typeValue.value;
+    }
+
+    if(typeof setPostType==="function"){
+      setPostType(type);
+    }else if(typeEl){
+      typeEl.dispatchEvent(new Event("change",{bubbles:true}));
+    }
+
+    // Category is an independent explicit field. Never use a partial label
+    // match and never leave the previous category selected.
+    const category=normalizeCategoryValue(explicitCategory) || type;
+    if(catEl){
+      const catValue=[...catEl.options].find(o=>norm(o.value).toLowerCase()===norm(category).toLowerCase());
+      catEl.value=catValue ? catValue.value : "";
+    }
 
     const data=buildData(text,type);
 
@@ -1625,6 +1642,17 @@ loadPosts();
     document.getElementById("link").value=urls[0]||"";
     document.getElementById("link2").value=action||"";
     if(typeof fillFields==="function")fillFields(data);
+
+    // Final guard: restore the two top-level selections after dynamic field rendering.
+    if(typeEl){
+      const typeValue=[...typeEl.options].find(o=>norm(o.value).toLowerCase()===norm(type).toLowerCase());
+      if(typeValue) typeEl.value=typeValue.value;
+    }
+    if(catEl){
+      const catValue=[...catEl.options].find(o=>norm(o.value).toLowerCase()===norm(category).toLowerCase());
+      catEl.value=catValue ? catValue.value : "";
+    }
+
     if(type==="Education")smartEducationMode();
     setStatus(title ? "✓ Form filled correctly — review before publishing" : "⚠️ Post Title not found. Add Post Title manually before publishing.", !title);
   }
@@ -1638,10 +1666,17 @@ loadPosts();
     const explicitDistrict=afterLabel(text,["District Target"]);
 
     const type=normalizeTypeValue(explicitType) || detectType(text);
-    if(typeof setPostType==="function")setPostType(type);
+    const typeEl=document.getElementById("type");
+    const catEl=document.getElementById("cat");
+
+    if(typeof setPostType==="function") setPostType(type);
+    else if(typeEl) typeEl.value=type;
 
     const cat=normalizeCategoryValue(explicitCategory) || type;
-    const catEl=document.getElementById("cat"); if(catEl)catEl.value=cat;
+    if(catEl){
+      const catValue=[...catEl.options].find(o=>norm(o.value).toLowerCase()===norm(cat).toLowerCase());
+      catEl.value=catValue ? catValue.value : "";
+    }
 
     const district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
     const ds=document.getElementById("districtTarget"); if(ds)ds.value=district||"all";
