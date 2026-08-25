@@ -390,6 +390,27 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:700px){.district-pills{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.district-pill{font-size:9px}}
 </style>
 
+
+<style id="smart-auto-fill-css">
+.smart-fill-card{
+  grid-column:1/-1;margin:2px 0 4px;padding:12px;border:1px solid #d7e3f3;
+  border-radius:12px;background:linear-gradient(180deg,#f8fbff,#fff);
+}
+.smart-fill-head{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.smart-fill-head .spark{width:30px;height:30px;border-radius:9px;background:#eaf2ff;color:#075bd7;display:grid;place-items:center;font-size:16px}
+.smart-fill-head b{font-size:12px;color:#16345f}.smart-fill-head small{display:block;color:#7a8799;font-size:9px;margin-top:2px}
+.smart-fill-text{width:100%;min-height:115px;max-height:220px;resize:vertical;border:1px solid #cbd8e8;border-radius:9px;padding:10px;font-size:11px;line-height:1.45;background:#fff}
+.smart-fill-actions{display:flex;gap:7px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.smart-fill-btn{border:1px solid #c8d8ed;background:#fff;color:#0755c9;border-radius:8px;padding:8px 11px;font-size:10px;font-weight:800;cursor:pointer}
+.smart-fill-btn.primary{background:#0b5bd7;border-color:#0b5bd7;color:#fff}
+.smart-fill-btn.clear{color:#c62828;border-color:#efcaca;background:#fff7f7}
+.smart-fill-status{font-size:9px;color:#64748b;margin-left:auto}
+.smart-fill-note{font-size:8.5px;color:#7a8799;margin-top:6px;line-height:1.35}
+@media(max-width:700px){
+  .smart-fill-status{width:100%;margin-left:0}
+}
+</style>
+
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -491,6 +512,22 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 
 <div class="form-section-title"><span class="section-dot"></span>Basic Information<small>Post identity & category</small></div>
+
+<div class="smart-fill-card">
+  <div class="smart-fill-head">
+    <div class="spark">✨</div>
+    <div><b>Smart Auto Fill</b><small>Paste official notification details and fill the form automatically</small></div>
+  </div>
+  <textarea id="smartPasteText" class="smart-fill-text" placeholder="Paste the official notification text here...&#10;&#10;Example: Department, post name, vacancies, qualification, last date, fee, selection process, official links etc."></textarea>
+  <div class="smart-fill-actions">
+    <button type="button" class="smart-fill-btn primary" id="smartAutoFillBtn">✨ Auto Fill Form</button>
+    <button type="button" class="smart-fill-btn" id="smartDetectBtn">🔎 Detect Type</button>
+    <button type="button" class="smart-fill-btn clear" id="smartClearBtn">✕ Clear</button>
+    <span class="smart-fill-status" id="smartFillStatus">Ready</span>
+  </div>
+  <div class="smart-fill-note">Only information found in the pasted text is filled. Unclear fields are left blank so you can review before publishing.</div>
+</div>
+
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
 <option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
@@ -1223,6 +1260,256 @@ $("form").addEventListener("submit",async e=>{
 setPostType("Government Jobs");
 updateLinkLabels("Government Jobs");
 loadPosts();
+
+/* Smart Auto Fill — client-side extraction from pasted official notification text */
+(function(){
+  const districtNames = {
+    angul:"Angul", balangir:"Balangir", balasore:"Balasore", bargarh:"Bargarh",
+    bhadrak:"Bhadrak", boudh:"Boudh", cuttack:"Cuttack", deogarh:"Deogarh",
+    dhenkanal:"Dhenkanal", gajapati:"Gajapati", ganjam:"Ganjam",
+    jagatsinghpur:"Jagatsinghpur", jajpur:"Jajpur", jharsuguda:"Jharsuguda",
+    kalahandi:"Kalahandi", kandhamal:"Kandhamal", kendrapara:"Kendrapara",
+    kendujhar:"Kendujhar", khordha:"Khordha", koraput:"Koraput",
+    malkangiri:"Malkangiri", mayurbhanj:"Mayurbhanj", nabarangpur:"Nabarangpur",
+    nayagarh:"Nayagarh", nuapada:"Nuapada", puri:"Puri", rayagada:"Rayagada",
+    sambalpur:"Sambalpur", subarnapur:"Subarnapur", sundargarh:"Sundargarh"
+  };
+
+  const categoryRules = [
+    {type:"Admit Cards", keys:["admit card","admitcard","hall ticket","call letter","download admit"]},
+    {type:"Answer Keys", keys:["answer key","answerkey","response sheet","provisional key","final key","objection"]},
+    {type:"Results", keys:["result","merit list","selection list","score card","cut off","cut-off","shortlisted"]},
+    {type:"Education", keys:["scholarship","admission","sams","academic year","pg admission","+2 admission","+3 admission","matric scholarship","education notification"]},
+    {type:"Odisha Jobs", keys:["odisha job","odisha government recruitment","district recruitment","state government recruitment"]},
+    {type:"Government Jobs", keys:["recruitment","vacancy","vacancies","notification","apply online","employment","post name","online application"]}
+  ];
+
+  function smartText(){
+    return (document.getElementById("smartPasteText")?.value || "").replace(/\r/g,"").trim();
+  }
+  function setStatus(msg, bad){
+    const el=document.getElementById("smartFillStatus");
+    if(!el)return;
+    el.textContent=msg;
+    el.style.color=bad?"#c62828":"#64748b";
+  }
+  function norm(s){
+    return String(s||"").replace(/\u00a0/g," ").replace(/[ \t]+/g," ").trim();
+  }
+  function linesOf(t){
+    return t.split("\n").map(x=>norm(x)).filter(Boolean);
+  }
+  function escReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+
+  function afterLabel(text, labels){
+    const ls=labels.map(escReg).join("|");
+    const re=new RegExp("(?:^|\\n)\\s*(?:"+ls+")\\s*[:\\-–—]?\\s*(.+?)(?=\\n|$)","i");
+    const m=text.match(re);
+    return m ? norm(m[1]) : "";
+  }
+
+  function nearbyValue(text, labels){
+    let v=afterLabel(text,labels);
+    if(v)return v;
+    const compact=text.replace(/\n+/g,"\n");
+    const re=new RegExp("(?:\\b(?:"+labels.map(escReg).join("|")+"))\\b\\s*[:\\-–—]?\\s*([^\\n]{2,180})","i");
+    const m=compact.match(re);
+    return m ? norm(m[1]) : "";
+  }
+
+  function firstUrl(text, exclude){
+    const urls=text.match(/https?:\/\/[^\s<>"')\]]+/gi)||[];
+    const clean=urls.map(u=>u.replace(/[.,;]+$/,""));
+    return clean.find(u=>!(exclude||[]).some(x=>u.toLowerCase().includes(x)))||"";
+  }
+
+  function allUrls(text){ return (text.match(/https?:\/\/[^\s<>"')\]]+/gi)||[]).map(u=>u.replace(/[.,;]+$/,"")); }
+
+  function parseDate(raw){
+    if(!raw)return "";
+    const s=raw.replace(/\b(to|till|upto|up to)\b.*$/i,"").trim();
+    let m=s.match(/\b(\d{1,2})[\/\-.](\d{1,2})[\/\-.](20\d{2})\b/);
+    if(m)return `${m[3]}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`;
+    m=s.match(/\b(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})\b/);
+    if(m)return `${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
+    const months={january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,september:9,october:10,november:11,december:12,
+      jan:1,feb:2,mar:3,apr:4,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12};
+    m=s.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)[,\s]+(20\d{2})\b/i);
+    if(!m)m=s.match(/\b([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?[,\s]+(20\d{2})\b/i);
+    if(m){
+      let d,mon,y;
+      if(/^\d/.test(m[1])){d=m[1];mon=m[2].toLowerCase();y=m[3];}
+      else{mon=m[1].toLowerCase();d=m[2];y=m[3];}
+      if(months[mon])return `${y}-${String(months[mon]).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    }
+    return "";
+  }
+
+  function dateValue(text, labels){
+    const raw=nearbyValue(text,labels);
+    return parseDate(raw);
+  }
+
+  function detectType(text){
+    const low=text.toLowerCase();
+    let best="Government Jobs", score=-1;
+    categoryRules.forEach(r=>{
+      const sc=r.keys.reduce((n,k)=>n+(low.includes(k)?1:0),0);
+      if(sc>score){score=sc;best=r.type;}
+    });
+    return score>0?best:"Government Jobs";
+  }
+
+  function detectDistrict(text){
+    const low=text.toLowerCase();
+    for(const [key,name] of Object.entries(districtNames)){
+      const re=new RegExp("\\b"+escReg(name.toLowerCase())+"\\b","i");
+      if(re.test(low))return key;
+    }
+    return "all";
+  }
+
+  function bestTitle(text,type){
+    let v=nearbyValue(text,["Post Title","Title","Name of Post","Post Name","Exam Name","Recruitment Name","Advertisement Title"]);
+    if(v && v.length<=220)return v;
+    const ls=linesOf(text);
+    const bad=/^(department|organization|advertisement|notification no|important dates?|eligibility|qualification|how to apply|official website|apply online|contents?)\b/i;
+    const candidate=ls.find(x=>x.length>=10 && x.length<=180 && !bad.test(x) && !/^https?:\/\//i.test(x));
+    return candidate || type;
+  }
+
+  function description(text){
+    let v=nearbyValue(text,["Short Description","Description","Brief","Overview","About"]);
+    if(v)return v.slice(0,1000);
+    const ls=linesOf(text).filter(x=>x.length>25 && !/^https?:\/\//i.test(x));
+    const chosen=ls.slice(0,3).join(" ");
+    return chosen.slice(0,1000);
+  }
+
+  function chooseOption(id,value){
+    const el=document.getElementById(id);
+    if(!el || !value)return;
+    const low=value.toLowerCase();
+    const opt=[...el.options].find(o=>o.value.toLowerCase()===low || o.text.toLowerCase()===low ||
+      o.text.toLowerCase().includes(low) || low.includes(o.text.toLowerCase()));
+    if(opt)el.value=opt.value;
+  }
+
+  function smartEducationMode(){
+    const s=document.getElementById("f_updateType");
+    if(s){
+      const low=smartText().toLowerCase();
+      if(low.includes("scholarship"))s.value="Scholarship";
+      else if(low.includes("result"))s.value="Education Result";
+      else if(low.includes("exam"))s.value="Education Exam";
+      else s.value="Admission";
+      s.dispatchEvent(new Event("change",{bubbles:true}));
+    }
+  }
+
+  function buildData(text,type){
+    const d={};
+    d.department=nearbyValue(text,["Department","Department / Organization","Ministry","Organization","Organization / Board / University","Board"]);
+    d.postName=nearbyValue(text,["Post Name","Name of Post","Post"]);
+    d.totalVacancies=nearbyValue(text,["Total Vacancies","Total Vacancy","No. of Vacancies","Number of Vacancies","Vacancies"]);
+    d.postWiseVacancy=nearbyValue(text,["Post-wise Vacancy","Post Wise Vacancy"]);
+    d.vacancy=d.totalVacancies||nearbyValue(text,["Vacancy","Vacancies"]);
+    d.qualification=nearbyValue(text,["Educational Qualification","Qualification","Eligibility Criteria"]);
+    d.eligibility=nearbyValue(text,["Eligibility","Eligibility Criteria"]);
+    d.odishaEligibility=nearbyValue(text,["Odisha Eligibility","Domicile","Odisha Domicile"]);
+    d.ageLimit=nearbyValue(text,["Age Limit","Age Criteria"]);
+    d.ageRelaxation=nearbyValue(text,["Age Relaxation","Upper Age Relaxation"]);
+    d.applicationStart=dateValue(text,["Application Start Date","Application Start","Start Date","Opening Date","Apply Online From"]);
+    d.lastDate=dateValue(text,["Last Date","Closing Date","Application Last Date","Deadline","Last Date to Apply"]);
+    d.applicationFee=nearbyValue(text,["Application Fee","Exam Fee","Application Fees"]);
+    d.selectionProcess=nearbyValue(text,["Selection Process","Selection Procedure"]);
+    d.salary=nearbyValue(text,["Salary","Pay Scale","Salary / Pay Scale","Remuneration"]);
+    d.jobLocation=nearbyValue(text,["Job Location","Place of Posting","Posting Location"]);
+    d.importantDates=nearbyValue(text,["Important Dates","Important Date"]);
+    d.examDate=nearbyValue(text,["Exam Date","Date of Examination","Examination Date"]);
+    d.examName=nearbyValue(text,["Exam Name","Name of Examination","Examination"]);
+    d.organization=d.department||nearbyValue(text,["Organization","Conducting Authority"]);
+    d.admitReleaseDate=dateValue(text,["Admit Card Release Date","Admit Card Released","Hall Ticket Release"]);
+    d.examCenter=nearbyValue(text,["Exam Center","Examination Centre","Exam Centre"]);
+    d.registrationInfo=nearbyValue(text,["Registration Number","Application Number","Registration Information"]);
+    d.resultType=nearbyValue(text,["Result Type","Type of Result"]);
+    d.resultDate=dateValue(text,["Result Date","Result Released","Result Publication Date"]);
+    d.rollInfo=nearbyValue(text,["Roll Number","Registration Information","Roll No"]);
+    d.cutoff=nearbyValue(text,["Cut-off","Cutoff","Merit Information","Cut Off"]);
+    d.answerReleaseDate=dateValue(text,["Answer Key Release Date","Answer Key Released","Key Released"]);
+    d.answerKeyType=nearbyValue(text,["Answer Key Type","Key Type"]);
+    d.questionPaper=nearbyValue(text,["Question Paper","Paper Details"]);
+    d.objectionStart=dateValue(text,["Objection Start Date","Challenge Start Date"]);
+    d.objectionLast=dateValue(text,["Objection Last Date","Objection Last Date","Challenge Last Date"]);
+    d.objectionDetails=nearbyValue(text,["Objection Details","Challenge Details","Objection / Challenge"]);
+    d.updateType=nearbyValue(text,["Update Type"]);
+    d.admissionType=nearbyValue(text,["Admission Type"]);
+    d.admissionSession=nearbyValue(text,["Admission Session","Academic Year","Session"]);
+    d.collegeInstitution=nearbyValue(text,["College","Institution","College / Institution"]);
+    d.courseClass=nearbyValue(text,["Course","Course / Class","Class"]);
+    d.streamHonours=nearbyValue(text,["Stream","Honours","Stream / Honours"]);
+    d.seatVacancy=nearbyValue(text,["Seat Vacancy","Seats","Seat / Vacancy"]);
+    d.incomeLimit=nearbyValue(text,["Family Income Limit","Income Limit","Annual Family Income"]);
+    d.scholarshipBenefits=nearbyValue(text,["Scholarship Amount","Benefits","Scholarship Benefits"]);
+    d.renewalLastDate=dateValue(text,["Renewal Last Date","Renewal Deadline"]);
+    d.requiredDocuments=nearbyValue(text,["Required Documents","Documents Required"]);
+    d.educationDescription=nearbyValue(text,["Description","Important Instructions","Education Description"]);
+    d.importantInformation=nearbyValue(text,["Important Information","Important Instructions"]);
+    d.instructions2=nearbyValue(text,["Instructions","Instructions for Candidates"]);
+    d.detailedDescription=nearbyValue(text,["Detailed Description","Details"]);
+    return d;
+  }
+
+  function applySmartFill(){
+    const text=smartText();
+    if(!text){setStatus("Paste notification text first",true);return;}
+    const type=detectType(text);
+    if(typeof setPostType==="function")setPostType(type);
+    const data=buildData(text,type);
+    data.districtTarget=detectDistrict(text);
+    if(data.districtTarget!=="all") {
+      const ds=document.getElementById("districtTarget");
+      if(ds)ds.value=data.districtTarget;
+    }
+    const title=bestTitle(text,type);
+    const desc=description(text);
+    const urls=allUrls(text);
+    const low=text.toLowerCase();
+    let action="";
+    if(type==="Admit Cards") action=urls.find(u=>/admit|hall|download/i.test(u))||urls[1]||"";
+    else if(type==="Results") action=urls.find(u=>/result|score|merit/i.test(u))||urls[1]||"";
+    else if(type==="Answer Keys") action=urls.find(u=>/answer|response|key/i.test(u))||urls[1]||"";
+    else action=urls.find(u=>/apply|registration|online/i.test(u))||urls[1]||"";
+    document.getElementById("title").value=title;
+    document.getElementById("desc").value=desc;
+    const chars=document.getElementById("chars"); if(chars)chars.textContent=String(desc.length);
+    document.getElementById("link").value=urls[0]||"";
+    document.getElementById("link2").value=action||"";
+    if(typeof fillFields==="function")fillFields(data);
+    if(type==="Education")smartEducationMode();
+    setStatus("✓ Form filled — review before publishing");
+  }
+
+  function justDetect(){
+    const text=smartText();
+    if(!text){setStatus("Paste notification text first",true);return;}
+    const type=detectType(text);
+    if(typeof setPostType==="function")setPostType(type);
+    const district=detectDistrict(text);
+    const ds=document.getElementById("districtTarget"); if(ds)ds.value=district;
+    setStatus("Detected: "+type+(district!=="all"?" • "+districtNames[district]:""));
+  }
+
+  document.addEventListener("DOMContentLoaded",function(){
+    document.getElementById("smartAutoFillBtn")?.addEventListener("click",applySmartFill);
+    document.getElementById("smartDetectBtn")?.addEventListener("click",justDetect);
+    document.getElementById("smartClearBtn")?.addEventListener("click",function(){
+      const t=document.getElementById("smartPasteText"); if(t)t.value="";
+      setStatus("Ready");
+    });
+  });
+})();
+
 </script>
 <script id="admin-login-js">
 (function(){
