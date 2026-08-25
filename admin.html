@@ -375,6 +375,21 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:900px){.admin-control-grid{grid-template-columns:1fr}}
 </style>
 
+
+<style id="district-admin-css">
+.district-help{margin-top:4px;font-size:8.5px;line-height:1.35;color:#7a8799}
+.district-directory{margin-top:14px;border:1px solid #e0e7f1;border-radius:12px;background:#fff;overflow:hidden}
+.district-directory-head{padding:12px 14px;border-bottom:1px solid #e8edf4;background:#f8fbff}
+.district-directory-head b{font-size:12px;color:#17355f}
+.district-directory-head small{display:block;margin-top:3px;color:#7a8799;font-size:9px}
+.district-pills{padding:12px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.district-pill{display:flex;align-items:center;justify-content:center;min-height:34px;padding:7px 8px;border:1px solid #dce5f1;border-radius:999px;background:#fff;color:#24415f;text-decoration:none;font-size:9px;font-weight:800;transition:.16s ease}
+.district-pill:hover{border-color:#1465d8;color:#1465d8;background:#f3f8ff;transform:translateY(-1px)}
+.district-count{display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;background:#e8f1ff;color:#1465d8;font-size:8px;font-weight:800}
+@media(max-width:1100px){.district-pills{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:700px){.district-pills{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.district-pill{font-size:9px}}
+</style>
+
 </head><body>
 <div id="opLoading"><div class="box">⏳ <span id="opText">Please wait...</span></div></div>
 <div id="toast"></div>
@@ -482,6 +497,43 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div><label>Category</label><select id="cat" onchange="setPostType(this.value)">
 <option value="">Select Category</option><option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
+<div>
+  <label>District Target <span class="optional">(Optional)</span></label>
+  <select id="districtTarget">
+    <option value="all">All Odisha / General</option>
+    <option value="angul">Angul</option>
+    <option value="balangir">Balangir</option>
+    <option value="balasore">Balasore</option>
+    <option value="bargarh">Bargarh</option>
+    <option value="bhadrak">Bhadrak</option>
+    <option value="boudh">Boudh</option>
+    <option value="cuttack">Cuttack</option>
+    <option value="deogarh">Deogarh</option>
+    <option value="dhenkanal">Dhenkanal</option>
+    <option value="gajapati">Gajapati</option>
+    <option value="ganjam">Ganjam</option>
+    <option value="jagatsinghpur">Jagatsinghpur</option>
+    <option value="jajpur">Jajpur</option>
+    <option value="jharsuguda">Jharsuguda</option>
+    <option value="kalahandi">Kalahandi</option>
+    <option value="kandhamal">Kandhamal</option>
+    <option value="kendrapara">Kendrapara</option>
+    <option value="kendujhar">Kendujhar</option>
+    <option value="khordha">Khordha</option>
+    <option value="koraput">Koraput</option>
+    <option value="malkangiri">Malkangiri</option>
+    <option value="mayurbhanj">Mayurbhanj</option>
+    <option value="nabarangpur">Nabarangpur</option>
+    <option value="nayagarh">Nayagarh</option>
+    <option value="nuapada">Nuapada</option>
+    <option value="puri">Puri</option>
+    <option value="rayagada">Rayagada</option>
+    <option value="sambalpur">Sambalpur</option>
+    <option value="subarnapur">Subarnapur</option>
+    <option value="sundargarh">Sundargarh</option>
+  </select>
+  <div class="district-help">Select a district only for district-specific notifications. “All Odisha / General” will not be shown in a district feed.</div>
+</div>
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
 <div class="form-section-title"><span class="section-dot"></span>Job / Post Details<small>Category-specific information</small></div>
@@ -585,6 +637,45 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
         <button type="button" id="saveSiteLogo" class="btn btn-primary">SAVE LOGO</button>
         <button type="button" id="removeSiteLogo" class="btn reset">REMOVE / RESET</button>
+      </div>
+    </div>
+
+    <div class="district-directory">
+      <div class="district-directory-head">
+        <b>📍 District Directory</b>
+        <small>Open any district page to preview the district-specific portal. Posts appear there only when that district is selected in Add New Post.</small>
+      </div>
+      <div class="district-pills">
+        <a class="district-pill" href="/?district=angul" target="_blank">Angul</a>
+        <a class="district-pill" href="/?district=balangir" target="_blank">Balangir</a>
+        <a class="district-pill" href="/?district=balasore" target="_blank">Balasore</a>
+        <a class="district-pill" href="/?district=bargarh" target="_blank">Bargarh</a>
+        <a class="district-pill" href="/?district=bhadrak" target="_blank">Bhadrak</a>
+        <a class="district-pill" href="/?district=boudh" target="_blank">Boudh</a>
+        <a class="district-pill" href="/?district=cuttack" target="_blank">Cuttack</a>
+        <a class="district-pill" href="/?district=deogarh" target="_blank">Deogarh</a>
+        <a class="district-pill" href="/?district=dhenkanal" target="_blank">Dhenkanal</a>
+        <a class="district-pill" href="/?district=gajapati" target="_blank">Gajapati</a>
+        <a class="district-pill" href="/?district=ganjam" target="_blank">Ganjam</a>
+        <a class="district-pill" href="/?district=jagatsinghpur" target="_blank">Jagatsinghpur</a>
+        <a class="district-pill" href="/?district=jajpur" target="_blank">Jajpur</a>
+        <a class="district-pill" href="/?district=jharsuguda" target="_blank">Jharsuguda</a>
+        <a class="district-pill" href="/?district=kalahandi" target="_blank">Kalahandi</a>
+        <a class="district-pill" href="/?district=kandhamal" target="_blank">Kandhamal</a>
+        <a class="district-pill" href="/?district=kendrapara" target="_blank">Kendrapara</a>
+        <a class="district-pill" href="/?district=kendujhar" target="_blank">Kendujhar</a>
+        <a class="district-pill" href="/?district=khordha" target="_blank">Khordha</a>
+        <a class="district-pill" href="/?district=koraput" target="_blank">Koraput</a>
+        <a class="district-pill" href="/?district=malkangiri" target="_blank">Malkangiri</a>
+        <a class="district-pill" href="/?district=mayurbhanj" target="_blank">Mayurbhanj</a>
+        <a class="district-pill" href="/?district=nabarangpur" target="_blank">Nabarangpur</a>
+        <a class="district-pill" href="/?district=nayagarh" target="_blank">Nayagarh</a>
+        <a class="district-pill" href="/?district=nuapada" target="_blank">Nuapada</a>
+        <a class="district-pill" href="/?district=puri" target="_blank">Puri</a>
+        <a class="district-pill" href="/?district=rayagada" target="_blank">Rayagada</a>
+        <a class="district-pill" href="/?district=sambalpur" target="_blank">Sambalpur</a>
+        <a class="district-pill" href="/?district=subarnapur" target="_blank">Subarnapur</a>
+        <a class="district-pill" href="/?district=sundargarh" target="_blank">Sundargarh</a>
       </div>
     </div>
   </div>
@@ -798,8 +889,10 @@ function togglePreview(){
   const link1=$("link").value.trim(), link2=$("link2").value.trim();
   const instructions=esc($("instructions").value.trim());
   const fields=collectFields();
+  const districtLabel=fields.districtTarget==="all"?"All Odisha / General":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget);
+  delete fields.districtTarget;
   const fieldHtml=Object.entries(fields).filter(([k,v])=>v).map(([k,v])=>'<div><b>'+esc(k.replace(/([A-Z])/g," $1"))+':</b> '+esc(v)+'</div>').join("");
-  $("previewContent").innerHTML='<div style="font-size:16px;font-weight:800;color:#12203b">'+title+'</div><div style="margin:4px 0 8px;color:#0755c9;font-weight:700">'+type+'</div><div>'+desc+'</div>'+(fieldHtml?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #e1e8f2">'+fieldHtml+'</div>':'')+(link1?'<div style="margin-top:8px"><b>Official Link:</b> '+esc(link1)+'</div>':'')+(link2?'<div><b>'+esc(actionLabels[$("type").value]||"Main Action Link")+':</b> '+esc(link2)+'</div>':'')+(instructions?'<div style="margin-top:8px"><b>Instructions:</b> '+instructions+'</div>':'');
+  $("previewContent").innerHTML='<div style="font-size:16px;font-weight:800;color:#12203b">'+title+'</div><div style="margin:4px 0 8px;color:#0755c9;font-weight:700">'+type+'</div><div style="margin-bottom:7px"><b>District:</b> '+esc(districtLabel)+'</div><div>'+desc+'</div>'+(fieldHtml?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #e1e8f2">'+fieldHtml+'</div>':'')+(link1?'<div style="margin-top:8px"><b>Official Link:</b> '+esc(link1)+'</div>':'')+(link2?'<div><b>'+esc(actionLabels[$("type").value]||"Main Action Link")+':</b> '+esc(link2)+'</div>':'')+(instructions?'<div style="margin-top:8px"><b>Instructions:</b> '+instructions+'</div>':'');
   box.style.display="block";
 }
 
@@ -818,9 +911,13 @@ function collectFields(){
   syncExamDateValue();
   const out={},schema=schemas[$("type").value]||[];
   schema.forEach(f=>{const e=$("f_"+f[0]);if(e)out[f[0]]=e.value.trim()});
+  const district=$("districtTarget");
+  if(district) out.districtTarget=district.value||"all";
   return out;
 }
 function fillFields(data){
+  const district=$("districtTarget");
+  if(district) district.value=(data||{}).districtTarget||"all";
   (schemas[$("type").value]||[]).forEach(f=>{
     const value=(data||{})[f[0]]||"";
     const e=$("f_"+f[0]);
@@ -836,7 +933,7 @@ function fillFields(data){
     }else if(e)e.value=value;
   });
 }
-function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";setPostType("Government Jobs")}
+function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";const d=$("districtTarget");if(d)d.value="all";setPostType("Government Jobs")}
 function clearFieldErrors(){
   document.querySelectorAll(".fieldError").forEach(e=>e.classList.remove("fieldError"));
 }
