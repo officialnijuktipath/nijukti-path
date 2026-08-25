@@ -1341,6 +1341,68 @@ div.quick:not(.quick-access){
 })();
 </script>
 
+<style id="district-explorer-style">.district-explorer{margin:28px 14px;padding:22px;border-radius:22px;background:linear-gradient(135deg,#061a3a,#0b2b59);color:#fff}.district-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}.district-head h2{margin:0;font-size:22px}.district-head p{margin:6px 0 0;color:#64748b;font-size:13px}.district-view-all{border:1px solid rgba(255,255,255,.2);background:#f4f7fb;color:#10233f;border:1px solid #dfe6ef;border-radius:999px;padding:9px 14px;font-weight:700}.district-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;max-height:none;overflow:visible;align-items:center}.district-grid.expanded{max-height:none}.district-card{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:10px 8px;min-height:0;border-radius:999px;background:#fff;color:#0b2346;text-decoration:none;border:1px solid rgba(255,255,255,.25);box-shadow:0 3px 10px rgba(0,0,0,.10);transition:.2s;white-space:nowrap}.district-card:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(0,0,0,.16)}.district-card strong{font-size:13px;margin:0;font-weight:800}.district-card small{display:none}@media(max-width:900px){.district-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:640px){.district-explorer{margin:20px 14px;padding:16px}.district-head{align-items:flex-start}.district-head h2{font-size:18px}.district-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:280px}.district-card{padding:8px 13px}} </style>
+<style id="district-white-final">
+.district-explorer,
+.district-explorer .district-head,
+.district-explorer .district-grid{
+  background:#fff !important;
+}
+.district-explorer .district-head h2{color:#10233f !important;}
+.district-explorer .district-head p{color:#64748b !important;}
+</style>
+
+
+<style id="district-hover-colors">
+.district-card[data-district="Angul"]{--district-color:#f59e0b;}
+.district-card[data-district="Balasore"]{--district-color:#3b82f6;}
+.district-card[data-district="Bargarh"]{--district-color:#10b981;}
+.district-card[data-district="Bhadrak"]{--district-color:#06b6d4;}
+.district-card[data-district="Bolangir"]{--district-color:#ef4444;}
+.district-card[data-district="Boudh"]{--district-color:#8b5cf6;}
+.district-card[data-district="Cuttack"]{--district-color:#f97316;}
+.district-card[data-district="Deogarh"]{--district-color:#14b8a6;}
+.district-card[data-district="Dhenkanal"]{--district-color:#eab308;}
+.district-card[data-district="Gajapati"]{--district-color:#ec4899;}
+.district-card[data-district="Ganjam"]{--district-color:#22c55e;}
+.district-card[data-district="Jagatsinghpur"]{--district-color:#0ea5e9;}
+.district-card[data-district="Jajpur"]{--district-color:#a855f7;}
+.district-card[data-district="Jharsuguda"]{--district-color:#f43f5e;}
+.district-card[data-district="Kalahandi"]{--district-color:#84cc16;}
+.district-card[data-district="Kandhamal"]{--district-color:#6366f1;}
+.district-card[data-district="Kendrapara"]{--district-color:#fb7185;}
+.district-card[data-district="Keonjhar"]{--district-color:#0891b2;}
+.district-card[data-district="Khordha"]{--district-color:#2563eb;}
+.district-card[data-district="Koraput"]{--district-color:#16a34a;}
+.district-card[data-district="Malkangiri"]{--district-color:#d946ef;}
+.district-card[data-district="Mayurbhanj"]{--district-color:#ea580c;}
+.district-card[data-district="Nabarangpur"]{--district-color:#0d9488;}
+.district-card[data-district="Nayagarh"]{--district-color:#7c3aed;}
+.district-card[data-district="Nuapada"]{--district-color:#ca8a04;}
+.district-card[data-district="Puri"]{--district-color:#0284c7;}
+.district-card[data-district="Rayagada"]{--district-color:#e11d48;}
+.district-card[data-district="Sambalpur"]{--district-color:#059669;}
+.district-card[data-district="Subarnapur"]{--district-color:#9333ea;}
+.district-card[data-district="Sundargarh"]{--district-color:#65a30d;}
+.district-card {
+  --district-color:#3b82f6;
+  background:#fff !important;
+  color:#0b2346 !important;
+  border:1px solid #e2e8f0 !important;
+  transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease,color .18s ease !important;
+}
+.district-card:hover {
+  background:color-mix(in srgb,var(--district-color) 12%,#fff) !important;
+  border-color:color-mix(in srgb,var(--district-color) 48%,#fff) !important;
+  box-shadow:0 5px 16px color-mix(in srgb,var(--district-color) 20%,transparent) !important;
+  color:#0b2346 !important;
+  transform:translateY(-2px) !important;
+}
+.district-card:hover .district-pin {
+  color:var(--district-color) !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -1854,17 +1916,7 @@ ${importantPosts.length?`<div class="notice-strip notice-scroll-final">
 </section>
 </div>
 
-<section class="categories-box">
-  <div class="section-head" style="margin-bottom:18px"><h2 class="title">Top Categories</h2><a class="view" href="/?all=latest">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a></div>
-  <div class="cat-grid">
-    <a class="cat" href="/?label=Government%20Jobs"><div class="cat-icon"><i class="fa-solid fa-briefcase"></i></div><div><strong>Government Jobs</strong><span>View Posts</span></div></a>
-    <a class="cat" href="/?label=Odisha%20Jobs"><div class="cat-icon"><i class="fa-solid fa-building-columns"></i></div><div><strong>Odisha Jobs</strong><span>View Posts</span></div></a>
-    <a class="cat" href="/?label=Answer%20Key"><div class="cat-icon"><i class="fa-solid fa-file-circle-check"></i></div><div><strong>Answer Key</strong><span>View Posts</span></div></a>
-    <a class="cat" href="/?label=Admit%20Card"><div class="cat-icon"><i class="fa-solid fa-id-card"></i></div><div><strong>Admit Card</strong><span>View Posts</span></div></a>
-    <a class="cat" href="/?label=Results"><div class="cat-icon"><i class="fa-solid fa-trophy"></i></div><div><strong>Results</strong><span>View Posts</span></div></a>
-    <a class="cat" href="/?label=Education"><div class="cat-icon"><i class="fa-solid fa-graduation-cap"></i></div><div><strong>Education</strong><span>View Posts</span></div></a>
-  </div>
-</section>
+<section class="district-explorer" id="districts"><div class="district-head"><div><h2>📍 Explore Odisha Districts</h2><p>Choose your district to explore district information and updates.</p></div><button class="district-view-all" type="button" onclick="document.getElementById('districtGrid').classList.toggle('expanded')">View All 30 Districts →</button></div><div class="district-grid" id="districtGrid"><a class="district-card" href="?district=angul"><span>📍</span><strong>Angul</strong><small>Explore District</small></a><a class="district-card" href="?district=balasore"><span>📍</span><strong>Balasore</strong><small>Explore District</small></a><a class="district-card" href="?district=bargarh"><span>📍</span><strong>Bargarh</strong><small>Explore District</small></a><a class="district-card" href="?district=bhadrak"><span>📍</span><strong>Bhadrak</strong><small>Explore District</small></a><a class="district-card" href="?district=bolangir"><span>📍</span><strong>Bolangir</strong><small>Explore District</small></a><a class="district-card" href="?district=boudh"><span>📍</span><strong>Boudh</strong><small>Explore District</small></a><a class="district-card" href="?district=cuttack"><span>📍</span><strong>Cuttack</strong><small>Explore District</small></a><a class="district-card" href="?district=deogarh"><span>📍</span><strong>Deogarh</strong><small>Explore District</small></a><a class="district-card" href="?district=dhenkanal"><span>📍</span><strong>Dhenkanal</strong><small>Explore District</small></a><a class="district-card" href="?district=gajapati"><span>📍</span><strong>Gajapati</strong><small>Explore District</small></a><a class="district-card" href="?district=ganjam"><span>📍</span><strong>Ganjam</strong><small>Explore District</small></a><a class="district-card" href="?district=jagatsinghpur"><span>📍</span><strong>Jagatsinghpur</strong><small>Explore District</small></a><a class="district-card" href="?district=jajpur"><span>📍</span><strong>Jajpur</strong><small>Explore District</small></a><a class="district-card" href="?district=jharsuguda"><span>📍</span><strong>Jharsuguda</strong><small>Explore District</small></a><a class="district-card" href="?district=kalahandi"><span>📍</span><strong>Kalahandi</strong><small>Explore District</small></a><a class="district-card" href="?district=kandhamal"><span>📍</span><strong>Kandhamal</strong><small>Explore District</small></a><a class="district-card" href="?district=kendrapara"><span>📍</span><strong>Kendrapara</strong><small>Explore District</small></a><a class="district-card" href="?district=keonjhar"><span>📍</span><strong>Keonjhar</strong><small>Explore District</small></a><a class="district-card" href="?district=khordha"><span>📍</span><strong>Khordha</strong><small>Explore District</small></a><a class="district-card" href="?district=koraput"><span>📍</span><strong>Koraput</strong><small>Explore District</small></a><a class="district-card" href="?district=malkangiri"><span>📍</span><strong>Malkangiri</strong><small>Explore District</small></a><a class="district-card" href="?district=mayurbhanj"><span>📍</span><strong>Mayurbhanj</strong><small>Explore District</small></a><a class="district-card" href="?district=nabarangpur"><span>📍</span><strong>Nabarangpur</strong><small>Explore District</small></a><a class="district-card" href="?district=nayagarh"><span>📍</span><strong>Nayagarh</strong><small>Explore District</small></a><a class="district-card" href="?district=nuapada"><span>📍</span><strong>Nuapada</strong><small>Explore District</small></a><a class="district-card" href="?district=puri"><span>📍</span><strong>Puri</strong><small>Explore District</small></a><a class="district-card" href="?district=rayagada"><span>📍</span><strong>Rayagada</strong><small>Explore District</small></a><a class="district-card" href="?district=sambalpur"><span>📍</span><strong>Sambalpur</strong><small>Explore District</small></a><a class="district-card" href="?district=subarnapur"><span>📍</span><strong>Subarnapur</strong><small>Explore District</small></a><a class="district-card" href="?district=sundargarh"><span>📍</span><strong>Sundargarh</strong><small>Explore District</small></a></div></section>
 `;
 const tabs=document.querySelectorAll('#homeTabs .update-tab');
 const grid=document.getElementById('latestGrid');
@@ -2170,5 +2222,5 @@ loadFeed();
 })();
 </script>
 
-</body>
+<script id="district-page-router">(function(){const districts=["Angul", "Balasore", "Bargarh", "Bhadrak", "Bolangir", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Keonjhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"];const p=new URLSearchParams(location.search);const slug=p.get('district');if(!slug)return;const name=slug.split('-').map(x=>x.charAt(0).toUpperCase()+x.slice(1)).join(' ');if(!districts.includes(name))return;document.addEventListener('DOMContentLoaded',function(){const main=document.querySelector('main')||document.body;main.innerHTML=`<section class="district-page"><div class="district-hero"><div class="district-breadcrumb">Home › Districts › <b>${name}</b></div><h1>📍 ${name} District</h1><p>District information, education, scholarship, results and important notifications.</p></div><div class="district-tabs"><span class="active">About District</span><span>Education</span><span>Scholarship</span><span>Results</span><span>Important Links</span></div><div class="district-info-grid"><article><h2>About ${name} District</h2><p>This is the dedicated information page for ${name} district of Odisha. Verified district information, local education updates, scholarships, results and important notifications will be shown here.</p><div class="info-note">ℹ️ This is an information page. Government jobs are not listed here.</div></article><aside><h3>Quick Information</h3><p>📍 District: ${name}</p><p>🇮🇳 State: Odisha</p></aside></div></section>`;window.scrollTo(0,0)})})();</script><style id="district-page-style">.district-page{background:#f4f7fb;padding:24px 5%;min-height:70vh;color:#10233f}.district-hero{border-radius:24px;background:linear-gradient(135deg,#071a39,#183d6d);color:#fff;padding:28px}.district-breadcrumb{font-size:12px;color:#cbd8e8;margin-bottom:18px}.district-hero h1{font-size:34px;margin:0 0 8px}.district-hero p{color:#d8e3f1}.district-tabs{display:flex;gap:24px;overflow:auto;background:#fff;border-bottom:1px solid #e5eaf1;padding:15px 8px;margin-top:18px}.district-tabs span{white-space:nowrap;font-size:13px}.district-tabs .active{color:#e88700;font-weight:800}.district-info-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px}.district-info-grid article,.district-info-grid aside{background:#fff;border-radius:18px;padding:22px;box-shadow:0 5px 18px rgba(15,23,42,.06)}.info-note{margin-top:20px;background:#e9f8ef;color:#17653b;padding:12px;border-radius:12px;font-size:12px}@media(max-width:640px){.district-page{padding:14px}.district-info-grid{grid-template-columns:1fr}.district-hero h1{font-size:24px}}</style></body>
 </html>
