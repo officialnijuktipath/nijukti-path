@@ -1432,8 +1432,6 @@ div.quick:not(.quick-access){
 .district-notification-icon{width:38px;height:38px;border-radius:12px;background:#eef5ff;display:flex;align-items:center;justify-content:center;flex:none}
 .district-notification-card h3{font-size:13px;margin:0 0 5px;color:#10233f}
 .district-notification-card h3 a{color:inherit;text-decoration:none}
-.district-notification-card{cursor:pointer}
-.district-notification-card:hover{border-color:#2563eb;box-shadow:0 8px 22px rgba(15,23,42,.09);transform:translateY(-1px);transition:.18s ease}
 .district-notification-card p{font-size:10px;line-height:1.5;color:#64748b;margin:0}
 .district-notification-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
 .district-notification-meta span{font-size:8px;border-radius:999px;padding:4px 7px;background:#f5f7fb;color:#64748b}
@@ -1939,6 +1937,34 @@ function applyHeroBackground(entries){
     hero.style.backgroundImage=presets[preset];
   }
 }
+function normalizeApiPost(p){
+  if(!p) return null;
+  const id=String(p.bloggerId||p.bloggerPostId||p.blogId||p.postId||p.id||'').trim();
+  const title=String(p.title?.$t||p.title||p.postTitle||p.name||'').trim();
+  const content=String(p.content?.$t||p.content||p.body||p.postContent||'');
+  const summary=String(p.summary?.$t||p.description||p.shortDescription||'');
+  const category=String(p.category||p.postType||'Government Jobs');
+  const published=String(p.published?.$t||p.published||p.publishedDate||p.createdAt||p.updatedAt||new Date().toISOString());
+  if(!id || !title) return null;
+  return {
+    id:{$t:id},
+    title:{$t:title},
+    content:{$t:content},
+    summary:{$t:summary},
+    published:{$t:published},
+    category:[{term:category}],
+    link:[{rel:'alternate',href:String(p.url||p.permalink||p.postUrl||'')}]
+  };
+}
+
+async function resolveApiPost(id){
+  const r=await fetch('/api/posts?id='+encodeURIComponent(id),{cache:'no-store'});
+  const data=await r.json();
+  if(!r.ok) throw new Error(data?.error||'Post could not be loaded');
+  const p=Array.isArray(data)?data[0]:(data?.post||data);
+  return normalizeApiPost(p);
+}
+
 function handleFeed(data){
 let rawEntries=(data && data.feed && data.feed.entry)||[];
 applyHeroBackground(rawEntries);
@@ -1949,7 +1975,17 @@ let p=new URLSearchParams(location.search);
 let pid=p.get('post'), label=p.get('label'), q=p.get('q'), edu=p.get('edu'), allLatest=p.get('all')==='latest';
 if(pid){
 let e=entries.find(x=>postId(x)===pid);
-if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
+if(e){
+  showPost(e);
+}else{
+  document.getElementById('app').innerHTML='<div class="empty">Loading post...</div>';
+  resolveApiPost(pid).then(function(apiPost){
+    if(apiPost) showPost(apiPost);
+    else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
+  }).catch(function(){
+    document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
+  });
+}
 }else if(allLatest||label||q||edu){
   if(label){
     const labelTitle = label + ' | Odisha Jobs, Admit Card, Results & Education';
@@ -2449,10 +2485,7 @@ loadFeed();
 
         box.innerHTML=districtPosts.slice(0,12).map(function(p){
           const title=p?.title?.$t||p?.title||'District Notification';
-          // Always open the notification inside Nijukti Path.
-          // The Admin/API post id is the same id used by the site's ?post=
-          // detail renderer, so never prefer the Blogger permalink here.
-          const postId=p?.id?.$t||p?.id||p?.postId||p?.bloggerId||'';
+          const postId=String(p?.id||p?.postId||p?.bloggerId||p?.bloggerPostId||'').trim();
           const href=postId
             ? '/?post='+encodeURIComponent(postId)
             : (p?.url||p?.permalink||p?.postUrl||'#');
@@ -2467,13 +2500,6 @@ loadFeed();
       });
   }
 
-
-  document.addEventListener('click',function(e){
-    const card=e.target.closest('.district-notification-card');
-    if(!card || e.target.closest('a')) return;
-    const link=card.querySelector('h3 a');
-    if(link && link.href) location.href=link.href;
-  });
 
   document.addEventListener('DOMContentLoaded',function(){
     const main=document.querySelector('main')||document.body;
