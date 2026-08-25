@@ -591,7 +591,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </form></div></section>
 <section><div class="card qa"><div class="head" style="margin:-14px -14px 14px"><h3>⚡ Quick Actions</h3><small>Add new updates quickly</small></div><div class="qagrid"><button onclick="quick('Government Jobs')">💼<br>Add Government Job</button><button onclick="quick('Odisha Jobs')">👥<br>Add Odisha Job</button><button onclick="quick('Admit Cards')">🪪<br>Upload Admit Card</button><button onclick="quick('Results')">📊<br>Add Result</button><button onclick="quick('Answer Keys')">🔗<br>Upload Answer Key</button><button onclick="quick('Education')">🎓<br>Education Update</button></div></div><div class="card notify" id="notifications"><div class="head"><h3>🔔 Notifications <button type="button" id="clearNotifications" style="float:right;border:0;background:transparent;font-size:10px;color:#58708f;cursor:pointer">Clear</button></h3></div><div id="notificationList"><div class="note"><span class="greenDot">●</span>Dashboard ready</div></div></div></section>
 <section class="card recent" id="drafts"><div class="head recentHead"><div><h3>▤ &nbsp; Drafts</h3><small id="draftSub">Saved on Blogger</small></div><button class="viewAll" type="button" onclick="loadPosts()">↻ Refresh</button></div><div class="posts" id="draftPosts">Loading drafts...</div></section>
-<section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" onclick="location.hash='recent'">View All</button></div><div class="posts" id="posts">Loading posts...</div></section>
+<section class="card recent" id="recent"><div class="head recentHead"><div><h3>☷ &nbsp; Recent Posts</h3><small>Latest 5 posts</small></div><button class="viewAll" type="button" onclick="showAllPosts()">View All</button></div><div class="posts" id="posts">Loading posts...</div></section>
 <div class="admin-control-grid">
   <section class="card admin-control-panel" id="closingSoonAdmin">
     <div class="head">
@@ -1084,6 +1084,32 @@ function filterPosts(){
   render(posts.filter(p=>(p.title||"").toLowerCase().includes(q)||(p.category||"").toLowerCase().includes(q)));
 }
 
+function showAllPosts(){
+  showAllRecentPosts=true;
+  const section=$("recent");
+  const title=section ? section.querySelector(".recentHead h3") : null;
+  const sub=section ? section.querySelector(".recentHead small") : null;
+  const btn=section ? section.querySelector(".viewAll") : null;
+  if(title) title.textContent="☷  All Posts";
+  if(sub) sub.textContent=(posts.length||0)+" posts";
+  if(btn){btn.textContent="← Back to Recent";btn.onclick=showRecentPosts;}
+  render(posts);
+  if(section) section.scrollIntoView({behavior:"smooth",block:"start"});
+  location.hash="recent";
+}
+
+function showRecentPosts(){
+  showAllRecentPosts=false;
+  const section=$("recent");
+  const title=section ? section.querySelector(".recentHead h3") : null;
+  const sub=section ? section.querySelector(".recentHead small") : null;
+  const btn=section ? section.querySelector(".viewAll") : null;
+  if(title) title.textContent="☷  Recent Posts";
+  if(sub) sub.textContent="Latest 5 posts";
+  if(btn){btn.textContent="View All";btn.onclick=showAllPosts;}
+  render(posts);
+}
+
 function extractDraftData(content){
   const out={};
   const m=String(content||"").match(/NIJUKTI_PATH_DATA:([\s\S]*?)\s*-->/);
@@ -1105,12 +1131,15 @@ function extractDescription(content){
   return text;
 }
 
+let showAllRecentPosts=false;
+
 function render(a){
   if(!a.length){
     $("posts").innerHTML='<div style="padding:14px;color:#8792a4;font-size:11px">No posts added yet.</div>';
     return;
   }
-  $("posts").innerHTML=a.slice(0,5).map(p=>{
+  const list=showAllRecentPosts?a.slice():a.slice(0,5);
+  $("posts").innerHTML=list.map(p=>{
     const isDraft=p.status==="draft";
     return '<article class="post"><div class="posttop"><span class="tag">'+esc(p.category||"Post")+'</span><span class="status">'+(isDraft?"Draft":"Published")+'</span></div><h4>'+esc(p.title||"Untitled")+'</h4><div class="meta">▣ '+esc(p.updated||p.published||"")+'</div><div class="postactions">'+
       (p.url&&!isDraft?'<button title="View" onclick="viewPost(\''+esc(p.url)+'\')">◉</button>':'')+
@@ -1148,7 +1177,7 @@ async function loadPosts(){
     if(!r.ok)throw Error(d.error||"Unable to load posts");
     posts=Array.isArray(d)?d:(d.posts||[]);
     drafts=Array.isArray(d)?[]:(d.drafts||[]);
-    render(posts);
+    if(showAllRecentPosts) render(posts); else render(posts);
     renderDrafts(drafts);
     counts();
     addNotification("Dashboard refreshed • "+posts.length+" published, "+drafts.length+" drafts","success");
