@@ -2339,12 +2339,55 @@ loadFeed();
   const d=districtData[slug];
 
   function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  const DISTRICT_CANONICAL={
+    angul:"angul",
+    balangir:"balangir",
+    bolangir:"balangir",
+    balasore:"balasore",
+    baleswar:"balasore",
+    bargarh:"bargarh",
+    bhadrak:"bhadrak",
+    boudh:"boudh",
+    baudh:"boudh",
+    cuttack:"cuttack",
+    deogarh:"deogarh",
+    debagarh:"deogarh",
+    dhenkanal:"dhenkanal",
+    gajapati:"gajapati",
+    ganjam:"ganjam",
+    jagatsinghpur:"jagatsinghpur",
+    jajpur:"jajpur",
+    jharsuguda:"jharsuguda",
+    kalahandi:"kalahandi",
+    kandhamal:"kandhamal",
+    kendrapara:"kendrapara",
+    kendujhar:"kendujhar",
+    keonjhar:"kendujhar",
+    khordha:"khordha",
+    khurda:"khordha",
+    koraput:"koraput",
+    malkangiri:"malkangiri",
+    mayurbhanj:"mayurbhanj",
+    nabarangpur:"nabarangpur",
+    nayagarh:"nayagarh",
+    nuapada:"nuapada",
+    puri:"puri",
+    rayagada:"rayagada",
+    sambalpur:"sambalpur",
+    subarnapur:"subarnapur",
+    sonepur:"subarnapur",
+    sundargarh:"sundargarh"
+  };
+
   function districtKey(v){
-    return String(v||'')
+    const raw=String(v||'')
       .trim()
       .toLowerCase()
-      .replace(/district$/i,'')
+      .replace(/&/g,'and')
+      .replace(/\bdistrict\b/g,'')
       .replace(/[^a-z0-9]+/g,'');
+
+    return DISTRICT_CANONICAL[raw] || raw;
   }
 
   function getDistrictMeta(entry){
