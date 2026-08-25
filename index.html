@@ -2339,26 +2339,71 @@ loadFeed();
   const d=districtData[slug];
 
   function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function districtKey(v){
+    return String(v||'')
+      .trim()
+      .toLowerCase()
+      .replace(/district$/i,'')
+      .replace(/[^a-z0-9]+/g,'');
+  }
+
+  function getDistrictMeta(entry){
+    // Admin saves District Target inside fields and may also embed it in
+    // NP_META. Read both so older/newer posts remain compatible.
+    const fields=entry?.fields||entry?.homepage||{};
+    let meta={...fields};
+    const raw=(entry?.content&&entry.content.$t)||entry?.content||'';
+    const marker=String(raw).match(/NP_META\s*[:=]\s*(\{[\s\S]*?\})\s*(?:-->|<\/span>|$)/i);
+    if(marker){
+      try{ meta={...meta,...JSON.parse(marker[1])}; }catch(e){}
+    }
+    if(!meta.districtTarget){
+      const text=String(raw).replace(/<[^>]*>/g,' ');
+      const m=text.match(/District\s*Target\s*:\s*([^\n<|]+)/i);
+      if(m) meta.districtTarget=m[1].trim();
+    }
+    return meta;
+  }
+
   function loadFeed(){
     const box=document.getElementById('districtNotificationList');
     if(!box)return;
-    const url='/feeds/posts/default/-/'+encodeURIComponent(d.name)+'?alt=json&max-results=12';
-    fetch(url).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
-      const entries=(data.feed&&data.feed.entry)||[];
-      if(!entries.length){
-        box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>Admin se "'+esc(d.name)+'" district select karke publish ki gayi posts yahan automatically aayengi.</p></div>';
-        return;
-      }
-      box.innerHTML=entries.map(function(e){
-        const title=e.title&&e.title.$t?e.title.$t:'District Notification';
-        const alt=(e.link||[]).find(x=>x.rel==='alternate');
-        const href=alt?alt.href:'#';
-        const date=e.published&&e.published.$t?new Date(e.published.$t).toLocaleDateString('en-IN'):'';
-        return '<article class="district-notification-card"><div class="district-notification-icon">📢</div><div><h3><a href="'+esc(href)+'">'+esc(title)+'</a></h3><div class="district-notification-meta"><span>📍 '+esc(d.name)+'</span><span>🗓️ '+esc(date)+'</span></div></div></article>';
-      }).join('');
-    }).catch(function(){
-      box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>District label "'+esc(d.name)+'" wali posts yahan show hongi.</p></div>';
-    });
+
+    // Do NOT depend on a Blogger district label. Fetch the public feed and
+    // filter using the exact District Target saved by the Admin.
+    const url='/feeds/posts/default?alt=json&max-results=150';
+    fetch(url,{cache:'no-store'})
+      .then(r=>r.ok?r.json():Promise.reject())
+      .then(data=>{
+        const entries=(data.feed&&data.feed.entry)||[];
+        const wanted=districtKey(slug);
+
+        const districtEntries=entries.filter(function(e){
+          const meta=getDistrictMeta(e);
+          const target=districtKey(meta.districtTarget);
+
+          // Explicit district target is authoritative.
+          return target===wanted;
+        });
+
+        if(!districtEntries.length){
+          box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>Admin me "'+esc(d.name)+'" District Target select karke publish ki gayi posts yahan automatically aayengi.</p></div>';
+          return;
+        }
+
+        box.innerHTML=districtEntries.slice(0,12).map(function(e){
+          const title=e.title&&e.title.$t?e.title.$t:'District Notification';
+          const alt=(e.link||[]).find(x=>x.rel==='alternate');
+          const href=alt?alt.href:'#';
+          const date=e.published&&e.published.$t
+            ?new Date(e.published.$t).toLocaleDateString('en-IN'):'';
+
+          return '<article class="district-notification-card"><div class="district-notification-icon">📢</div><div><h3><a href="'+esc(href)+'">'+esc(title)+'</a></h3><div class="district-notification-meta"><span>📍 '+esc(d.name)+'</span><span>🗓️ '+esc(date)+'</span></div></div></article>';
+        }).join('');
+      })
+      .catch(function(){
+        box.innerHTML='<div class="district-empty"><div>⚠️</div><strong>District notifications could not be loaded</strong><p>Please refresh and try again.</p></div>';
+      });
   }
 
   document.addEventListener('DOMContentLoaded',function(){
