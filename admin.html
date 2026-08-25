@@ -831,10 +831,12 @@ button:disabled{opacity:.55;cursor:not-allowed}
 const $=x=>document.getElementById(x);
 let posts=[],editingId=null;
 
-const schemas={
-"Government Jobs":[
-["department","Department / Organization"],
+const commonMonitoringFields=[
+["department","Organization / Board / University"],
+["admissionSession","Admission Session / Academic Year"],
 ["postName","Post Name"],
+["courseClass","Course / Class"],
+["streamHonours","Stream / Honours"],
 ["totalVacancies","Total Vacancies"],
 ["postWiseVacancy","Post-wise Vacancy","textarea"],
 ["seatVacancy","Seat / Vacancy","textarea"],
@@ -856,12 +858,52 @@ const schemas={
 ["requiredDocuments","Required Documents","textarea"],
 ["description","Description / Important Instructions","textarea"],
 ["importantNote","Important Instructions / Note","textarea"]
+];
+
+const schemas={
+"Government Jobs":[...commonMonitoringFields],
+"Odisha Jobs":[...commonMonitoringFields,
+["vacancy","Vacancy"],
+["examDate","Exam Date","date"]
 ],
-"Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["importantInformation","Important Information","textarea"]],
-"Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
-"Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
-"Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
-"Education":[["updateType","Update Type","select","Admission|Scholarship|Education Exam|Education Result|Education Notification"],["admissionType","Admission Type","select","UG Admission|B.Tech / B.E. Admission|PG Admission|M.Tech / M.E. Admission|MBA / MCA Admission|B.Ed / M.Ed Admission|Medical Admission|Nursing / Paramedical Admission|Diploma / Polytechnic Admission|+2 Admission|+3 / Degree Admission|Other Admission"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["lastTime","Last Time (Optional)"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
+"Admit Cards":[...commonMonitoringFields,
+["examName","Exam Name"],
+["organization","Organization"],
+["admitReleaseDate","Admit Card Release Date","date"],
+["examDate","Exam Date","date"],
+["examCenter","Exam Center Information"],
+["registrationInfo","Application / Registration Number Information"],
+["instructions2","Instructions","textarea"]
+],
+"Results":[...commonMonitoringFields,
+["examName","Exam Name"],
+["organization","Organization"],
+["resultType","Result Type"],
+["resultDate","Result Date","date"],
+["examDate","Exam Date","date"],
+["rollInfo","Roll Number / Registration Information"],
+["cutoff","Cut-off / Merit Information"],
+["instructions2","Instructions","textarea"]
+],
+"Answer Keys":[...commonMonitoringFields,
+["examName","Exam Name"],
+["organization","Organization"],
+["examDate","Exam Date","date"],
+["answerReleaseDate","Answer Key Release Date","date"],
+["answerKeyType","Answer Key Type"],
+["questionPaper","Question Paper / Paper Details"],
+["objectionStart","Objection Start Date","date"],
+["objectionLast","Objection Last Date","date"],
+["objectionDetails","Objection / Challenge Details","textarea"]
+],
+"Education":[...commonMonitoringFields,
+["updateType","Update Type","select","Admission|Scholarship|Education Exam|Education Result|Education Notification"],
+["admissionType","Admission Type","select","UG Admission|B.Tech / B.E. Admission|PG Admission|M.Tech / M.E. Admission|MBA / MCA Admission|B.Ed / M.Ed Admission|Medical Admission|Nursing / Paramedical Admission|Diploma / Polytechnic Admission|+2 Admission|+3 / Degree Admission|Other Admission"],
+["collegeInstitution","College / Institution"],
+["incomeLimit","Family Income Limit"],
+["scholarshipBenefits","Scholarship Amount / Benefits"],
+["renewalLastDate","Renewal Last Date","date"]
+]
 };
 
 // Per-post homepage controls. These are saved inside the same Blogger post fields,
@@ -1557,11 +1599,12 @@ loadPosts();
     d.importantDates=nearbyValue(text,["Important Dates","Important Date"]);
     d.importantInfo=nearbyValue(text,["Important Information"]);
     d.requiredDocuments=nearbyValue(text,["Required Documents","Documents Required"]);
-    d.description=nearbyValue(text,["Description / Important Instructions","Description","Important Instructions"]);
+    d.description=nearbyValue(text,["Description / Important Instructions"]);
     d.importantNote=nearbyValue(text,["Important Instructions / Note","Important Note","Instructions / Note"]);
     d.examDate=nearbyValue(text,["Exam Date","Date of Examination","Examination Date"]);
     d.examName=nearbyValue(text,["Exam Name","Name of Examination","Examination"]);
     d.organization=d.department||nearbyValue(text,["Organization","Conducting Authority"]);
+    if(!d.department) d.department=nearbyValue(text,["Organization / Board / University","Organization"]);
     d.admitReleaseDate=dateValue(text,["Admit Card Release Date","Admit Card Released","Hall Ticket Release"]);
     d.examCenter=nearbyValue(text,["Exam Center","Examination Centre","Exam Centre"]);
     d.registrationInfo=nearbyValue(text,["Registration Number","Application Number","Registration Information"]);
