@@ -538,7 +538,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div>
   <label>District Target <span class="optional">(Optional)</span></label>
   <select id="districtTarget">
-    <option value="all">All Odisha / General</option>
+    <option value="all-india">All India</option><option value="all">All Odisha / General</option>
     <option value="angul">Angul</option>
     <option value="balangir">Balangir</option>
     <option value="balasore">Balasore</option>
@@ -570,7 +570,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <option value="subarnapur">Subarnapur</option>
     <option value="sundargarh">Sundargarh</option>
   </select>
-  <div class="district-help">Select a district only for district-specific notifications. “All Odisha / General” will not be shown in a district feed.</div>
+  <div class="district-help">Select a district only for district-specific notifications. “All India” is for Central Government / Government Jobs; “All Odisha / General” is for Odisha-wide updates.</div>
 </div>
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
@@ -934,6 +934,9 @@ function updateLinkLabels(type){
 function setPostType(type){
   if(!type) return;
   $("type").value=type;$("cat").value=type;
+  const districtTargetEl=$("districtTarget");
+  if(districtTargetEl && type==="Government Jobs") districtTargetEl.value="all-india";
+  else if(districtTargetEl && type==="Odisha Jobs" && districtTargetEl.value==="all-india") districtTargetEl.value="all";
   updateLinkLabels(type);
   const schema=(schemas[type]||[]).filter(f=>f[2]!=="url");
   $("dynamicFields").innerHTML='<div class="dynamicGrid">'+schema.map(f=>{
@@ -993,7 +996,7 @@ function togglePreview(){
   const link1=$("link").value.trim(), link2=$("link2").value.trim();
   const instructions=esc($("instructions").value.trim());
   const fields=collectFields();
-  const districtLabel=fields.districtTarget==="all"?"All Odisha / General":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget);
+  const districtLabel=fields.districtTarget==="all-india"?"All India":(fields.districtTarget==="all"?"All Odisha / General":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget));
   delete fields.districtTarget;
   const fieldHtml=Object.entries(fields).filter(([k,v])=>v).map(([k,v])=>'<div><b>'+esc(k.replace(/([A-Z])/g," $1"))+':</b> '+esc(v)+'</div>').join("");
   $("previewContent").innerHTML='<div style="font-size:16px;font-weight:800;color:#12203b">'+title+'</div><div style="margin:4px 0 8px;color:#0755c9;font-weight:700">'+type+'</div><div style="margin-bottom:7px"><b>District:</b> '+esc(districtLabel)+'</div><div>'+desc+'</div>'+(fieldHtml?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #e1e8f2">'+fieldHtml+'</div>':'')+(link1?'<div style="margin-top:8px"><b>Official Link:</b> '+esc(link1)+'</div>':'')+(link2?'<div><b>'+esc(actionLabels[$("type").value]||"Main Action Link")+':</b> '+esc(link2)+'</div>':'')+(instructions?'<div style="margin-top:8px"><b>Instructions:</b> '+instructions+'</div>':'');
@@ -1037,7 +1040,7 @@ function fillFields(data){
     }else if(e)e.value=value;
   });
 }
-function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";const d=$("districtTarget");if(d)d.value="all";setPostType("Government Jobs")}
+function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";const d=$("districtTarget");if(d)d.value="all-india";setPostType("Government Jobs")}
 function clearFieldErrors(){
   document.querySelectorAll(".fieldError").forEach(e=>e.classList.remove("fieldError"));
 }
@@ -1660,6 +1663,7 @@ loadPosts();
 
   function normalizeDistrictValue(value){
     const v=norm(value).toLowerCase();
+    if(/^(all india|all-india|india|pan india|pan-india|central government|central govt)$/i.test(v)) return "all-india";
     if(!v || /^(all odisha|all odisha \/ general|general|all districts|statewide|odisha)$/i.test(v)) return "all";
     const aliases={
       "bolangir":"balangir",
@@ -1713,9 +1717,16 @@ loadPosts();
     // Explicit District Target has priority. If the field is present but says
     // All Odisha/General, reset to "all" instead of accidentally retaining
     // a previous district selection.
-    const district=explicitDistrict!=="" 
+    let district=explicitDistrict!=="" 
       ? normalizeDistrictValue(explicitDistrict)
       : detectDistrict(text);
+
+    // Government Jobs are Central / All-India by default.
+    // An explicitly named district still wins.
+    if((type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text))
+       && (explicitDistrict==="" || /^(all odisha|all odisha \/ general|general|odisha|statewide)$/i.test(norm(explicitDistrict)))){
+      district="all-india";
+    }
     data.districtTarget=district || "all";
     const ds=document.getElementById("districtTarget");
     if(ds)ds.value=data.districtTarget;
@@ -1772,10 +1783,14 @@ loadPosts();
       catEl.value=catValue ? catValue.value : "";
     }
 
-    const district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
+    let district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
+    if((type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text))
+       && (explicitDistrict==="" || /^(all odisha|all odisha \/ general|general|odisha|statewide)$/i.test(norm(explicitDistrict)))){
+      district="all-india";
+    }
     const ds=document.getElementById("districtTarget"); if(ds)ds.value=district||"all";
 
-    setStatus("Detected: "+type+" • Category: "+cat+(district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General"));
+    setStatus("Detected: "+type+" • Category: "+cat+(district==="all-india"?" • All India":(district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General")));
   }
 
   document.addEventListener("DOMContentLoaded",function(){
