@@ -2412,34 +2412,46 @@ loadFeed();
     const box=document.getElementById('districtNotificationList');
     if(!box)return;
 
-    // Do NOT depend on a Blogger district label. Fetch the public feed and
-    // filter using the exact District Target saved by the Admin.
-    const url='/feeds/posts/default?alt=json&max-results=150';
-    fetch(url,{cache:'no-store'})
+    // IMPORTANT: District Target is stored by Admin in /api/posts as
+    // fields.districtTarget. Blogger's public feed does not expose those
+    // custom fields reliably, so district pages must read the same API data
+    // that the Admin panel uses.
+    fetch('/api/posts?status=all',{cache:'no-store'})
       .then(r=>r.ok?r.json():Promise.reject())
       .then(data=>{
-        const entries=(data.feed&&data.feed.entry)||[];
+        const posts=Array.isArray(data)?data:(Array.isArray(data.posts)?data.posts:[]);
         const wanted=districtKey(slug);
 
-        const districtEntries=entries.filter(function(e){
-          const meta=getDistrictMeta(e);
-          const target=districtKey(meta.districtTarget);
+        const districtPosts=posts.filter(function(p){
+          if(p && (p.draft===true || p.status==='draft')) return false;
 
-          // Explicit district target is authoritative.
+          const fields=p?.fields||p?.meta?.fields||{};
+          const target=districtKey(
+            fields.districtTarget ||
+            p?.districtTarget ||
+            p?.meta?.districtTarget ||
+            ''
+          );
+
           return target===wanted;
+        }).sort(function(a,b){
+          const da=new Date(a.published||a.publishedDate||a.date||a.updated||0).getTime();
+          const db=new Date(b.published||b.publishedDate||b.date||b.updated||0).getTime();
+          return db-da;
         });
 
-        if(!districtEntries.length){
+        if(!districtPosts.length){
           box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>Admin me "'+esc(d.name)+'" District Target select karke publish ki gayi posts yahan automatically aayengi.</p></div>';
           return;
         }
 
-        box.innerHTML=districtEntries.slice(0,12).map(function(e){
-          const title=e.title&&e.title.$t?e.title.$t:'District Notification';
-          const alt=(e.link||[]).find(x=>x.rel==='alternate');
-          const href=alt?alt.href:'#';
-          const date=e.published&&e.published.$t
-            ?new Date(e.published.$t).toLocaleDateString('en-IN'):'';
+        box.innerHTML=districtPosts.slice(0,12).map(function(p){
+          const title=p?.title?.$t||p?.title||'District Notification';
+          const href=p?.url||p?.permalink||p?.postUrl||(
+            p?.id ? '/?post='+encodeURIComponent(p.id) : '#'
+          );
+          const rawDate=p?.published?.$t||p?.published||p?.publishedDate||p?.date||'';
+          const date=rawDate?new Date(rawDate).toLocaleDateString('en-IN'):'';
 
           return '<article class="district-notification-card"><div class="district-notification-icon">📢</div><div><h3><a href="'+esc(href)+'">'+esc(title)+'</a></h3><div class="district-notification-meta"><span>📍 '+esc(d.name)+'</span><span>🗓️ '+esc(date)+'</span></div></div></article>';
         }).join('');
@@ -2448,6 +2460,7 @@ loadFeed();
         box.innerHTML='<div class="district-empty"><div>⚠️</div><strong>District notifications could not be loaded</strong><p>Please refresh and try again.</p></div>';
       });
   }
+
 
   document.addEventListener('DOMContentLoaded',function(){
     const main=document.querySelector('main')||document.body;
@@ -2533,61 +2546,7 @@ loadFeed();
   });
 })();
 </script>
-<script id="district-notification-final-loader">
-(function(){
-  const params = new URLSearchParams(location.search);
-  const slug = params.get('district');
-  if(!slug) return;
-
-  const district = slug.split('-').map(function(x){
-    return x.charAt(0).toUpperCase()+x.slice(1);
-  }).join(' ');
-
-  function esc(s){
-    return String(s||'').replace(/[&<>"']/g,function(c){
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-    });
-  }
-
-  function render(entries){
-    const box=document.getElementById('districtNotificationList');
-    if(!box)return;
-
-    if(!entries.length){
-      box.innerHTML='<div class="district-empty"><div>📢</div><strong>No district notification yet</strong><p>New posts assigned to '+esc(district)+' will appear here automatically.</p></div>';
-      return;
-    }
-
-    box.innerHTML=entries.slice(0,12).map(function(e){
-      const title=e.title&&e.title.$t?e.title.$t:'District Notification';
-      const alt=(e.link||[]).find(function(x){return x.rel==='alternate';});
-      const href=alt?alt.href:'#';
-      const date=e.published&&e.published.$t?new Date(e.published.$t).toLocaleDateString('en-IN'):'';
-      const summary=e.summary&&e.summary.$t?e.summary.$t.replace(/<[^>]*>/g,'').slice(0,180):'';
-      return '<article class="district-notification-card">'+
-        '<div class="district-notification-icon">📢</div>'+
-        '<div><h3><a href="'+esc(href)+'">'+esc(title)+'</a></h3>'+
-        '<p>'+esc(summary)+'</p>'+
-        '<div class="district-notification-meta"><span>📍 '+esc(district)+'</span><span>🗓️ '+esc(date)+'</span></div></div>'+
-        '</article>';
-    }).join('');
-  }
-
-  function load(){
-    const url='/feeds/posts/default/-/'+encodeURIComponent(district)+'?alt=json&max-results=12';
-    fetch(url).then(function(r){
-      if(!r.ok) throw new Error('feed');
-      return r.json();
-    }).then(function(data){
-      render((data.feed&&data.feed.entry)||[]);
-    }).catch(function(){
-      render([]);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded',load);
-})();
-</script>
+<!-- Old duplicate district loader disabled: primary loader uses /api/posts fields.districtTarget. -->
 
 </body>
 </html>
