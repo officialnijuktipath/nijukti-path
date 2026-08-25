@@ -523,7 +523,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <button type="button" class="smart-fill-btn primary" id="smartAutoFillBtn">✨ Auto Fill Form</button>
     <button type="button" class="smart-fill-btn" id="smartDetectBtn">🔎 Detect Type</button>
     <button type="button" class="smart-fill-btn clear" id="smartClearBtn">✕ Clear</button>
-    \1<div style="font-size:9px;color:#64748b;margin-top:5px">Exact field mapping: <b>Field:</b> value. Missing fields stay blank; headings are ignored.</div>
+    \1<div id="smartFillStatus" style="font-size:9px;color:#64748b;margin-top:7px">Ready</div>
+    <div style="font-size:9px;color:#64748b;margin-top:5px">Exact field mapping: <b>Field:</b> value. Missing fields stay blank; headings are ignored.</div>
   </div>
   <div class="smart-fill-note">Paste only the notification/monitoring fields. Headings such as “MONITORING REQUEST”, “QUESTION TITLE”, “REQUEST” etc. are ignored and will never be copied into Post Title.</div>
 </div>
@@ -1541,17 +1542,73 @@ loadPosts();
     return d;
   }
 
+  function normalizeTypeValue(value){
+    const v=norm(value).toLowerCase();
+    const map={
+      "government jobs":"Government Jobs",
+      "government job":"Government Jobs",
+      "odisha jobs":"Odisha Jobs",
+      "odisha job":"Odisha Jobs",
+      "admit cards":"Admit Cards",
+      "admit card":"Admit Cards",
+      "results":"Results",
+      "result":"Results",
+      "answer keys":"Answer Keys",
+      "answer key":"Answer Keys",
+      "education":"Education"
+    };
+    return map[v] || "";
+  }
+
+  function normalizeCategoryValue(value){
+    return normalizeTypeValue(value);
+  }
+
+  function normalizeDistrictValue(value){
+    const v=norm(value).toLowerCase();
+    if(!v || /^(all odisha|all odisha \/ general|general|all districts|statewide|odisha)$/i.test(v)) return "all";
+    const aliases={
+      "bolangir":"balangir",
+      "balangir":"balangir",
+      "keonjhar":"kendujhar"
+    };
+    const key=aliases[v] || v.replace(/[^a-z0-9]+/g,"");
+    if(districtNames[key]) return key;
+    const found=Object.entries(districtNames).find(([k,n])=>n.toLowerCase()===v);
+    return found ? found[0] : "";
+  }
+
   function applySmartFill(){
     const text=smartText();
     if(!text){setStatus("Paste notification text first",true);return;}
-    const type=detectType(text);
+
+    // IMPORTANT: explicit monitoring fields always win over keyword guessing.
+    // Post Type, Category and District Target are read from their own labels.
+    const explicitType=afterLabel(text,["Post Type"]);
+    const explicitCategory=afterLabel(text,["Category"]);
+    const explicitDistrict=afterLabel(text,["District Target"]);
+
+    const type=normalizeTypeValue(explicitType) || detectType(text);
     if(typeof setPostType==="function")setPostType(type);
+
+    // setPostType intentionally syncs category with type; now override it
+    // only when the pasted Category is an explicit valid category.
+    const category=normalizeCategoryValue(explicitCategory) || type;
+    const catEl=document.getElementById("cat");
+    if(catEl)catEl.value=category;
+
     const data=buildData(text,type);
-    data.districtTarget=detectDistrict(text);
-    if(data.districtTarget!=="all") {
-      const ds=document.getElementById("districtTarget");
-      if(ds)ds.value=data.districtTarget;
-    }
+
+    // Explicit District Target has priority. If the field is present but says
+    // All Odisha/General, reset to "all" instead of accidentally retaining
+    // a previous district selection.
+    const district=explicitDistrict!=="" 
+      ? normalizeDistrictValue(explicitDistrict)
+      : detectDistrict(text);
+    data.districtTarget=district || "all";
+    const ds=document.getElementById("districtTarget");
+    if(ds)ds.value=data.districtTarget;
+
     const title=bestTitle(text,type);
     const desc=description(text);
     const urls=allUrls(text);
@@ -1575,11 +1632,21 @@ loadPosts();
   function justDetect(){
     const text=smartText();
     if(!text){setStatus("Paste notification text first",true);return;}
-    const type=detectType(text);
+
+    const explicitType=afterLabel(text,["Post Type"]);
+    const explicitCategory=afterLabel(text,["Category"]);
+    const explicitDistrict=afterLabel(text,["District Target"]);
+
+    const type=normalizeTypeValue(explicitType) || detectType(text);
     if(typeof setPostType==="function")setPostType(type);
-    const district=detectDistrict(text);
-    const ds=document.getElementById("districtTarget"); if(ds)ds.value=district;
-    setStatus("Detected: "+type+(district!=="all"?" • "+districtNames[district]:""));
+
+    const cat=normalizeCategoryValue(explicitCategory) || type;
+    const catEl=document.getElementById("cat"); if(catEl)catEl.value=cat;
+
+    const district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
+    const ds=document.getElementById("districtTarget"); if(ds)ds.value=district||"all";
+
+    setStatus("Detected: "+type+" • Category: "+cat+(district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General"));
   }
 
   document.addEventListener("DOMContentLoaded",function(){
