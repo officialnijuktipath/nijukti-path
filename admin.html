@@ -525,7 +525,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <button type="button" class="smart-fill-btn clear" id="smartClearBtn">✕ Clear</button>
     <span class="smart-fill-status" id="smartFillStatus">Ready</span>
   </div>
-  <div class="smart-fill-note">Only information found in the pasted text is filled. Unclear fields are left blank so you can review before publishing.</div>
+  <div class="smart-fill-note">Paste only the notification/monitoring fields. Headings such as “MONITORING REQUEST”, “QUESTION TITLE”, “REQUEST” etc. are ignored and will never be copied into Post Title.</div>
 </div>
 
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
@@ -1285,7 +1285,13 @@ loadPosts();
   ];
 
   function smartText(){
-    return (document.getElementById("smartPasteText")?.value || "").replace(/\r/g,"").trim();
+    const raw=(document.getElementById("smartPasteText")?.value || "").replace(/\r/g,"");
+    // Monitoring/request headings are instructions, not notification data.
+    // Strip them before any field/title detection so they can never become the Post Title.
+    return raw.split("\n").filter(line=>{
+      const x=norm(line);
+      return x && !/^(MONITORING REQUEST|MONITORING NOTIFICATION|NOTIFICATION REQUEST|QUESTION|QUESTION TITLE|REQUEST|PROMPT)\s*:?$/i.test(x);
+    }).join("\n").trim();
   }
   function setStatus(msg, bad){
     const el=document.getElementById("smartFillStatus");
@@ -1370,10 +1376,14 @@ loadPosts();
   }
 
   function bestTitle(text,type){
-    let v=nearbyValue(text,["Post Title","Title","Name of Post","Post Name","Exam Name","Recruitment Name","Advertisement Title"]);
-    if(v && v.length<=220)return v;
+    // For the user's structured monitoring format, Post Title is the ONLY source
+    // for the title. Never use the monitoring/request/question heading as fallback.
+    let v=nearbyValue(text,["Post Title"]);
+    if(v && v.length<=220 && !/^(MONITORING REQUEST|MONITORING NOTIFICATION|QUESTION|REQUEST|PROMPT)$/i.test(v))return v;
+    v=nearbyValue(text,["Title","Name of Post","Post Name","Exam Name","Recruitment Name","Advertisement Title"]);
+    if(v && v.length<=220 && !/^(MONITORING REQUEST|MONITORING NOTIFICATION|QUESTION|REQUEST|PROMPT)$/i.test(v))return v;
     const ls=linesOf(text);
-    const bad=/^(department|organization|advertisement|notification no|important dates?|eligibility|qualification|how to apply|official website|apply online|contents?)\b/i;
+    const bad=/^(post type|category|short description|district target|update type|department|organization|organization \/ board \/ university|admission session|course|stream|qualification|eligibility|age limit|application|last date|salary|selection|important|description|official|apply online|monitoring|question|request|prompt)\b/i;
     const candidate=ls.find(x=>x.length>=10 && x.length<=180 && !bad.test(x) && !/^https?:\/\//i.test(x));
     return candidate || type;
   }
