@@ -2333,8 +2333,10 @@ loadFeed();
 "sundargarh":{name:"Sundargarh",color:"#15803d",symbol:"🌲"}
   };
   const params=new URLSearchParams(location.search);
-  const slug=params.get('district') || 'khordha';
-  const d=districtData[slug] || districtData.khordha;
+  const slug=params.get('district');
+  // Run the district portal only on a valid district URL.
+  if(!slug || !districtData[slug]) return;
+  const d=districtData[slug];
 
   function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function loadFeed(){
