@@ -532,8 +532,31 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
 <option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
-<div><label>Category</label><select id="cat" onchange="setPostType(this.value)">
-<option value="">Select Category</option><option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
+<div><label>Category</label><select id="cat">
+<option value="">Select Category</option>
+<option>Government Jobs</option>
+<option>Odisha Jobs</option>
+<option>Admit Cards</option>
+<option>Results</option>
+<option>Answer Keys</option>
+<option>Education</option>
+<option>Admission</option>
+<option>Scholarship</option>
+<option>Exam</option>
+<option>Result</option>
+<option>Notification</option>
+<option>UG Admission</option>
+<option>B.Tech / B.E. Admission</option>
+<option>PG Admission</option>
+<option>M.Tech / M.E. Admission</option>
+<option>MBA / MCA Admission</option>
+<option>B.Ed / M.Ed Admission</option>
+<option>Medical Admission</option>
+<option>Nursing / Paramedical Admission</option>
+<option>Diploma / Polytechnic Admission</option>
+<option>+2 Admission</option>
+<option>+3 / Degree Admission</option>
+<option>Other Admission</option>
 </select></div>
 <div>
   <label>District Target <span class="optional">(Optional)</span></label>
@@ -933,7 +956,7 @@ function updateLinkLabels(type){
 
 function setPostType(type){
   if(!type) return;
-  $("type").value=type;$("cat").value=type;
+  $("type").value=type;
   const districtTargetEl=$("districtTarget");
   if(districtTargetEl && type==="Government Jobs") districtTargetEl.value="all-india";
   else if(districtTargetEl && type==="Odisha Jobs" && districtTargetEl.value==="all-india") districtTargetEl.value="all";
@@ -1652,7 +1675,15 @@ loadPosts();
       "result":"Results",
       "answer keys":"Answer Keys",
       "answer key":"Answer Keys",
-      "education":"Education"
+      "education":"Education",
+      "admission":"Admission","scholarship":"Scholarship","education exam":"Education Exam",
+      "education result":"Education Result","education notification":"Education Notification",
+      "ug admission":"UG Admission","b.tech / b.e. admission":"B.Tech / B.E. Admission",
+      "pg admission":"PG Admission","m.tech / m.e. admission":"M.Tech / M.E. Admission",
+      "mba / mca admission":"MBA / MCA Admission","b.ed / m.ed admission":"B.Ed / M.Ed Admission",
+      "medical admission":"Medical Admission","nursing / paramedical admission":"Nursing / Paramedical Admission",
+      "diploma / polytechnic admission":"Diploma / Polytechnic Admission","+2 admission":"+2 Admission",
+      "+3 / degree admission":"+3 / Degree Admission","other admission":"Other Admission"
     };
     return map[v] || "";
   }
