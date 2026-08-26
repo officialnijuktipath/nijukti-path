@@ -2394,10 +2394,16 @@ loadFeed();
   }
 
   function postHrefOf(e){
-    const id=postIdOf(e);
+    const id=String(
+      e?.bloggerId||e?.blogger_id||e?.bloggerPostId||
+      e?.blogger_post_id||e?.postId||e?.post_id||
+      e?.id?.$t||e?.id||''
+    ).trim();
     if(id) return '/?post='+encodeURIComponent(id);
+
     const alt=(e?.link||[]).find(x=>x.rel==='alternate');
     if(alt?.href) return '/?postUrl='+encodeURIComponent(alt.href);
+
     const t=titleOf(e);
     if(t) return '/?postTitle='+encodeURIComponent(t);
     return '/';
@@ -2421,9 +2427,8 @@ loadFeed();
     }
 
     box.innerHTML=matched.map(function(e){
-      const date=e.published?.$t
-        ?new Date(e.published.$t).toLocaleDateString('en-IN')
-        :(e.publishDate||e.date||'');
+      const rawDate=e.published?.$t||e.published||e.publishDate||e.publishedDate||e.date||e.updated||'';
+      const date=rawDate?new Date(rawDate).toLocaleDateString('en-IN'):'';
       return '<article class="district-notification-card">'+
         '<div class="district-notification-icon">📢</div>'+
         '<div><h3><a href="'+esc(postHrefOf(e))+'">'+esc(titleOf(e))+'</a></h3>'+
@@ -2436,75 +2441,42 @@ loadFeed();
     const box=document.getElementById('districtNotificationList');
     if(!box)return;
 
-    // IMPORTANT: Blogger feed remains the source of actual post entries/IDs.
-    // API is used only to enrich each Blogger post with District Target.
-    // This prevents district notifications from disappearing when API IDs differ.
+    // PRIMARY: Admin/API data contains the District Target reliably.
+    // FALLBACK: Blogger feed is used only when the API is unavailable.
     try{
-      const [apiResp, feedResp] = await Promise.all([
-        fetch('/api/posts?status=all',{cache:'no-store'}),
-        fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'})
-      ]);
-
-      const feedData=await feedResp.json();
-      const bloggerEntries=(feedData.feed&&feedData.feed.entry)||[];
-
-      let apiEntries=[];
+      const apiResp=await fetch('/api/posts?status=all',{cache:'no-store'});
       if(apiResp.ok){
         const apiData=await apiResp.json();
-        apiEntries=Array.isArray(apiData)?apiData:
+        const apiEntries=Array.isArray(apiData)?apiData:
           (Array.isArray(apiData.posts)?apiData.posts:
           (Array.isArray(apiData.items)?apiData.items:[]));
+
+        const wanted=normDistrict(d.name);
+        const matched=apiEntries.filter(function(a){
+          const target=normDistrict(districtOf(a));
+          return target && target!=='all' && target!=='allindia' &&
+                 target!=='allodisha' && target!=='odishageneral' &&
+                 target===wanted;
+        }).slice(0,12);
+
+        if(matched.length){
+          renderDistrictEntries(matched);
+          return;
+        }
       }
-
-      // Build API lookup by every practical identity available.
-      const apiByTitle=new Map();
-      const apiById=new Map();
-
-      apiEntries.forEach(function(a){
-        const ids=[
-          a?.bloggerId,a?.blogger_id,a?.bloggerPostId,a?.blogger_post_id,
-          a?.postId,a?.post_id,a?.id?.$t,a?.id
-        ].filter(Boolean).map(String);
-
-        ids.forEach(id=>apiById.set(id,a));
-
-        const titles=[
-          a?.title?.$t,a?.title,a?.postTitle,a?.post_title,a?.name
-        ].filter(Boolean);
-        titles.forEach(t=>apiByTitle.set(normText(t),a));
-      });
-
-      // Enrich Blogger entries while ALWAYS retaining Blogger ID/link/content.
-      const enriched=bloggerEntries.map(function(b){
-        const bid=String(b?.id?.$t||b?.id||'');
-        const bt=normText(b?.title?.$t||b?.title||'');
-        const a=apiById.get(bid)||apiByTitle.get(bt);
-
-        if(!a) return b;
-
-        const target=districtOf(a);
-        return {
-          ...b,
-          fields:{
-            ...(b.fields||{}),
-            ...(a.fields||{}),
-            districtTarget: target || (b.fields&&b.fields.districtTarget) || ''
-          },
-          districtTarget: target || b.districtTarget || ''
-        };
-      });
-
-      renderDistrictEntries(enriched);
     }catch(err){
-      // If API is unavailable, Blogger metadata/NP_META is still used.
-      try{
-        const fr=await fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'});
-        if(!fr.ok) throw new Error('feed');
-        const fd=await fr.json();
-        renderDistrictEntries((fd.feed&&fd.feed.entry)||[]);
-      }catch(_){
-        box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>District Target data load nahi paya.</p></div>';
-      }
+      console.warn('District API unavailable, using Blogger fallback:',err);
+    }
+
+    // FALLBACK: Blogger feed + NP_META districtTarget.
+    try{
+      const fr=await fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'});
+      if(!fr.ok) throw new Error('feed');
+      const fd=await fr.json();
+      renderDistrictEntries((fd.feed&&fd.feed.entry)||[]);
+    }catch(err){
+      console.error('District notification loader error:',err);
+      box.innerHTML='<div class="district-empty"><div>⚠️</div><strong>District notifications could not be loaded</strong><p>Please refresh and try again.</p></div>';
     }
   }
 
