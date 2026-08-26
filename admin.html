@@ -532,7 +532,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div><label>Post Type</label><select id="type" onchange="setPostType(this.value)">
 <option>Government Jobs</option><option>Odisha Jobs</option><option>Admit Cards</option><option>Results</option><option>Answer Keys</option><option>Education</option>
 </select></div>
-<div><label>Category</label><select id="cat">
+<div><label>Category</label><select id="cat" onchange="updateCategoryOnly(this.value)">
 <option value="">Select Category</option>
 <option>Government Jobs</option>
 <option>Odisha Jobs</option>
@@ -561,7 +561,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div>
   <label>District Target <span class="optional">(Optional)</span></label>
   <select id="districtTarget">
-    <option value="all-india">All India</option><option value="all">All Odisha / General</option>
+    <option value="all">All Odisha / General</option>
     <option value="angul">Angul</option>
     <option value="balangir">Balangir</option>
     <option value="balasore">Balasore</option>
@@ -593,7 +593,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <option value="subarnapur">Subarnapur</option>
     <option value="sundargarh">Sundargarh</option>
   </select>
-  <div class="district-help">Select a district only for district-specific notifications. “All India” is for Central Government / Government Jobs; “All Odisha / General” is for Odisha-wide updates.</div>
+  <div class="district-help">Select a district only for district-specific notifications. “All Odisha / General” will not be shown in a district feed.</div>
 </div>
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
@@ -854,79 +854,13 @@ button:disabled{opacity:.55;cursor:not-allowed}
 const $=x=>document.getElementById(x);
 let posts=[],editingId=null;
 
-const commonMonitoringFields=[
-["department","Organization / Board / University"],
-["admissionSession","Admission Session / Academic Year"],
-["postName","Post Name"],
-["courseClass","Course / Class"],
-["streamHonours","Stream / Honours"],
-["totalVacancies","Total Vacancies"],
-["postWiseVacancy","Post-wise Vacancy","textarea"],
-["seatVacancy","Seat / Vacancy","textarea"],
-["qualification","Qualification","textarea"],
-["eligibility","Eligibility","textarea"],
-["odishaEligibility","Odisha Eligibility / Domicile","textarea"],
-["ageLimit","Age Limit"],
-["ageRelaxation","Age Relaxation"],
-["applicationStart","Application Start Date","date"],
-["lastDate","Last Date","date"],
-["lastTime","Last Time"],
-["applicationFee","Application Fee"],
-["salary","Salary / Pay Scale"],
-["jobLocation","Job Location"],
-["selectionProcess","Selection Process","textarea"],
-["meritSelection","Merit / Selection Process","textarea"],
-["importantDates","Important Dates","textarea"],
-["importantInfo","Important Information","textarea"],
-["requiredDocuments","Required Documents","textarea"],
-["description","Description / Important Instructions","textarea"],
-["importantNote","Important Instructions / Note","textarea"]
-];
-
 const schemas={
-"Government Jobs":[...commonMonitoringFields],
-"Odisha Jobs":[...commonMonitoringFields,
-["vacancy","Vacancy"],
-["examDate","Exam Date","date"]
-],
-"Admit Cards":[...commonMonitoringFields,
-["examName","Exam Name"],
-["organization","Organization"],
-["admitReleaseDate","Admit Card Release Date","date"],
-["examDate","Exam Date","date"],
-["examCenter","Exam Center Information"],
-["registrationInfo","Application / Registration Number Information"],
-["instructions2","Instructions","textarea"]
-],
-"Results":[...commonMonitoringFields,
-["examName","Exam Name"],
-["organization","Organization"],
-["resultType","Result Type"],
-["resultDate","Result Date","date"],
-["examDate","Exam Date","date"],
-["rollInfo","Roll Number / Registration Information"],
-["cutoff","Cut-off / Merit Information"],
-["instructions2","Instructions","textarea"]
-],
-"Answer Keys":[...commonMonitoringFields,
-["examName","Exam Name"],
-["organization","Organization"],
-["examDate","Exam Date","date"],
-["answerReleaseDate","Answer Key Release Date","date"],
-["answerKeyType","Answer Key Type"],
-["questionPaper","Question Paper / Paper Details"],
-["objectionStart","Objection Start Date","date"],
-["objectionLast","Objection Last Date","date"],
-["objectionDetails","Objection / Challenge Details","textarea"]
-],
-"Education":[...commonMonitoringFields,
-["updateType","Update Type","select","Admission|Scholarship|Education Exam|Education Result|Education Notification"],
-["admissionType","Admission Type","select","UG Admission|B.Tech / B.E. Admission|PG Admission|M.Tech / M.E. Admission|MBA / MCA Admission|B.Ed / M.Ed Admission|Medical Admission|Nursing / Paramedical Admission|Diploma / Polytechnic Admission|+2 Admission|+3 / Degree Admission|Other Admission"],
-["collegeInstitution","College / Institution"],
-["incomeLimit","Family Income Limit"],
-["scholarshipBenefits","Scholarship Amount / Benefits"],
-["renewalLastDate","Renewal Last Date","date"]
-]
+"Government Jobs":[["department","Department / Organization"],["postName","Post Name"],["totalVacancies","Total Vacancies"],["postWiseVacancy","Post-wise Vacancy"],["qualification","Qualification"],["ageLimit","Age Limit"],["ageRelaxation","Age Relaxation"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary / Pay Scale"],["jobLocation","Job Location"],["importantDates","Important Dates"],["detailedDescription","Detailed Description","textarea"]],
+"Odisha Jobs":[["department","Department"],["postName","Post Name"],["vacancy","Vacancy"],["qualification","Qualification"],["odishaEligibility","Odisha Eligibility / Domicile"],["ageLimit","Age Limit"],["applicationStart","Application Start","date"],["lastDate","Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Selection Process"],["salary","Salary"],["examDate","Exam Date","date"],["importantInformation","Important Information","textarea"]],
+"Admit Cards":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["admitReleaseDate","Admit Card Release Date","date"],["examDate","Exam Date","date"],["examCenter","Exam Center Information"],["registrationInfo","Application / Registration Number Information"],["instructions2","Instructions","textarea"]],
+"Results":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["resultType","Result Type"],["resultDate","Result Date","date"],["examDate","Exam Date","date"],["rollInfo","Roll Number / Registration Information"],["cutoff","Cut-off / Merit Information"],["instructions2","Instructions","textarea"]],
+"Answer Keys":[["examName","Exam Name"],["organization","Organization"],["postName","Post Name"],["examDate","Exam Date","date"],["answerReleaseDate","Answer Key Release Date","date"],["answerKeyType","Answer Key Type"],["questionPaper","Question Paper / Paper Details"],["objectionStart","Objection Start Date","date"],["objectionLast","Objection Last Date","date"],["objectionDetails","Objection / Challenge Details","textarea"]],
+"Education":[["updateType","Update Type","select","Admission|Scholarship|Education Exam|Education Result|Education Notification"],["admissionType","Admission Type","select","UG Admission|B.Tech / B.E. Admission|PG Admission|M.Tech / M.E. Admission|MBA / MCA Admission|B.Ed / M.Ed Admission|Medical Admission|Nursing / Paramedical Admission|Diploma / Polytechnic Admission|+2 Admission|+3 / Degree Admission|Other Admission"],["organization","Organization / Board / University"],["admissionSession","Admission Session / Academic Year"],["collegeInstitution","College / Institution"],["courseClass","Course / Class"],["streamHonours","Stream / Honours"],["eligibility","Eligibility"],["seatVacancy","Seat / Vacancy"],["incomeLimit","Family Income Limit"],["scholarshipBenefits","Scholarship Amount / Benefits"],["applicationStart","Application Start Date","date"],["lastDate","Last Date","date"],["lastTime","Last Time (Optional)"],["renewalLastDate","Renewal Last Date","date"],["applicationFee","Application Fee"],["selectionProcess","Merit / Selection Process"],["requiredDocuments","Required Documents","textarea"],["educationDescription","Description / Important Instructions","textarea"]]
 };
 
 // Per-post homepage controls. These are saved inside the same Blogger post fields,
@@ -954,12 +888,14 @@ function updateLinkLabels(type){
   $("link2Label").innerHTML=(actionLabels[type]||"Main Action Link")+' <span class="optional">(Optional)</span>';
 }
 
+function updateCategoryOnly(category){
+  const el=$("cat");
+  if(el) el.value=category||"";
+}
+
 function setPostType(type){
   if(!type) return;
   $("type").value=type;
-  const districtTargetEl=$("districtTarget");
-  if(districtTargetEl && type==="Government Jobs") districtTargetEl.value="all-india";
-  else if(districtTargetEl && type==="Odisha Jobs" && districtTargetEl.value==="all-india") districtTargetEl.value="all";
   updateLinkLabels(type);
   const schema=(schemas[type]||[]).filter(f=>f[2]!=="url");
   $("dynamicFields").innerHTML='<div class="dynamicGrid">'+schema.map(f=>{
@@ -1019,7 +955,7 @@ function togglePreview(){
   const link1=$("link").value.trim(), link2=$("link2").value.trim();
   const instructions=esc($("instructions").value.trim());
   const fields=collectFields();
-  const districtLabel=fields.districtTarget==="all-india"?"All India":(fields.districtTarget==="all"?"All Odisha / General":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget));
+  const districtLabel=fields.districtTarget==="all"?"All Odisha / General":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget);
   delete fields.districtTarget;
   const fieldHtml=Object.entries(fields).filter(([k,v])=>v).map(([k,v])=>'<div><b>'+esc(k.replace(/([A-Z])/g," $1"))+':</b> '+esc(v)+'</div>').join("");
   $("previewContent").innerHTML='<div style="font-size:16px;font-weight:800;color:#12203b">'+title+'</div><div style="margin:4px 0 8px;color:#0755c9;font-weight:700">'+type+'</div><div style="margin-bottom:7px"><b>District:</b> '+esc(districtLabel)+'</div><div>'+desc+'</div>'+(fieldHtml?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #e1e8f2">'+fieldHtml+'</div>':'')+(link1?'<div style="margin-top:8px"><b>Official Link:</b> '+esc(link1)+'</div>':'')+(link2?'<div><b>'+esc(actionLabels[$("type").value]||"Main Action Link")+':</b> '+esc(link2)+'</div>':'')+(instructions?'<div style="margin-top:8px"><b>Instructions:</b> '+instructions+'</div>':'');
@@ -1063,7 +999,7 @@ function fillFields(data){
     }else if(e)e.value=value;
   });
 }
-function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";const d=$("districtTarget");if(d)d.value="all-india";setPostType("Government Jobs")}
+function resetForm(){editingId=null;$("editingPostId").value="";$("form").reset();$("chars").textContent="0";$("msg").style.display="none";$("err").style.display="none";$("postPreview").style.display="none";const d=$("districtTarget");if(d)d.value="all";setPostType("Government Jobs")}
 function clearFieldErrors(){
   document.querySelectorAll(".fieldError").forEach(e=>e.classList.remove("fieldError"));
 }
@@ -1607,30 +1543,22 @@ loadPosts();
     d.postName=nearbyValue(text,["Post Name","Name of Post","Post"]);
     d.totalVacancies=nearbyValue(text,["Total Vacancies","Total Vacancy","No. of Vacancies","Number of Vacancies","Vacancies"]);
     d.postWiseVacancy=nearbyValue(text,["Post-wise Vacancy","Post Wise Vacancy"]);
-    d.seatVacancy=nearbyValue(text,["Seat / Vacancy","Seat Vacancy","Seats"]);
     d.vacancy=d.totalVacancies||nearbyValue(text,["Vacancy","Vacancies"]);
     d.qualification=nearbyValue(text,["Educational Qualification","Qualification","Eligibility Criteria"]);
     d.eligibility=nearbyValue(text,["Eligibility","Eligibility Criteria"]);
-    d.odishaEligibility=nearbyValue(text,["Odisha Eligibility / Domicile","Odisha Eligibility","Domicile","Odisha Domicile"]);
+    d.odishaEligibility=nearbyValue(text,["Odisha Eligibility","Domicile","Odisha Domicile"]);
     d.ageLimit=nearbyValue(text,["Age Limit","Age Criteria"]);
     d.ageRelaxation=nearbyValue(text,["Age Relaxation","Upper Age Relaxation"]);
     d.applicationStart=dateValue(text,["Application Start Date","Application Start","Start Date","Opening Date","Apply Online From"]);
     d.lastDate=dateValue(text,["Last Date","Closing Date","Application Last Date","Deadline","Last Date to Apply"]);
-    d.lastTime=nearbyValue(text,["Last Time","Closing Time","Application Last Time"]);
     d.applicationFee=nearbyValue(text,["Application Fee","Exam Fee","Application Fees"]);
+    d.selectionProcess=nearbyValue(text,["Selection Process","Selection Procedure"]);
     d.salary=nearbyValue(text,["Salary","Pay Scale","Salary / Pay Scale","Remuneration"]);
     d.jobLocation=nearbyValue(text,["Job Location","Place of Posting","Posting Location"]);
-    d.selectionProcess=nearbyValue(text,["Selection Process","Selection Procedure"]);
-    d.meritSelection=nearbyValue(text,["Merit / Selection Process","Merit Selection Process","Final Selection"]);
     d.importantDates=nearbyValue(text,["Important Dates","Important Date"]);
-    d.importantInfo=nearbyValue(text,["Important Information"]);
-    d.requiredDocuments=nearbyValue(text,["Required Documents","Documents Required"]);
-    d.description=nearbyValue(text,["Description / Important Instructions"]);
-    d.importantNote=nearbyValue(text,["Important Instructions / Note","Important Note","Instructions / Note"]);
     d.examDate=nearbyValue(text,["Exam Date","Date of Examination","Examination Date"]);
     d.examName=nearbyValue(text,["Exam Name","Name of Examination","Examination"]);
     d.organization=d.department||nearbyValue(text,["Organization","Conducting Authority"]);
-    if(!d.department) d.department=nearbyValue(text,["Organization / Board / University","Organization"]);
     d.admitReleaseDate=dateValue(text,["Admit Card Release Date","Admit Card Released","Hall Ticket Release"]);
     d.examCenter=nearbyValue(text,["Exam Center","Examination Centre","Exam Centre"]);
     d.registrationInfo=nearbyValue(text,["Registration Number","Application Number","Registration Information"]);
@@ -1667,6 +1595,7 @@ loadPosts();
     const map={
       "government jobs":"Government Jobs",
       "government job":"Government Jobs",
+      "central government jobs":"Government Jobs",
       "odisha jobs":"Odisha Jobs",
       "odisha job":"Odisha Jobs",
       "admit cards":"Admit Cards",
@@ -1677,29 +1606,53 @@ loadPosts();
       "answer key":"Answer Keys",
       "education":"Education",
       "scholarship / education":"Education",
-      "scholarship education":"Education",
-      "scholarship examination":"Scholarship",
-      "scholarship exam":"Scholarship",
-      "admission":"Admission","scholarship":"Scholarship","education exam":"Education Exam",
-      "education result":"Education Result","education notification":"Education Notification",
-      "ug admission":"UG Admission","b.tech / b.e. admission":"B.Tech / B.E. Admission",
-      "pg admission":"PG Admission","m.tech / m.e. admission":"M.Tech / M.E. Admission",
-      "mba / mca admission":"MBA / MCA Admission","b.ed / m.ed admission":"B.Ed / M.Ed Admission",
-      "medical admission":"Medical Admission","nursing / paramedical admission":"Nursing / Paramedical Admission",
-      "diploma / polytechnic admission":"Diploma / Polytechnic Admission","+2 admission":"+2 Admission",
-      "+3 / degree admission":"+3 / Degree Admission","other admission":"Other Admission"
+      "scholarship/education":"Education",
+      "education / scholarship":"Education",
+      "education/scholarship":"Education",
+      "scholarship":"Education"
     };
     return map[v] || "";
   }
 
   function normalizeCategoryValue(value){
-    return normalizeTypeValue(value);
+    const v=norm(value).toLowerCase();
+    const map={
+      "government jobs":"Government Jobs",
+      "odisha jobs":"Odisha Jobs",
+      "admit cards":"Admit Cards",
+      "admit card":"Admit Cards",
+      "results":"Results",
+      "result":"Result",
+      "answer keys":"Answer Keys",
+      "answer key":"Answer Keys",
+      "education":"Education",
+      "admission":"Admission",
+      "scholarship":"Scholarship",
+      "scholarship examination":"Scholarship",
+      "scholarship exam":"Scholarship",
+      "exam":"Exam",
+      "notification":"Notification",
+      "ug admission":"UG Admission",
+      "b.tech / b.e. admission":"B.Tech / B.E. Admission",
+      "b.tech/b.e. admission":"B.Tech / B.E. Admission",
+      "pg admission":"PG Admission",
+      "m.tech / m.e. admission":"M.Tech / M.E. Admission",
+      "mba / mca admission":"MBA / MCA Admission",
+      "b.ed / m.ed admission":"B.Ed / M.Ed Admission",
+      "medical admission":"Medical Admission",
+      "nursing / paramedical admission":"Nursing / Paramedical Admission",
+      "diploma / polytechnic admission":"Diploma / Polytechnic Admission",
+      "+2 admission":"+2 Admission",
+      "+3 / degree admission":"+3 / Degree Admission",
+      "other admission":"Other Admission"
+    };
+    return map[v] || "";
   }
 
   function normalizeDistrictValue(value){
     const v=norm(value).toLowerCase();
-    if(/^(all india|all-india|india|pan india|pan-india|central government|central govt)$/i.test(v)) return "all-india";
     if(!v || /^(all odisha|all odisha \/ general|general|all districts|statewide|odisha)$/i.test(v)) return "all";
+    if(/^(all india|india|pan india|central government)$/i.test(v)) return "all-india";
     const aliases={
       "bolangir":"balangir",
       "balangir":"balangir",
@@ -1714,6 +1667,7 @@ loadPosts();
   function applySmartFill(){
     const text=smartText();
     if(!text){setStatus("Paste notification text first",true);return;}
+    try{
 
     // IMPORTANT: explicit monitoring fields always win over keyword guessing.
     // Post Type, Category and District Target are read from their own labels.
@@ -1741,18 +1695,7 @@ loadPosts();
 
     // Category is an independent explicit field. Never use a partial label
     // match and never leave the previous category selected.
-    let category=normalizeCategoryValue(explicitCategory) || type;
-
-    // Explicit aliases used by monitoring notifications.
-    const rawType=norm(explicitType).toLowerCase();
-    const rawCategory=norm(explicitCategory).toLowerCase();
-
-    if(/^(scholarship\s*[/\-]\s*education|scholarship)$/.test(rawType)){
-      type="Education";
-    }
-    if(/^(scholarship\s+examination|scholarship\s+exam)$/.test(rawCategory)){
-      category="Scholarship";
-    }
+    const category=normalizeCategoryValue(explicitCategory) || type;
     if(catEl){
       const catValue=[...catEl.options].find(o=>norm(o.value).toLowerCase()===norm(category).toLowerCase());
       catEl.value=catValue ? catValue.value : "";
@@ -1763,17 +1706,9 @@ loadPosts();
     // Explicit District Target has priority. If the field is present but says
     // All Odisha/General, reset to "all" instead of accidentally retaining
     // a previous district selection.
-    let district=explicitDistrict!=="" 
+    const district=explicitDistrict!=="" 
       ? normalizeDistrictValue(explicitDistrict)
       : detectDistrict(text);
-
-    // Government Jobs are Central / All-India by default.
-    // An explicitly named district still wins.
-    if(explicitDistrict===""){
-      if(type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text)){
-        district="all-india";
-      }
-    }
     data.districtTarget=district || "all";
     const ds=document.getElementById("districtTarget");
     if(ds)ds.value=data.districtTarget;
@@ -1807,13 +1742,11 @@ loadPosts();
 
     if(type==="Education")smartEducationMode();
     setStatus(title ? "✓ Form filled correctly — review before publishing" : "⚠️ Post Title not found. Add Post Title manually before publishing.", !title);
-  
-    $("type").value=type;
-    $("cat").value=category;
-    $("type").dispatchEvent(new Event("change",{bubbles:true}));
-    // Keep Category independent after the Post Type change handler runs.
-    $("cat").value=category;
-}
+    }catch(err){
+      console.error("Smart Auto Fill error:",err);
+      setStatus("⚠️ Auto Fill error: "+(err?.message||"Unknown error"),true);
+    }
+  }
 
   function justDetect(){
     const text=smartText();
@@ -1836,15 +1769,10 @@ loadPosts();
       catEl.value=catValue ? catValue.value : "";
     }
 
-    let district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
-    if(explicitDistrict===""){
-      if(type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text)){
-        district="all-india";
-      }
-    }
+    const district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
     const ds=document.getElementById("districtTarget"); if(ds)ds.value=district||"all";
 
-    setStatus("Detected: "+type+" • Category: "+cat+(district==="all-india"?" • All India":(district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General")));
+    setStatus("Detected: "+type+" • Category: "+cat+(district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General"));
   }
 
   document.addEventListener("DOMContentLoaded",function(){
