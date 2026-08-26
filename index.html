@@ -2355,24 +2355,74 @@ loadFeed();
   }
 
   function normDistrict(v){
-    return String(v||'').trim().toLowerCase()
+    let s=String(v||'').trim().toLowerCase()
       .replace(/district/g,'').replace(/[^a-z0-9]+/g,'');
+
+    // Common name variants used by the Admin panel vs district URLs.
+    const aliases={
+      bolangir:'balangir',
+      balangir:'balangir',
+      keonjhar:'kendujhar',
+      kendujhar:'kendujhar'
+    };
+    return aliases[s]||s;
   }
 
   function districtOf(e){
-    const fields=e?.fields||e?.homepage||{};
-    const direct=fields.districtTarget||e?.districtTarget||'';
-    if(direct) return String(direct).trim();
+    // District Target can arrive from the API, homepage metadata,
+    // or directly from the Blogger post content. Read all supported shapes.
+    const sources=[
+      e?.fields,
+      e?.homepage?.fields,
+      e?.data?.fields,
+      e?.meta?.fields,
+      e?.post?.fields,
+      e?.homepage,
+      e?.data,
+      e?.meta,
+      e?.post,
+      e
+    ];
 
-    const src=String((e?.content&&e.content.$t)||(e?.summary&&e.summary.$t)||'');
-    const m=src.match(/NP_META\s*[:=]\s*(\{[\s\S]*?\})\s*(?:-->|<\/span>|$)/i);
-    if(m){
+    for(const obj of sources){
+      if(obj && obj.districtTarget){
+        return String(obj.districtTarget).trim();
+      }
+    }
+
+    const src=String(
+      (e?.content&&e.content.$t) ||
+      (e?.content&&e.content) ||
+      (e?.summary&&e.summary.$t) ||
+      (e?.summary&&e.summary) ||
+      e?.body || ''
+    );
+
+    // Admin saves the structured notification data as NIJUKTI_PATH_DATA.
+    // Older posts may use NP_META, so support both.
+    const patterns=[
+      /NIJUKTI_PATH_DATA\s*:\s*([\s\S]*?)\s*-->/i,
+      /NP_META\s*[:=]\s*([\s\S]*?)\s*(?:-->|<\/span>|$)/i
+    ];
+
+    for(const re of patterns){
+      const m=src.match(re);
+      if(!m) continue;
       try{
-        const x=JSON.parse(m[1]);
-        if(x.fields&&x.fields.districtTarget) return String(x.fields.districtTarget).trim();
-        if(x.districtTarget) return String(x.districtTarget).trim();
+        let raw=m[1]
+          .replace(/&quot;/g,'"')
+          .replace(/&#039;/g,"'")
+          .replace(/&lt;/g,"<")
+          .replace(/&gt;/g,">")
+          .replace(/&amp;/g,"&")
+          .trim();
+
+        const x=JSON.parse(raw);
+        if(x?.fields?.districtTarget) return String(x.fields.districtTarget).trim();
+        if(x?.districtTarget) return String(x.districtTarget).trim();
       }catch(_){}
     }
+
     return '';
   }
 
