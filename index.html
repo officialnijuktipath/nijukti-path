@@ -1955,9 +1955,14 @@ let entries=rawEntries.filter(e=>!hasLabel(e,'Site Settings'));
 POSTS=entries;
 try{window.NIJUKTI_PATH_POSTS=entries;window.dispatchEvent(new Event('nijukti-feed-ready'));}catch(e){}
 let p=new URLSearchParams(location.search);
-let pid=p.get('post'), label=p.get('label'), q=p.get('q'), edu=p.get('edu'), allLatest=p.get('all')==='latest';
-if(pid){
-let e=entries.find(x=>postId(x)===pid);
+let pid=p.get('post'), postUrl=p.get('postUrl'), postTitle=p.get('postTitle'), label=p.get('label'), q=p.get('q'), edu=p.get('edu'), allLatest=p.get('all')==='latest';
+if(pid || postUrl || postTitle){
+let e=entries.find(x=>{
+  if(pid && postId(x)===pid) return true;
+  if(postUrl && (x.link||[]).some(l=>l.rel==='alternate' && l.href===postUrl)) return true;
+  if(postTitle && String(x.title?.$t||'').trim()===String(postTitle).trim()) return true;
+  return false;
+});
 if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
 }else if(allLatest||label||q||edu){
   if(label){
@@ -2180,6 +2185,10 @@ loadFeed();
     // Keep homepage panel clicks on Nijukti Path instead of sending users to Blogger.
     const id=p?.id?.$t||p?.id||p?.postId;
     if(id) return '/?post='+encodeURIComponent(id);
+    const alt=(p?.link||[]).find?.(x=>x.rel==="alternate");
+    if(alt?.href) return '/?postUrl='+encodeURIComponent(alt.href);
+    const t=title(p);
+    if(t) return '/?postTitle='+encodeURIComponent(t);
     const a=(p?.link||[]).find?.(x=>x.rel==="alternate")||p?.link?.[0];
     if(a?.href && /officialnijuktipath\.blogspot\.com/i.test(a.href)){
       const m=a.href.match(/[?&]post(?:Id)?=([^&]+)/i);
@@ -2388,7 +2397,10 @@ loadFeed();
     const id=postIdOf(e);
     if(id) return '/?post='+encodeURIComponent(id);
     const alt=(e?.link||[]).find(x=>x.rel==='alternate');
-    return alt?.href||'/';
+    if(alt?.href) return '/?postUrl='+encodeURIComponent(alt.href);
+    const t=titleOf(e);
+    if(t) return '/?postTitle='+encodeURIComponent(t);
+    return '/';
   }
 
   function renderDistrictEntries(entries){
@@ -2424,87 +2436,81 @@ loadFeed();
     const box=document.getElementById('districtNotificationList');
     if(!box)return;
 
-    // IMPORTANT:
-    // District Target is saved by the Admin panel in /api/posts as
-    // fields.districtTarget. Blogger's public feed does not reliably expose
-    // custom fields, so the district page reads the same API directly.
+    // IMPORTANT: Blogger feed remains the source of actual post entries/IDs.
+    // API is used only to enrich each Blogger post with District Target.
+    // This prevents district notifications from disappearing when API IDs differ.
     try{
-      const apiResp=await fetch('/api/posts?status=all',{cache:'no-store'});
-      if(!apiResp.ok) throw new Error('API '+apiResp.status);
+      const [apiResp, feedResp] = await Promise.all([
+        fetch('/api/posts?status=all',{cache:'no-store'}),
+        fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'})
+      ]);
 
-      const apiData=await apiResp.json();
-      const apiEntries=Array.isArray(apiData)
-        ? apiData
-        : (Array.isArray(apiData.posts)
-          ? apiData.posts
-          : (Array.isArray(apiData.items) ? apiData.items : []));
+      const feedData=await feedResp.json();
+      const bloggerEntries=(feedData.feed&&feedData.feed.entry)||[];
 
-      const wanted=normDistrict(d.name);
-
-      const matched=apiEntries.filter(function(p){
-        // Never show drafts on a public district page.
-        if(p && (p.draft===true || p.status==='draft')) return false;
-
-        // Support every API shape used by the Admin/backend.
-        const fields=p?.fields || p?.meta?.fields || p?.data?.fields || {};
-        const target=normDistrict(
-          fields.districtTarget ||
-          p?.districtTarget ||
-          p?.meta?.districtTarget ||
-          p?.data?.districtTarget ||
-          ''
-        );
-
-        return target &&
-          target!=='all' &&
-          target!=='allindia' &&
-          target!=='allodisha' &&
-          target!=='odishageneral' &&
-          target===wanted;
-      }).sort(function(a,b){
-        const da=new Date(
-          a?.published?.$t || a?.published || a?.publishedDate ||
-          a?.date || a?.updated || 0
-        ).getTime();
-        const db=new Date(
-          b?.published?.$t || b?.published || b?.publishedDate ||
-          b?.date || b?.updated || 0
-        ).getTime();
-        return db-da;
-      }).slice(0,12);
-
-      if(!matched.length){
-        box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>Admin me "'+esc(d.name)+'" District Target select karke publish ki gayi posts yahan automatically aayengi.</p></div>';
-        return;
+      let apiEntries=[];
+      if(apiResp.ok){
+        const apiData=await apiResp.json();
+        apiEntries=Array.isArray(apiData)?apiData:
+          (Array.isArray(apiData.posts)?apiData.posts:
+          (Array.isArray(apiData.items)?apiData.items:[]));
       }
 
-      box.innerHTML=matched.map(function(p){
-        const title=p?.title?.$t || p?.title || p?.postTitle || p?.name || 'District Notification';
-        const postId=p?.id?.$t || p?.id || p?.postId || p?.bloggerId || p?.bloggerPostId || '';
-        const href=postId
-          ? '/?post='+encodeURIComponent(postId)
-          : (p?.url || p?.permalink || p?.postUrl || '#');
+      // Build API lookup by every practical identity available.
+      const apiByTitle=new Map();
+      const apiById=new Map();
 
-        const rawDate=p?.published?.$t || p?.published || p?.publishedDate ||
-          p?.date || p?.updated || '';
-        const date=rawDate ? new Date(rawDate).toLocaleDateString('en-IN') : '';
+      apiEntries.forEach(function(a){
+        const ids=[
+          a?.bloggerId,a?.blogger_id,a?.bloggerPostId,a?.blogger_post_id,
+          a?.postId,a?.post_id,a?.id?.$t,a?.id
+        ].filter(Boolean).map(String);
 
-        return '<article class="district-notification-card">'+
-          '<div class="district-notification-icon">📢</div>'+
-          '<div><h3><a href="'+esc(href)+'">'+esc(title)+'</a></h3>'+
-          '<div class="district-notification-meta"><span>📍 '+esc(d.name)+'</span><span>🗓️ '+esc(date)+'</span></div></div>'+
-          '</article>';
-      }).join('');
+        ids.forEach(id=>apiById.set(id,a));
+
+        const titles=[
+          a?.title?.$t,a?.title,a?.postTitle,a?.post_title,a?.name
+        ].filter(Boolean);
+        titles.forEach(t=>apiByTitle.set(normText(t),a));
+      });
+
+      // Enrich Blogger entries while ALWAYS retaining Blogger ID/link/content.
+      const enriched=bloggerEntries.map(function(b){
+        const bid=String(b?.id?.$t||b?.id||'');
+        const bt=normText(b?.title?.$t||b?.title||'');
+        const a=apiById.get(bid)||apiByTitle.get(bt);
+
+        if(!a) return b;
+
+        const target=districtOf(a);
+        return {
+          ...b,
+          fields:{
+            ...(b.fields||{}),
+            ...(a.fields||{}),
+            districtTarget: target || (b.fields&&b.fields.districtTarget) || ''
+          },
+          districtTarget: target || b.districtTarget || ''
+        };
+      });
+
+      renderDistrictEntries(enriched);
     }catch(err){
-      console.error('District notification API error:',err);
-      box.innerHTML='<div class="district-empty"><div>⚠️</div><strong>District notifications could not be loaded</strong><p>Please refresh and try again.</p></div>';
+      // If API is unavailable, Blogger metadata/NP_META is still used.
+      try{
+        const fr=await fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'});
+        if(!fr.ok) throw new Error('feed');
+        const fd=await fr.json();
+        renderDistrictEntries((fd.feed&&fd.feed.entry)||[]);
+      }catch(_){
+        box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>District Target data load nahi paya.</p></div>';
+      }
     }
   }
 
   function loadFeed(){
     loadDistrictApi();
   }
-
 
   document.addEventListener('DOMContentLoaded',function(){
     const main=document.querySelector('main')||document.body;
