@@ -1742,10 +1742,17 @@ loadPosts();
     // Category is an independent explicit field. Never use a partial label
     // match and never leave the previous category selected.
     let category=normalizeCategoryValue(explicitCategory) || type;
-    if(scholarshipEducationType) type="Education";
-    if(scholarshipExamCategory) category="Scholarship";
-    if(scholarshipEducationType) type="Education";
-    if(scholarshipExamCategory) category="Scholarship";
+
+    // Explicit aliases used by monitoring notifications.
+    const rawType=norm(explicitType).toLowerCase();
+    const rawCategory=norm(explicitCategory).toLowerCase();
+
+    if(/^(scholarship\s*[/\-]\s*education|scholarship)$/.test(rawType)){
+      type="Education";
+    }
+    if(/^(scholarship\s+examination|scholarship\s+exam)$/.test(rawCategory)){
+      category="Scholarship";
+    }
     if(catEl){
       const catValue=[...catEl.options].find(o=>norm(o.value).toLowerCase()===norm(category).toLowerCase());
       catEl.value=catValue ? catValue.value : "";
@@ -1804,6 +1811,8 @@ loadPosts();
     $("type").value=type;
     $("cat").value=category;
     $("type").dispatchEvent(new Event("change",{bubbles:true}));
+    // Keep Category independent after the Post Type change handler runs.
+    $("cat").value=category;
 }
 
   function justDetect(){
