@@ -2429,7 +2429,7 @@ loadFeed();
     // This prevents district notifications from disappearing when API IDs differ.
     try{
       const [apiResp, feedResp] = await Promise.all([
-        fetch('/api/posts?published=true&max=100',{cache:'no-store'}),
+        fetch('/api/posts?status=all',{cache:'no-store'}),
         fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'})
       ]);
 
