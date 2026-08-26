@@ -1723,9 +1723,10 @@ loadPosts();
 
     // Government Jobs are Central / All-India by default.
     // An explicitly named district still wins.
-    if((type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text))
-       && (explicitDistrict==="" || /^(all odisha|all odisha \/ general|general|odisha|statewide)$/i.test(norm(explicitDistrict)))){
-      district="all-india";
+    if(explicitDistrict===""){
+      if(type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text)){
+        district="all-india";
+      }
     }
     data.districtTarget=district || "all";
     const ds=document.getElementById("districtTarget");
@@ -1784,9 +1785,10 @@ loadPosts();
     }
 
     let district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
-    if((type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text))
-       && (explicitDistrict==="" || /^(all odisha|all odisha \/ general|general|odisha|statewide)$/i.test(norm(explicitDistrict)))){
-      district="all-india";
+    if(explicitDistrict===""){
+      if(type==="Government Jobs" || /central government|central govt|ssc|upsc|railway|banking|ibps|rrb|nta/i.test(text)){
+        district="all-india";
+      }
     }
     const ds=document.getElementById("districtTarget"); if(ds)ds.value=district||"all";
 
