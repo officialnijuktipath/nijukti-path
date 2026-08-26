@@ -2355,74 +2355,24 @@ loadFeed();
   }
 
   function normDistrict(v){
-    let s=String(v||'').trim().toLowerCase()
+    return String(v||'').trim().toLowerCase()
       .replace(/district/g,'').replace(/[^a-z0-9]+/g,'');
-
-    // Common name variants used by the Admin panel vs district URLs.
-    const aliases={
-      bolangir:'balangir',
-      balangir:'balangir',
-      keonjhar:'kendujhar',
-      kendujhar:'kendujhar'
-    };
-    return aliases[s]||s;
   }
 
   function districtOf(e){
-    // District Target can arrive from the API, homepage metadata,
-    // or directly from the Blogger post content. Read all supported shapes.
-    const sources=[
-      e?.fields,
-      e?.homepage?.fields,
-      e?.data?.fields,
-      e?.meta?.fields,
-      e?.post?.fields,
-      e?.homepage,
-      e?.data,
-      e?.meta,
-      e?.post,
-      e
-    ];
+    const fields=e?.fields||e?.homepage||{};
+    const direct=fields.districtTarget||e?.districtTarget||'';
+    if(direct) return String(direct).trim();
 
-    for(const obj of sources){
-      if(obj && obj.districtTarget){
-        return String(obj.districtTarget).trim();
-      }
-    }
-
-    const src=String(
-      (e?.content&&e.content.$t) ||
-      (e?.content&&e.content) ||
-      (e?.summary&&e.summary.$t) ||
-      (e?.summary&&e.summary) ||
-      e?.body || ''
-    );
-
-    // Admin saves the structured notification data as NIJUKTI_PATH_DATA.
-    // Older posts may use NP_META, so support both.
-    const patterns=[
-      /NIJUKTI_PATH_DATA\s*:\s*([\s\S]*?)\s*-->/i,
-      /NP_META\s*[:=]\s*([\s\S]*?)\s*(?:-->|<\/span>|$)/i
-    ];
-
-    for(const re of patterns){
-      const m=src.match(re);
-      if(!m) continue;
+    const src=String((e?.content&&e.content.$t)||(e?.summary&&e.summary.$t)||'');
+    const m=src.match(/NP_META\s*[:=]\s*(\{[\s\S]*?\})\s*(?:-->|<\/span>|$)/i);
+    if(m){
       try{
-        let raw=m[1]
-          .replace(/&quot;/g,'"')
-          .replace(/&#039;/g,"'")
-          .replace(/&lt;/g,"<")
-          .replace(/&gt;/g,">")
-          .replace(/&amp;/g,"&")
-          .trim();
-
-        const x=JSON.parse(raw);
-        if(x?.fields?.districtTarget) return String(x.fields.districtTarget).trim();
-        if(x?.districtTarget) return String(x.districtTarget).trim();
+        const x=JSON.parse(m[1]);
+        if(x.fields&&x.fields.districtTarget) return String(x.fields.districtTarget).trim();
+        if(x.districtTarget) return String(x.districtTarget).trim();
       }catch(_){}
     }
-
     return '';
   }
 
@@ -2474,81 +2424,87 @@ loadFeed();
     const box=document.getElementById('districtNotificationList');
     if(!box)return;
 
-    // IMPORTANT: Blogger feed remains the source of actual post entries/IDs.
-    // API is used only to enrich each Blogger post with District Target.
-    // This prevents district notifications from disappearing when API IDs differ.
+    // IMPORTANT:
+    // District Target is saved by the Admin panel in /api/posts as
+    // fields.districtTarget. Blogger's public feed does not reliably expose
+    // custom fields, so the district page reads the same API directly.
     try{
-      const [apiResp, feedResp] = await Promise.all([
-        fetch('/api/posts?status=all',{cache:'no-store'}),
-        fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'})
-      ]);
+      const apiResp=await fetch('/api/posts?status=all',{cache:'no-store'});
+      if(!apiResp.ok) throw new Error('API '+apiResp.status);
 
-      const feedData=await feedResp.json();
-      const bloggerEntries=(feedData.feed&&feedData.feed.entry)||[];
+      const apiData=await apiResp.json();
+      const apiEntries=Array.isArray(apiData)
+        ? apiData
+        : (Array.isArray(apiData.posts)
+          ? apiData.posts
+          : (Array.isArray(apiData.items) ? apiData.items : []));
 
-      let apiEntries=[];
-      if(apiResp.ok){
-        const apiData=await apiResp.json();
-        apiEntries=Array.isArray(apiData)?apiData:
-          (Array.isArray(apiData.posts)?apiData.posts:
-          (Array.isArray(apiData.items)?apiData.items:[]));
+      const wanted=normDistrict(d.name);
+
+      const matched=apiEntries.filter(function(p){
+        // Never show drafts on a public district page.
+        if(p && (p.draft===true || p.status==='draft')) return false;
+
+        // Support every API shape used by the Admin/backend.
+        const fields=p?.fields || p?.meta?.fields || p?.data?.fields || {};
+        const target=normDistrict(
+          fields.districtTarget ||
+          p?.districtTarget ||
+          p?.meta?.districtTarget ||
+          p?.data?.districtTarget ||
+          ''
+        );
+
+        return target &&
+          target!=='all' &&
+          target!=='allindia' &&
+          target!=='allodisha' &&
+          target!=='odishageneral' &&
+          target===wanted;
+      }).sort(function(a,b){
+        const da=new Date(
+          a?.published?.$t || a?.published || a?.publishedDate ||
+          a?.date || a?.updated || 0
+        ).getTime();
+        const db=new Date(
+          b?.published?.$t || b?.published || b?.publishedDate ||
+          b?.date || b?.updated || 0
+        ).getTime();
+        return db-da;
+      }).slice(0,12);
+
+      if(!matched.length){
+        box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>Admin me "'+esc(d.name)+'" District Target select karke publish ki gayi posts yahan automatically aayengi.</p></div>';
+        return;
       }
 
-      // Build API lookup by every practical identity available.
-      const apiByTitle=new Map();
-      const apiById=new Map();
+      box.innerHTML=matched.map(function(p){
+        const title=p?.title?.$t || p?.title || p?.postTitle || p?.name || 'District Notification';
+        const postId=p?.id?.$t || p?.id || p?.postId || p?.bloggerId || p?.bloggerPostId || '';
+        const href=postId
+          ? '/?post='+encodeURIComponent(postId)
+          : (p?.url || p?.permalink || p?.postUrl || '#');
 
-      apiEntries.forEach(function(a){
-        const ids=[
-          a?.bloggerId,a?.blogger_id,a?.bloggerPostId,a?.blogger_post_id,
-          a?.postId,a?.post_id,a?.id?.$t,a?.id
-        ].filter(Boolean).map(String);
+        const rawDate=p?.published?.$t || p?.published || p?.publishedDate ||
+          p?.date || p?.updated || '';
+        const date=rawDate ? new Date(rawDate).toLocaleDateString('en-IN') : '';
 
-        ids.forEach(id=>apiById.set(id,a));
-
-        const titles=[
-          a?.title?.$t,a?.title,a?.postTitle,a?.post_title,a?.name
-        ].filter(Boolean);
-        titles.forEach(t=>apiByTitle.set(normText(t),a));
-      });
-
-      // Enrich Blogger entries while ALWAYS retaining Blogger ID/link/content.
-      const enriched=bloggerEntries.map(function(b){
-        const bid=String(b?.id?.$t||b?.id||'');
-        const bt=normText(b?.title?.$t||b?.title||'');
-        const a=apiById.get(bid)||apiByTitle.get(bt);
-
-        if(!a) return b;
-
-        const target=districtOf(a);
-        return {
-          ...b,
-          fields:{
-            ...(b.fields||{}),
-            ...(a.fields||{}),
-            districtTarget: target || (b.fields&&b.fields.districtTarget) || ''
-          },
-          districtTarget: target || b.districtTarget || ''
-        };
-      });
-
-      renderDistrictEntries(enriched);
+        return '<article class="district-notification-card">'+
+          '<div class="district-notification-icon">📢</div>'+
+          '<div><h3><a href="'+esc(href)+'">'+esc(title)+'</a></h3>'+
+          '<div class="district-notification-meta"><span>📍 '+esc(d.name)+'</span><span>🗓️ '+esc(date)+'</span></div></div>'+
+          '</article>';
+      }).join('');
     }catch(err){
-      // If API is unavailable, Blogger metadata/NP_META is still used.
-      try{
-        const fr=await fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'});
-        if(!fr.ok) throw new Error('feed');
-        const fd=await fr.json();
-        renderDistrictEntries((fd.feed&&fd.feed.entry)||[]);
-      }catch(_){
-        box.innerHTML='<div class="district-empty"><div>📢</div><strong>No '+esc(d.name)+' notification yet</strong><p>District Target data load nahi paya.</p></div>';
-      }
+      console.error('District notification API error:',err);
+      box.innerHTML='<div class="district-empty"><div>⚠️</div><strong>District notifications could not be loaded</strong><p>Please refresh and try again.</p></div>';
     }
   }
 
   function loadFeed(){
     loadDistrictApi();
   }
+
 
   document.addEventListener('DOMContentLoaded',function(){
     const main=document.querySelector('main')||document.body;
