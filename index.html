@@ -1957,10 +1957,12 @@ try{window.NIJUKTI_PATH_POSTS=entries;window.dispatchEvent(new Event('nijukti-fe
 let p=new URLSearchParams(location.search);
 let pid=p.get('post'), postUrl=p.get('postUrl'), postTitle=p.get('postTitle'), label=p.get('label'), q=p.get('q'), edu=p.get('edu'), allLatest=p.get('all')==='latest';
 if(pid || postUrl || postTitle){
+const wantedTitle=String(postTitle||'').trim().toLowerCase();
 let e=entries.find(x=>{
-  if(pid && postId(x)===pid) return true;
+  const title=String(x?.title?.$t||x?.title||'').trim().toLowerCase();
+  if(postTitle && title===wantedTitle) return true;
   if(postUrl && (x.link||[]).some(l=>l.rel==='alternate' && l.href===postUrl)) return true;
-  if(postTitle && String(x.title?.$t||'').trim()===String(postTitle).trim()) return true;
+  if(pid && String(postId(x)||'')===String(pid)) return true;
   return false;
 });
 if(e) showPost(e); else document.getElementById('app').innerHTML='<div class="empty">Post not found.</div>';
@@ -2394,18 +2396,16 @@ loadFeed();
   }
 
   function postHrefOf(e){
-    const id=String(
-      e?.bloggerId||e?.blogger_id||e?.bloggerPostId||
-      e?.blogger_post_id||e?.postId||e?.post_id||
-      e?.id?.$t||e?.id||''
+    const t=String(titleOf(e)||'').trim();
+    if(t) return '/?postTitle='+encodeURIComponent(t);
+
+    const bloggerId=String(
+      e?.bloggerId||e?.blogger_id||e?.bloggerPostId||e?.blogger_post_id||''
     ).trim();
-    if(id) return '/?post='+encodeURIComponent(id);
+    if(bloggerId) return '/?post='+encodeURIComponent(bloggerId);
 
     const alt=(e?.link||[]).find(x=>x.rel==='alternate');
     if(alt?.href) return '/?postUrl='+encodeURIComponent(alt.href);
-
-    const t=titleOf(e);
-    if(t) return '/?postTitle='+encodeURIComponent(t);
     return '/';
   }
 
