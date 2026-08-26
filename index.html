@@ -2424,55 +2424,67 @@ loadFeed();
     const box=document.getElementById('districtNotificationList');
     if(!box)return;
 
+    // IMPORTANT: Blogger feed remains the source of actual post entries/IDs.
+    // API is used only to enrich each Blogger post with District Target.
+    // This prevents district notifications from disappearing when API IDs differ.
     try{
-      // Blogger feed supplies the real Blogger post IDs used by ?post=...
-      // API supplies the reliable District Target metadata.
       const [apiResp, feedResp] = await Promise.all([
         fetch('/api/posts?published=true&max=100',{cache:'no-store'}),
         fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'})
       ]);
 
-      if(!apiResp.ok) throw new Error('API '+apiResp.status);
-      if(!feedResp.ok) throw new Error('Feed '+feedResp.status);
-
-      const apiData=await apiResp.json();
-      const apiEntries=Array.isArray(apiData)?apiData:
-        (Array.isArray(apiData.posts)?apiData.posts:
-        (Array.isArray(apiData.items)?apiData.items:[]));
-
       const feedData=await feedResp.json();
       const bloggerEntries=(feedData.feed&&feedData.feed.entry)||[];
 
-      // Match API metadata to the actual Blogger entry by Blogger ID first,
-      // then by exact normalized title. This prevents "Post not found".
-      const byId=new Map();
-      const byTitle=new Map();
-      bloggerEntries.forEach(function(b){
-        const id=String(b?.id?.$t||'');
-        if(id) byId.set(id,b);
-        const t=normText(b?.title?.$t||'');
-        if(t) byTitle.set(t,b);
+      let apiEntries=[];
+      if(apiResp.ok){
+        const apiData=await apiResp.json();
+        apiEntries=Array.isArray(apiData)?apiData:
+          (Array.isArray(apiData.posts)?apiData.posts:
+          (Array.isArray(apiData.items)?apiData.items:[]));
+      }
+
+      // Build API lookup by every practical identity available.
+      const apiByTitle=new Map();
+      const apiById=new Map();
+
+      apiEntries.forEach(function(a){
+        const ids=[
+          a?.bloggerId,a?.blogger_id,a?.bloggerPostId,a?.blogger_post_id,
+          a?.postId,a?.post_id,a?.id?.$t,a?.id
+        ].filter(Boolean).map(String);
+
+        ids.forEach(id=>apiById.set(id,a));
+
+        const titles=[
+          a?.title?.$t,a?.title,a?.postTitle,a?.post_title,a?.name
+        ].filter(Boolean);
+        titles.forEach(t=>apiByTitle.set(normText(t),a));
       });
 
-      const merged=apiEntries.map(function(a){
-        const aid=String(a?.bloggerId||a?.blogger_id||a?.bloggerPostId||'');
-        const at=normText(a?.title?.$t||a?.title||a?.postTitle||a?.name||'');
-        const b=(aid&&byId.get(aid))||byTitle.get(at);
-        if(b){
-          // Keep Blogger's id/link/content, while preserving API fields.
-          return {...b, fields:{...(b.fields||{}),...(a.fields||{}), districtTarget:districtOf(a)}};
-        }
-        return a;
+      // Enrich Blogger entries while ALWAYS retaining Blogger ID/link/content.
+      const enriched=bloggerEntries.map(function(b){
+        const bid=String(b?.id?.$t||b?.id||'');
+        const bt=normText(b?.title?.$t||b?.title||'');
+        const a=apiById.get(bid)||apiByTitle.get(bt);
+
+        if(!a) return b;
+
+        const target=districtOf(a);
+        return {
+          ...b,
+          fields:{
+            ...(b.fields||{}),
+            ...(a.fields||{}),
+            districtTarget: target || (b.fields&&b.fields.districtTarget) || ''
+          },
+          districtTarget: target || b.districtTarget || ''
+        };
       });
 
-      // Use only posts that can resolve to a real Blogger entry.
-      const resolved=merged.filter(function(e){
-        return !!(e?.id?.$t || e?.link?.length);
-      });
-
-      renderDistrictEntries(resolved);
+      renderDistrictEntries(enriched);
     }catch(err){
-      // Blogger-only fallback; this still preserves working ?post= links.
+      // If API is unavailable, Blogger metadata/NP_META is still used.
       try{
         const fr=await fetch(FEED+'?alt=json&max-results=100',{cache:'no-store'});
         if(!fr.ok) throw new Error('feed');
