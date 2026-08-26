@@ -1676,6 +1676,10 @@ loadPosts();
       "answer keys":"Answer Keys",
       "answer key":"Answer Keys",
       "education":"Education",
+      "scholarship / education":"Education",
+      "scholarship education":"Education",
+      "scholarship examination":"Scholarship",
+      "scholarship exam":"Scholarship",
       "admission":"Admission","scholarship":"Scholarship","education exam":"Education Exam",
       "education result":"Education Result","education notification":"Education Notification",
       "ug admission":"UG Admission","b.tech / b.e. admission":"B.Tech / B.E. Admission",
@@ -1737,7 +1741,11 @@ loadPosts();
 
     // Category is an independent explicit field. Never use a partial label
     // match and never leave the previous category selected.
-    const category=normalizeCategoryValue(explicitCategory) || type;
+    let category=normalizeCategoryValue(explicitCategory) || type;
+    if(scholarshipEducationType) type="Education";
+    if(scholarshipExamCategory) category="Scholarship";
+    if(scholarshipEducationType) type="Education";
+    if(scholarshipExamCategory) category="Scholarship";
     if(catEl){
       const catValue=[...catEl.options].find(o=>norm(o.value).toLowerCase()===norm(category).toLowerCase());
       catEl.value=catValue ? catValue.value : "";
@@ -1792,7 +1800,11 @@ loadPosts();
 
     if(type==="Education")smartEducationMode();
     setStatus(title ? "✓ Form filled correctly — review before publishing" : "⚠️ Post Title not found. Add Post Title manually before publishing.", !title);
-  }
+  
+    $("type").value=type;
+    $("cat").value=category;
+    $("type").dispatchEvent(new Event("change",{bubbles:true}));
+}
 
   function justDetect(){
     const text=smartText();
