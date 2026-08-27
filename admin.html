@@ -562,6 +562,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <label>District Target <span class="optional">(Optional)</span></label>
   <select id="districtTarget">
     <option value="all">All Odisha / General</option>
+    <option value="all-india">All India</option>
     <option value="angul">Angul</option>
     <option value="balangir">Balangir</option>
     <option value="balasore">Balasore</option>
@@ -593,7 +594,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <option value="subarnapur">Subarnapur</option>
     <option value="sundargarh">Sundargarh</option>
   </select>
-  <div class="district-help">Select a district only for district-specific notifications. “All Odisha / General” will not be shown in a district feed.</div>
+  <div class="district-help">Select a district only for district-specific notifications. “All Odisha / General” is for Odisha-wide updates; “All India” is for nationwide updates. Neither will be shown in a district feed.</div>
 </div>
 <div class="full"><label>Post Title</label><input id="title" placeholder="Enter post title here..."></div>
 <div class="full"><label>Short Description</label><textarea id="desc" maxlength="1000" placeholder="Enter short description / key highlights..."></textarea><div class="counter"><span id="chars">0</span>/1000</div></div>
@@ -955,7 +956,7 @@ function togglePreview(){
   const link1=$("link").value.trim(), link2=$("link2").value.trim();
   const instructions=esc($("instructions").value.trim());
   const fields=collectFields();
-  const districtLabel=fields.districtTarget==="all"?"All Odisha / General":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget);
+  const districtLabel=fields.districtTarget==="all"?"All Odisha / General":fields.districtTarget==="all-india"?"All India":(document.querySelector("#districtTarget option:checked")?.textContent||fields.districtTarget);
   delete fields.districtTarget;
   const fieldHtml=Object.entries(fields).filter(([k,v])=>v).map(([k,v])=>'<div><b>'+esc(k.replace(/([A-Z])/g," $1"))+':</b> '+esc(v)+'</div>').join("");
   $("previewContent").innerHTML='<div style="font-size:16px;font-weight:800;color:#12203b">'+title+'</div><div style="margin:4px 0 8px;color:#0755c9;font-weight:700">'+type+'</div><div style="margin-bottom:7px"><b>District:</b> '+esc(districtLabel)+'</div><div>'+desc+'</div>'+(fieldHtml?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #e1e8f2">'+fieldHtml+'</div>':'')+(link1?'<div style="margin-top:8px"><b>Official Link:</b> '+esc(link1)+'</div>':'')+(link2?'<div><b>'+esc(actionLabels[$("type").value]||"Main Action Link")+':</b> '+esc(link2)+'</div>':'')+(instructions?'<div style="margin-top:8px"><b>Instructions:</b> '+instructions+'</div>':'');
@@ -1382,30 +1383,97 @@ loadPosts();
     const map={};
     const lines=linesOf(text);
 
-    // Accept BOTH formats:
-    //   Post Type: Odisha Jobs
-    // and the copy/paste-friendly format:
-    //   Post Type:
-    //   Odisha Jobs
+    // Exact field labels used by the All-in-One monitoring template.
+    // Longer labels are checked before shorter labels so "Organization / Board / University"
+    // can never be confused with "Organization", etc.
+    const knownLabels=[
+      "Organization / Board / University","Admission Session / Academic Year",
+      "Post-wise Vacancy","Post Type","Category","Post Title","Short Description",
+      "District Target","Update Type","Post Name","Course / Class","Stream / Honours",
+      "Total Vacancies","Seat / Vacancy","Qualification","Eligibility",
+      "Odisha Eligibility / Domicile","Age Limit","Age Relaxation",
+      "Application Start Date","Last Date","Last Time","Application Fee",
+      "Salary / Pay Scale","Job Location","Selection Process","Merit / Selection Process",
+      "Important Dates","Important Information","Required Documents",
+      "Description / Important Instructions","Important Instructions / Note",
+      "Official / Notification Link","Apply Online / Main Action Link",
+      "Admission Type","College / Institution","Vacancy","Renewal Last Date",
+      "Family Income Limit","Scholarship Amount / Benefits","Exam Name","Exam Date",
+      "Exam Center Information","Admit Card Release Date",
+      "Application / Registration Number Information","Result Type","Result Date",
+      "Roll Number / Registration Information","Cut-off / Merit Information",
+      "Answer Key Release Date","Answer Key Type","Question Paper / Paper Details",
+      "Objection Start Date","Objection Last Date","Objection / Challenge Details",
+      "Detailed Description","Instructions"
+    ].sort((a,b)=>b.length-a.length);
+
+    const canonical={};
+    knownLabels.forEach(label=>canonical[keyNorm(label)]=label);
+
+    function extractLabelTokens(line){
+      const found=[];
+      let pos=0;
+      while(pos<line.length){
+        let best=null, bestAt=Infinity;
+        for(const label of knownLabels){
+          const re=new RegExp("(^|\\\\s)"+escReg(label)+"\\\\s*:");
+          const m=line.slice(pos).match(re);
+          if(m){
+            const at=pos+m.index+(m[1] ? m[1].length : 0);
+            if(at<bestAt){best=label;bestAt=at;}
+          }
+        }
+        if(!best) break;
+        found.push({label:best, start:bestAt, colon:bestAt+best.length});
+        pos=bestAt+best.length+1;
+      }
+      return found;
+    }
+
     for(let i=0;i<lines.length;i++){
       const line=lines[i];
+
+      // First handle compact lines containing multiple known fields.
+      const tokens=extractLabelTokens(line);
+      if(tokens.length){
+        for(let j=0;j<tokens.length;j++){
+          const tok=tokens[j];
+          const valueStart=tok.colon+1;
+          const valueEnd=(j+1<tokens.length) ? tokens[j+1].start : line.length;
+          let value=norm(line.slice(valueStart,valueEnd));
+
+          // A label immediately follows another label => first value is genuinely blank.
+          if(value && canonical[keyNorm(value)]){
+            value="";
+          }
+
+          if(value && !(keyNorm(tok.label) in map)) map[keyNorm(tok.label)]=value;
+        }
+        continue;
+      }
+
+      // Also accept the two-line copy/paste form:
+      // Field:
+      // Value
       const m=line.match(/^\s*([^:]{1,100})\s*:\s*(.*)$/);
       if(!m) continue;
 
-      const key=keyNorm(m[1]);
-      let value=norm(m[2]);
+      const rawKey=norm(m[1]);
+      const key=keyNorm(rawKey);
+      const canonicalKey=canonical[key];
+      if(!canonicalKey) continue;
 
-      // If the value is on the next line, consume exactly that next line.
+      let value=norm(m[2]);
       if(!value && i+1<lines.length){
         const next=norm(lines[i+1]);
-        // Do not consume another labelled field as a value.
-        if(next && !/^\s*[^:]{1,100}\s*:\s*/.test(next)){
+        const nextTokens=extractLabelTokens(next);
+        if(next && !nextTokens.length && !/^\s*[^:]{1,100}\s*:\s*/.test(next)){
           value=next;
           i++;
         }
       }
 
-      if(!key || !value) continue;
+      if(!value) continue;
       if(!(key in map)) map[key]=value;
     }
     return map;
@@ -1539,23 +1607,23 @@ loadPosts();
 
   function buildData(text,type){
     const d={};
-    d.department=nearbyValue(text,["Department","Department / Organization","Ministry","Organization","Organization / Board / University","Board"]);
-    d.postName=nearbyValue(text,["Post Name","Name of Post","Post"]);
-    d.totalVacancies=nearbyValue(text,["Total Vacancies","Total Vacancy","No. of Vacancies","Number of Vacancies","Vacancies"]);
-    d.postWiseVacancy=nearbyValue(text,["Post-wise Vacancy","Post Wise Vacancy"]);
+    d.department=afterLabel(text,["Organization / Board / University"]) || nearbyValue(text,["Department","Department / Organization","Ministry","Organization","Board"]);
+    d.postName=afterLabel(text,["Post Name"]) || nearbyValue(text,["Name of Post","Post"]);
+    d.totalVacancies=afterLabel(text,["Total Vacancies"]) || nearbyValue(text,["Total Vacancy","No. of Vacancies","Number of Vacancies","Vacancies"]);
+    d.postWiseVacancy=afterLabel(text,["Post-wise Vacancy"]) || nearbyValue(text,["Post Wise Vacancy"]);
     d.vacancy=d.totalVacancies||nearbyValue(text,["Vacancy","Vacancies"]);
-    d.qualification=nearbyValue(text,["Educational Qualification","Qualification","Eligibility Criteria"]);
-    d.eligibility=nearbyValue(text,["Eligibility","Eligibility Criteria"]);
-    d.odishaEligibility=nearbyValue(text,["Odisha Eligibility","Domicile","Odisha Domicile"]);
-    d.ageLimit=nearbyValue(text,["Age Limit","Age Criteria"]);
-    d.ageRelaxation=nearbyValue(text,["Age Relaxation","Upper Age Relaxation"]);
-    d.applicationStart=dateValue(text,["Application Start Date","Application Start","Start Date","Opening Date","Apply Online From"]);
-    d.lastDate=dateValue(text,["Last Date","Closing Date","Application Last Date","Deadline","Last Date to Apply"]);
-    d.applicationFee=nearbyValue(text,["Application Fee","Exam Fee","Application Fees"]);
-    d.selectionProcess=nearbyValue(text,["Selection Process","Selection Procedure"]);
-    d.salary=nearbyValue(text,["Salary","Pay Scale","Salary / Pay Scale","Remuneration"]);
-    d.jobLocation=nearbyValue(text,["Job Location","Place of Posting","Posting Location"]);
-    d.importantDates=nearbyValue(text,["Important Dates","Important Date"]);
+    d.qualification=afterLabel(text,["Qualification"]) || nearbyValue(text,["Educational Qualification","Eligibility Criteria"]);
+    d.eligibility=afterLabel(text,["Eligibility"]) || nearbyValue(text,["Eligibility Criteria"]);
+    d.odishaEligibility=afterLabel(text,["Odisha Eligibility / Domicile"]) || nearbyValue(text,["Odisha Eligibility","Domicile","Odisha Domicile"]);
+    d.ageLimit=afterLabel(text,["Age Limit"]) || nearbyValue(text,["Age Criteria"]);
+    d.ageRelaxation=afterLabel(text,["Age Relaxation"]) || nearbyValue(text,["Upper Age Relaxation"]);
+    d.applicationStart=dateValue(text,["Application Start Date"]) || dateValue(text,["Application Start","Start Date","Opening Date","Apply Online From"]);
+    d.lastDate=dateValue(text,["Last Date"]) || dateValue(text,["Closing Date","Application Last Date","Deadline","Last Date to Apply"]);
+    d.applicationFee=afterLabel(text,["Application Fee"]) || nearbyValue(text,["Exam Fee","Application Fees"]);
+    d.selectionProcess=afterLabel(text,["Selection Process"]) || nearbyValue(text,["Selection Procedure"]);
+    d.salary=afterLabel(text,["Salary / Pay Scale"]) || nearbyValue(text,["Salary","Pay Scale","Remuneration"]);
+    d.jobLocation=afterLabel(text,["Job Location"]) || nearbyValue(text,["Place of Posting","Posting Location"]);
+    d.importantDates=afterLabel(text,["Important Dates"]) || nearbyValue(text,["Important Date"]);
     d.examDate=nearbyValue(text,["Exam Date","Date of Examination","Examination Date"]);
     d.examName=nearbyValue(text,["Exam Name","Name of Examination","Examination"]);
     d.organization=d.department||nearbyValue(text,["Organization","Conducting Authority"]);
@@ -1572,21 +1640,21 @@ loadPosts();
     d.objectionStart=dateValue(text,["Objection Start Date","Challenge Start Date"]);
     d.objectionLast=dateValue(text,["Objection Last Date","Objection Last Date","Challenge Last Date"]);
     d.objectionDetails=nearbyValue(text,["Objection Details","Challenge Details","Objection / Challenge"]);
-    d.updateType=nearbyValue(text,["Update Type"]);
-    d.admissionType=nearbyValue(text,["Admission Type"]);
-    d.admissionSession=nearbyValue(text,["Admission Session","Academic Year","Session"]);
-    d.collegeInstitution=nearbyValue(text,["College","Institution","College / Institution"]);
-    d.courseClass=nearbyValue(text,["Course","Course / Class","Class"]);
-    d.streamHonours=nearbyValue(text,["Stream","Honours","Stream / Honours"]);
-    d.seatVacancy=nearbyValue(text,["Seat Vacancy","Seats","Seat / Vacancy"]);
-    d.incomeLimit=nearbyValue(text,["Family Income Limit","Income Limit","Annual Family Income"]);
-    d.scholarshipBenefits=nearbyValue(text,["Scholarship Amount","Benefits","Scholarship Benefits"]);
+    d.updateType=afterLabel(text,["Update Type"]);
+    d.admissionType=afterLabel(text,["Admission Type"]);
+    d.admissionSession=afterLabel(text,["Admission Session / Academic Year"]) || nearbyValue(text,["Admission Session","Academic Year","Session"]);
+    d.collegeInstitution=afterLabel(text,["College / Institution"]) || nearbyValue(text,["College","Institution"]);
+    d.courseClass=afterLabel(text,["Course / Class"]) || nearbyValue(text,["Course","Class"]);
+    d.streamHonours=afterLabel(text,["Stream / Honours"]) || nearbyValue(text,["Stream","Honours"]);
+    d.seatVacancy=afterLabel(text,["Seat / Vacancy"]) || nearbyValue(text,["Seat Vacancy","Seats"]);
+    d.incomeLimit=afterLabel(text,["Family Income Limit"]) || nearbyValue(text,["Income Limit","Annual Family Income"]);
+    d.scholarshipBenefits=afterLabel(text,["Scholarship Amount / Benefits"]) || nearbyValue(text,["Scholarship Amount","Benefits","Scholarship Benefits"]);
     d.renewalLastDate=dateValue(text,["Renewal Last Date","Renewal Deadline"]);
-    d.requiredDocuments=nearbyValue(text,["Required Documents","Documents Required"]);
-    d.educationDescription=nearbyValue(text,["Description","Important Instructions","Education Description"]);
-    d.importantInformation=nearbyValue(text,["Important Information","Important Instructions"]);
-    d.instructions2=nearbyValue(text,["Instructions","Instructions for Candidates"]);
-    d.detailedDescription=nearbyValue(text,["Detailed Description","Details"]);
+    d.requiredDocuments=afterLabel(text,["Required Documents"]) || nearbyValue(text,["Documents Required"]);
+    d.educationDescription=afterLabel(text,["Description / Important Instructions"]) || nearbyValue(text,["Education Description"]);
+    d.importantInformation=afterLabel(text,["Important Information"]) || nearbyValue(text,["Important Instructions"]);
+    d.instructions2=afterLabel(text,["Instructions"]) || nearbyValue(text,["Instructions for Candidates"]);
+    d.detailedDescription=afterLabel(text,["Detailed Description"]) || nearbyValue(text,["Details"]);
     return d;
   }
 
@@ -1772,7 +1840,7 @@ loadPosts();
     const district=explicitDistrict!=="" ? normalizeDistrictValue(explicitDistrict) : detectDistrict(text);
     const ds=document.getElementById("districtTarget"); if(ds)ds.value=district||"all";
 
-    setStatus("Detected: "+type+" • Category: "+cat+(district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General"));
+    setStatus("Detected: "+type+" • Category: "+cat+(district==="all-india"?" • All India":district&&district!=="all"?" • "+districtNames[district]:" • All Odisha / General"));
   }
 
   document.addEventListener("DOMContentLoaded",function(){
